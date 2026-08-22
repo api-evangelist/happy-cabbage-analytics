@@ -1,0 +1,29 @@
+generated: '2026-08-22'
+method: generated
+source: openapi/happy-cabbage-analytics-happy-buyers-external-openapi.yml
+note: >-
+  Agent Skills authored by API Evangelist from the Happy Buyers External API contract. Every operationId
+  referenced was read out of the published OpenAPI 3.0.1 document — none is invented. Happy Cabbage does
+  publish its own example Claude skill files, but they are customer-only (requested by emailing
+  success@happycabbage.io per the AI Hub video pages) and were not obtainable from the public surface, so
+  these are generated rather than searched. Each skill states the reversibility and idempotency facts from
+  conventions/happy-cabbage-analytics-conventions.yml, because the write surface has no idempotency keys
+  and orders cannot be cancelled through the API.
+skills:
+- name: happy-cabbage-inventory-health-review
+  file: skills/happy-cabbage-analytics-inventory-health-review.md
+  writes: false
+  operations: 7
+  summary: Read inventory health across stores, brands and categories, add the trend, drill to products, report.
+- name: happy-cabbage-draft-replenishment-order
+  file: skills/happy-cabbage-analytics-draft-replenishment-order.md
+  writes: true
+  operations: 13
+  summary: Turn replenishment signals into a draft purchase order with line items and an attached invoice.
+  escalation: confirm-with-human before createOrder — no idempotency key, no cancel operation.
+- name: happy-cabbage-manage-product-lines
+  file: skills/happy-cabbage-analytics-manage-product-lines.md
+  writes: true
+  operations: 11
+  summary: Create and tune product lines (demand groups) and set per-store product carry status.
+  escalation: confirm-with-human before createProductLine — no idempotency key, no delete operation.

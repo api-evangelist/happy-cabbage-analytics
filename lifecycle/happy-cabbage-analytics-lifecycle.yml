@@ -1,0 +1,67 @@
+generated: '2026-08-22'
+method: searched
+source: https://www.happycabbage.io/release-notes
+note: >-
+  Happy Cabbage publishes a dated product release-notes page for Happy Buyers and nothing else in this
+  family — no deprecation policy, no Sunset/Deprecation header commitment, no SLA and no status page were
+  found on any host. Absences below are recorded, not inferred.
+versioning:
+  scheme: path-prefix
+  current: /external/v1
+  policy_url: null
+  policy_published: false
+  note: >-
+    The External API is pinned at /external/v1 with info.version "v1". No written versioning or breaking-
+    change policy is published.
+maturity:
+  stage: beta
+  since: '2026-06-05'
+  evidence: >-
+    The release-notes entry dated 2026-06-05 states "An external API is now in beta", alongside per-store
+    order setting overrides.
+  source: https://www.happycabbage.io/release-notes
+deprecation:
+  policy_published: false
+  policy_url: null
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  deprecated_operations: []
+  note: >-
+    No operation in the contract carries deprecated: true, and no deprecation or sunset policy page
+    exists. No Deprecation pointer is emitted in apis.yml.
+status_page:
+  published: false
+  url: null
+  probes:
+  - url: https://status.happycabbage.io/
+    status: 0
+    result: NXDOMAIN
+  note: >-
+    No status page found on happycabbage.io, happycabbage.ai or cabbage.pub. No StatusPage pointer is
+    emitted in apis.yml.
+sla:
+  published: false
+  url: null
+support:
+  channels:
+  - type: contact-form
+    url: https://www.happycabbage.io/contact
+  - type: email
+    value: success@happycabbage.io
+    note: The AI Hub video pages direct customers to this address to request the example Claude skill files.
+  - type: email
+    value: support@happycabbage.io
+    note: Named in the Treez integration documentation as the address a POS API key is forwarded to.
+release_notes:
+  url: https://www.happycabbage.io/release-notes
+  cadence: irregular, several entries per month
+  earliest_observed: '2025-02'
+  latest_observed: '2026-08-12'
+corporate_events:
+- date: '2025-06'
+  event: divestiture
+  detail: >-
+    Alpine IQ acquired Happy Marketers, the Happy Cabbage text-marketing suite. Happy Cabbage retained and
+    refocused on Happy Buyers.
+  source: https://www.happycabbage.io/integrations

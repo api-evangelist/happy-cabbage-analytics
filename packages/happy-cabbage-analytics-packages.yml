@@ -1,0 +1,92 @@
+generated: '2026-08-22'
+method: searched
+source: >-
+  registry.npmjs.org search, pypi.org, rubygems.org, crates.io, packagist.org, github.com/happycabbage,
+  https://cabbage.pub/swagger-ui/index.html
+package_count: 0
+official_sdk_count: 0
+note: >-
+  Happy Cabbage publishes no client libraries for the Happy Buyers External API. npm registry search for
+  "happycabbage" returns 0 results; pypi.org/pypi/happycabbage and /happy-cabbage, rubygems.org and
+  crates.io all return 404. The GitHub organisation github.com/happycabbage holds nine public
+  repositories, none of which is an API client — they are forks of R/Shiny community packages
+  (shinyTree, shinybulma, react-big-calendar), internal R utilities (ppmtools, twilior, novar, app_template),
+  a Java coding-assessment repo and a DigitalOcean HTML template, and the most recent push is 2023-08-21,
+  nearly three years before the External API shipped. The Swagger UI at cabbage.pub is the only client
+  tooling offered, and it generates curl rather than a language SDK. No SDKs pointer is emitted in apis.yml.
+packages: []
+registries_searched:
+- registry: npm
+  query: happycabbage
+  url: https://registry.npmjs.org/-/v1/search?text=happycabbage
+  results: 0
+- registry: pypi
+  url: https://pypi.org/pypi/happycabbage/json
+  status: 404
+- registry: pypi
+  url: https://pypi.org/pypi/happy-cabbage/json
+  status: 404
+- registry: rubygems
+  url: https://rubygems.org/api/v1/gems/happycabbage.json
+  status: 404
+- registry: crates.io
+  url: https://crates.io/api/v1/crates/happycabbage
+  status: 404
+- registry: packagist
+  url: https://packagist.org/packages/happycabbage/
+  status: 302
+  note: Redirect to search, no vendor namespace.
+source_repositories:
+  organization: https://github.com/happycabbage
+  public_repo_count: 9
+  api_clients: 0
+  last_push_observed: '2023-08-21'
+  repos:
+  - name: coding-assessment
+    language: Java
+    updated: '2023-08-21'
+    first_party: true
+    api_client: false
+  - name: ppmtools
+    language: R
+    updated: '2023-07-18'
+    first_party: true
+    api_client: false
+    description: R package of tools for use with Posit Package Manager.
+  - name: react-big-calendar
+    language: JavaScript
+    updated: '2022-01-11'
+    first_party: false
+    api_client: false
+    description: Fork of the community calendar component.
+  - name: shinyTree
+    language: JavaScript
+    updated: '2021-09-27'
+    first_party: false
+    api_client: false
+  - name: app_template
+    language: R
+    updated: '2021-08-10'
+    first_party: true
+    api_client: false
+  - name: twilior
+    language: R
+    updated: '2021-06-30'
+    first_party: true
+    api_client: false
+    description: R utilities wrapping Twilio, used in production code.
+  - name: novar
+    language: R
+    updated: '2021-03-01'
+    first_party: true
+    api_client: false
+  - name: TEMPL-sample-html
+    language: HTML
+    updated: '2021-01-15'
+    first_party: false
+    api_client: false
+  - name: shinybulma
+    language: R
+    updated: '2020-11-12'
+    first_party: false
+    api_client: false

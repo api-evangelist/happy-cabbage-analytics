@@ -64,5 +64,19 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Happy Cabbage Analytics is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://forgeglobal.com/happy-cabbage-analytics_stock/
+Happy Cabbage Analytics is a cannabis retail software company founded in 2019 and headquartered in San
+Francisco, California. Its Happy Buyers platform gives dispensary buyers AI-assisted inventory management,
+demand forecasting, replenishment and purchase-order workflows on top of live point-of-sale data from
+Dutchie, Flowhub, Blaze, Treez and Meadow, plus wholesale menus from Distru and Apex Trading. Happy Cabbage
+sold its Happy Marketers text-marketing suite to Alpine IQ in June 2025 and now focuses on Happy Buyers.
+
+The **Happy Buyers External API** entered beta on 2026-06-05 and is documented with a public Swagger UI.
+It is an OpenAPI 3.0.1 contract with 40 operations across 30 paths and 49 schemas, authenticated with an
+organization-scoped API key sent in the `hca-api-key` header.
+
+- Website: https://www.happycabbage.io/
+- API reference: https://cabbage.pub/swagger-ui/index.html
+- OpenAPI: https://cabbage.pub/v3/api-docs/external
+- Base URL: https://api.happycabbage.ai (`/external/v1`)
+- Release notes: https://www.happycabbage.io/release-notes
+- AI Hub: https://www.happycabbage.io/ai-hub

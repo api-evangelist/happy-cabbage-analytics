@@ -1,0 +1,23 @@
+generated: '2026-08-22'
+method: searched
+source: https://cabbage.pub/swagger-ui/index.html
+limit_count: 0
+note: >-
+  Happy Cabbage publishes no rate limits for the Happy Buyers External API. The OpenAPI 3.0.1 contract
+  declares no 429 response on any of its 40 operations, no RateLimit-*, X-RateLimit-* or Retry-After
+  response header, and no throttling language appears in info.description or on any page of the public
+  site. Unauthenticated probes of api.happycabbage.ai return 403 before any limit is reached, so nothing
+  could be observed live either. An agent integrating this API has no published budget and no runtime
+  exhaustion signal to back off on. Recorded as an honest zero.
+limits: []
+headers: []
+exhaustion:
+  status_code: null
+  retry_after: false
+probes:
+- url: https://api.happycabbage.ai/external/v1/whoami
+  status: 403
+  note: Unauthenticated request returns 403 Forbidden with no rate-limit headers.
+- url: https://cabbage.pub/v3/api-docs/external
+  status: 200
+  note: Contract fetched and searched for 429 / RateLimit / Retry-After — no match.

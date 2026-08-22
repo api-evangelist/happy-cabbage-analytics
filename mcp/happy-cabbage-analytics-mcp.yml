@@ -1,0 +1,434 @@
+generated: '2026-08-22'
+method: derived
+source: openapi/happy-cabbage-analytics-happy-buyers-external-openapi.yml
+status: candidate
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: api-key
+  verified: searched
+note: Happy Cabbage ships NO MCP server — neither a hosted remote endpoint nor a published stdio package. Searched
+  npm (0 results for "happycabbage"), PyPI, the GitHub organisation (9 repos, none MCP-related, last push 2023)
+  and every page of the public site; probed /mcp on api.happycabbage.ai and cabbage.pub (403) and on www.happycabbage.io
+  (404). The company IS explicitly agent-oriented — its AI Hub publishes six how-to videos on driving Happy Buyers
+  with Claude agents and states "Everything in the videos runs on the same public API you already have" and "Our
+  example skill files are built for Claude" — but the integration path is the REST API plus Agent Skills, not MCP,
+  and the example skill files are customer-only (request them by emailing success@happycabbage.io). The tool list
+  below is a DERIVED CANDIDATE mapped 1:1 from the External API operations; nobody serves it. No MCPServer pointer
+  is emitted in apis.yml.
+agent_posture:
+  published_agent_surface: REST API + provider-authored Claude Agent Skills (customer-only)
+  source: https://www.happycabbage.io/ai-hub
+  quotes:
+  - Everything in the videos runs on the same public API you already have.
+  - It's a standard API, so it works with whatever you already use. Our example skill files are built for Claude
+    because that's what we use internally.
+  skill_files_public: false
+  skill_files_request: success@happycabbage.io
+probes:
+- url: https://api.happycabbage.ai/mcp
+  method: POST tools/list
+  status: 403
+  result: Forbidden JSON envelope, not an MCP server
+- url: https://cabbage.pub/mcp
+  method: POST tools/list
+  status: 403
+  result: Forbidden JSON envelope, not an MCP server
+- url: https://www.happycabbage.io/mcp
+  method: POST tools/list
+  status: 405
+  result: Method Not Allowed from Webflow
+- url: https://restock.happycabbage.ai/mcp
+  method: POST tools/list
+  status: 200
+  result: FALSE POSITIVE - the React SPA catch-all returns the same 756-byte HTML shell for every path; not JSON-RPC,
+    not an MCP server
+- url: https://www.happycabbage.io/.well-known/ai-plugin.json
+  method: GET
+  status: 404
+  result: Invalid .well-known request stub
+tool_count: 40
+tools:
+- name: get_product_line
+  title: Get a product line
+  category: Product Lines
+  rest:
+    method: GET
+    path: /external/v1/product-lines/{id}
+    operationId: getProductLine
+  read_only: true
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+  required_scope: product_lines:read
+- name: update_product_line
+  title: Update a product line
+  category: Product Lines
+  rest:
+    method: PUT
+    path: /external/v1/product-lines/{id}
+    operationId: updateProductLine
+  read_only: false
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+  required_scope: product_lines:write
+- name: update_carry_status
+  title: Update product carry status
+  category: Product Inventory
+  rest:
+    method: PUT
+    path: /external/v1/product-inventory/{productId}/stores/{storeId}/carry-status
+    operationId: updateCarryStatus
+  read_only: false
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+  required_scope: inventory:write
+- name: get_order_items
+  title: List order items
+  category: Orders
+  rest:
+    method: GET
+    path: /external/v1/orders/{orderId}/items
+    operationId: getOrderItems
+  read_only: true
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+- name: add_order_item
+  title: Add order item
+  category: Orders
+  rest:
+    method: PUT
+    path: /external/v1/orders/{orderId}/items
+    operationId: addOrderItem
+  read_only: false
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+- name: get_order_invoice
+  title: Get order invoice
+  category: Orders
+  rest:
+    method: GET
+    path: /external/v1/orders/{orderId}/invoices/{invoiceId}
+    operationId: getOrderInvoice
+  read_only: true
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+- name: update_order_invoice
+  title: Update order invoice
+  category: Orders
+  rest:
+    method: PUT
+    path: /external/v1/orders/{orderId}/invoices/{invoiceId}
+    operationId: updateOrderInvoice
+  read_only: false
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+- name: remove_order_invoice
+  title: Remove order invoice
+  category: Orders
+  rest:
+    method: DELETE
+    path: /external/v1/orders/{orderId}/invoices/{invoiceId}
+    operationId: removeOrderInvoice
+  read_only: false
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+- name: update_order
+  title: Update an order
+  category: Orders
+  rest:
+    method: PUT
+    path: /external/v1/orders/{id}
+    operationId: updateOrder
+  read_only: false
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+  required_scope: orders:write
+- name: get_blockout_date
+  title: Get a blockout date
+  category: Blockout Dates
+  rest:
+    method: GET
+    path: /external/v1/blockout-dates/{id}
+    operationId: getBlockoutDate
+  read_only: true
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+- name: update_blockout_date
+  title: Update a blockout date
+  category: Blockout Dates
+  rest:
+    method: PUT
+    path: /external/v1/blockout-dates/{id}
+    operationId: updateBlockoutDate
+  read_only: false
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+- name: delete_blockout_date
+  title: Delete a blockout date
+  category: Blockout Dates
+  rest:
+    method: DELETE
+    path: /external/v1/blockout-dates/{id}
+    operationId: deleteBlockoutDate
+  read_only: false
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+- name: get_product_lines
+  title: List product lines
+  category: Product Lines
+  rest:
+    method: GET
+    path: /external/v1/product-lines
+    operationId: getProductLines
+  read_only: true
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+  required_scope: product_lines:read
+- name: create_product_line
+  title: Create a product line
+  category: Product Lines
+  rest:
+    method: POST
+    path: /external/v1/product-lines
+    operationId: createProductLine
+  read_only: false
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+  required_scope: product_lines:write
+- name: get_orders
+  title: List orders
+  category: Orders
+  rest:
+    method: GET
+    path: /external/v1/orders
+    operationId: getOrders
+  read_only: true
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+- name: create_order
+  title: Create an order
+  category: Orders
+  rest:
+    method: POST
+    path: /external/v1/orders
+    operationId: createOrder
+  read_only: false
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+  required_scope: orders:write
+- name: get_order_invoices
+  title: List order invoices
+  category: Orders
+  rest:
+    method: GET
+    path: /external/v1/orders/{orderId}/invoices
+    operationId: getOrderInvoices
+  read_only: true
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+- name: add_order_invoice
+  title: Add order invoice
+  category: Orders
+  rest:
+    method: POST
+    path: /external/v1/orders/{orderId}/invoices
+    operationId: addOrderInvoice
+  read_only: false
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+- name: generate_temporary_upload_url
+  title: Generate order invoice upload URL
+  category: Orders
+  rest:
+    method: POST
+    path: /external/v1/orders/{orderId}/invoices/{invoiceId}/upload-url
+    operationId: generateTemporaryUploadUrl
+  read_only: false
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+- name: generate_temporary_download_url
+  title: Generate order invoice download URL
+  category: Orders
+  rest:
+    method: POST
+    path: /external/v1/orders/{orderId}/invoices/{invoiceId}/download-url
+    operationId: generateTemporaryDownloadUrl
+  read_only: false
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+- name: get_blockout_dates
+  title: List blockout dates
+  category: Blockout Dates
+  rest:
+    method: GET
+    path: /external/v1/blockout-dates
+    operationId: getBlockoutDates
+  read_only: true
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+- name: create_blockout_date
+  title: Create a blockout date
+  category: Blockout Dates
+  rest:
+    method: POST
+    path: /external/v1/blockout-dates
+    operationId: createBlockoutDate
+  read_only: false
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+- name: whoami
+  title: Identify the current API key
+  category: Identity
+  rest:
+    method: GET
+    path: /external/v1/whoami
+    operationId: whoami
+  read_only: true
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+- name: get_universal_categories
+  title: List universal categories
+  category: Universal Categories
+  rest:
+    method: GET
+    path: /external/v1/universal-categories
+    operationId: getUniversalCategories
+  read_only: true
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+- name: get_universal_brands
+  title: List universal brands
+  category: Universal Brands
+  rest:
+    method: GET
+    path: /external/v1/universal-brands
+    operationId: getUniversalBrands
+  read_only: true
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+  required_scope: organization_metadata:read
+- name: get_stores
+  title: List stores
+  category: Stores
+  rest:
+    method: GET
+    path: /external/v1/stores
+    operationId: getStores
+  read_only: true
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+  required_scope: organization_metadata:read
+- name: get_product_line_product_inventory
+  title: Find product inventory inside a product line
+  category: Product Lines
+  rest:
+    method: GET
+    path: /external/v1/product-lines/{id}/product-inventory
+    operationId: getProductLineProductInventory
+  read_only: true
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+- name: get_product_line_inventory
+  title: List product line inventory
+  category: Product Line Inventory
+  rest:
+    method: GET
+    path: /external/v1/product-line-inventory
+    operationId: getProductLineInventory
+  read_only: true
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+  required_scope: inventory:read
+- name: get_product_inventory
+  title: List product inventory
+  category: Product Inventory
+  rest:
+    method: GET
+    path: /external/v1/product-inventory
+    operationId: getProductInventory
+  read_only: true
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+  required_scope: inventory:read
+- name: find_packages
+  title: List packages
+  category: Packages
+  rest:
+    method: GET
+    path: /external/v1/product-inventory/packages
+    operationId: findPackages
+  read_only: true
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+  required_scope: inventory:read
+- name: get_pos_categories
+  title: List POS categories
+  category: POS Categories
+  rest:
+    method: GET
+    path: /external/v1/pos-categories
+    operationId: getPosCategories
+  read_only: true
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+  required_scope: organization_metadata:read
+- name: get_pos_brands
+  title: List POS brands
+  category: POS Brands
+  rest:
+    method: GET
+    path: /external/v1/pos-brands
+    operationId: getPosBrands
+  read_only: true
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+  required_scope: organization_metadata:read
+- name: get_store_inventory_healths
+  title: List store inventory health
+  category: Inventory Health
+  rest:
+    method: GET
+    path: /external/v1/inventory-health/stores
+    operationId: getStoreInventoryHealths
+  read_only: true
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+  required_scope: inventory:read
+- name: get_store_inventory_health_histories
+  title: List store inventory health history
+  category: Inventory Health
+  rest:
+    method: GET
+    path: /external/v1/inventory-health/stores/history
+    operationId: getStoreInventoryHealthHistories
+  read_only: true
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+  required_scope: inventory:read
+- name: get_pos_brand_inventory_healths
+  title: List POS brand inventory health
+  category: Inventory Health
+  rest:
+    method: GET
+    path: /external/v1/inventory-health/pos-brands
+    operationId: getPosBrandInventoryHealths
+  read_only: true
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+  required_scope: inventory:read
+- name: get_pos_brand_inventory_health_history
+  title: List POS brand inventory health history
+  category: Inventory Health
+  rest:
+    method: GET
+    path: /external/v1/inventory-health/pos-brands/history
+    operationId: getPosBrandInventoryHealthHistory
+  read_only: true
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+  required_scope: inventory:read
+- name: get_category_inventory_healths
+  title: List category inventory health
+  category: Inventory Health
+  rest:
+    method: GET
+    path: /external/v1/inventory-health/categories
+    operationId: getCategoryInventoryHealths
+  read_only: true
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+  required_scope: inventory:read
+- name: get_category_inventory_health_histories
+  title: List category inventory health history
+  category: Inventory Health
+  rest:
+    method: GET
+    path: /external/v1/inventory-health/categories/history
+    operationId: getCategoryInventoryHealthHistories
+  read_only: true
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+  required_scope: inventory:read
+- name: get_daily_sales_metadata_for_product
+  title: List daily sales metadata for a product
+  category: Daily Sales Metadata
+  rest:
+    method: GET
+    path: /external/v1/daily-sales-metadata/stores/{storeId}/products/{productId}
+    operationId: getDailySalesMetadataForProduct
+  read_only: true
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody
+  required_scope: inventory:read
+- name: remove_order_item
+  title: Remove order item
+  category: Orders
+  rest:
+    method: DELETE
+    path: /external/v1/orders/{orderId}/items/{itemId}/store/{storeId}
+    operationId: removeOrderItem
+  read_only: false
+  input_schema_source: inherited from the OpenAPI operation parameters + requestBody

@@ -1,0 +1,88 @@
+generated: '2026-08-22'
+method: derived
+source: openapi/happy-cabbage-analytics-happy-buyers-external-openapi.yml
+docs: https://cabbage.pub/swagger-ui/index.html
+note: >-
+  Assertions derived from the Happy Buyers External API contract and from probing the provider's public
+  surface. Happy Cabbage publishes no trust center, no compliance page and no certification claims
+  anywhere on happycabbage.io, happycabbage.ai or cabbage.pub, so no Compliance pointer is emitted in
+  apis.yml. Every `conforms: false` below is a recorded absence, not a deduction.
+standards:
+- id: openapi-3.0
+  conforms: true
+  evidence: >-
+    openapi: "3.0.1" served live at https://cabbage.pub/v3/api-docs/external and
+    https://api.happycabbage.ai/v3/api-docs/external, 40 operations across 30 paths, 49 component schemas.
+- id: swagger-ui
+  conforms: true
+  evidence: >-
+    Public Swagger UI at https://cabbage.pub/swagger-ui/index.html, linked from the company's own
+    integrations page as "Happy Buyer API". springdoc config at /v3/api-docs/swagger-config names one
+    document group, "external".
+- id: oauth2
+  conforms: false
+  evidence: >-
+    The only securityScheme is ApiKeyAuth (apiKey in header, hca-api-key). No OAuth flow, no token
+    endpoint, and /.well-known/oauth-authorization-server returns 403 on api.happycabbage.ai and
+    cabbage.pub and 404 on www.happycabbage.io.
+- id: oidc
+  conforms: false
+  evidence: /.well-known/openid-configuration returns 404 (www.happycabbage.io) / 403 (api hosts).
+- id: rfc9457
+  conforms: false
+  evidence: >-
+    No 4xx/5xx response in the contract declares a body schema or an application/problem+json content
+    type. The live envelope is the Spring Boot default {timestamp,status,error,path}.
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: /.well-known/security.txt missed on all four hosts — see well-known/happy-cabbage-analytics-well-known.yml.
+- id: rfc8594-sunset
+  conforms: false
+  evidence: No Sunset or Deprecation header and no deprecation policy published.
+- id: pagination
+  conforms: true
+  evidence: >-
+    Uniform limit/offset pagination on every list operation, with a shared LimitOffsetResponse<T> envelope
+    carrying limit, offset, totalCount, hasMore and results.
+- id: idempotency
+  conforms: false
+  evidence: No Idempotency-Key header or client request token on any of the six write operations.
+- id: json-api
+  conforms: false
+  evidence: Plain JSON resource representations; no JSON:API document structure, no type/attributes envelope.
+- id: odata
+  conforms: false
+  evidence: No $metadata surface; filtering is bespoke query parameters.
+- id: scim
+  conforms: false
+  evidence: No urn:ietf:params:scim:schemas:* URN; the API exposes no user or group provisioning surface.
+domain_standard:
+  market: cannabis retail inventory and wholesale purchasing
+  standard_detected: false
+  candidate: state seed-to-sale track-and-trace identifiers (METRC / BioTrack)
+  evidence: >-
+    PackageResponse.regulatoryId is described as "Regulatory package identifier, when available" and the
+    package search parameter matches against "product name, POS package ID, and regulatory ID". The
+    2026-04-01 release-notes entry states the Replenishment report includes METRC package IDs. That is a
+    genuine regulatory identifier carried through the contract, but it is an opaque string field, not an
+    implementation of a standard message set, schema URN or endpoint shape — the contract declares no
+    METRC/BioTrack API conformance and no cannabis interoperability standard exists in scoring.yml's
+    recognised set. Recorded as detected-but-not-conformant so the finding is not lost, and NOT claimed as
+    domain-standard conformance.
+  note: >-
+    Cannabis retail has no cross-vendor API interoperability standard. Happy Cabbage instead publishes its
+    own normalisation layer — "universal brands" and "universal categories" that map POS-specific brand and
+    category vocabularies (Dutchie, Flowhub, Blaze, Treez, Meadow) onto canonical ids. That is a de-facto
+    private standard, exposed at GET /external/v1/universal-brands and /external/v1/universal-categories,
+    and it is the most interoperability-shaped thing in the contract.
+compliance:
+  certifications_published: []
+  trust_center: false
+  soc2: unknown
+  iso27001: unknown
+  hipaa: not-applicable
+  pci: not-applicable
+  evidence: >-
+    No trust page, no certification badges and no compliance section found on the public site. Probed
+    https://trust.happycabbage.io/ and https://www.happycabbage.io/security — both unresolved/404.
+  privacy_policy: https://lrn.mobi/hca_privacy_policy

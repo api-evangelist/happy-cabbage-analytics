@@ -1,0 +1,29 @@
+generated: '2026-08-22'
+method: searched
+source: https://www.happycabbage.io/
+plan_count: 0
+note: >-
+  Happy Cabbage publishes no pricing page and no plan tiers. https://www.happycabbage.io/pricing returns
+  404, the site navigation has no pricing entry, and every commercial path funnels to a free trial
+  (/buyers-free-trial) or a sales conversation (/book-a-demo). Nothing on the public surface states the
+  price of Happy Buyers or of External API access, and there is no self-serve checkout. Trade press
+  reported a $900 figure for the earlier bundled software suite, which is neither provider-published nor
+  current, so it is not recorded as a plan.
+plans: []
+access:
+  model: sales-assisted with free trial
+  trial: true
+  trial_url: https://www.happycabbage.io/buyers-free-trial
+  demo_url: https://www.happycabbage.io/book-a-demo
+  self_serve_checkout: false
+api_access:
+  gating: >-
+    External API keys are issued by Happy Buyers per organization (per the ApiKeyAuth securityScheme
+    description). No public key self-service, no published API price or quota.
+probes:
+- url: https://www.happycabbage.io/pricing
+  status: 404
+- url: https://www.happycabbage.io/buyers-free-trial
+  status: 200
+- url: https://www.happycabbage.io/book-a-demo
+  status: 200

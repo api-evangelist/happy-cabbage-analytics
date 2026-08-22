@@ -1,18 +1,92 @@
 aid: happy-cabbage-analytics
 name: Happy Cabbage Analytics
-description: 'Happy Cabbage Analytics is a company surfaced via the API Evangelist harvest backlog (source:
-  secondary-market) and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  Happy Cabbage Analytics is a cannabis retail software company founded in 2019 and headquartered in
+  San Francisco, California, whose Happy Buyers platform gives dispensary buyers AI-assisted inventory
+  management, demand forecasting, replenishment and purchase-order workflows on top of data pulled from
+  their point-of-sale system. The platform reads live sell-through from POS integrations (Dutchie,
+  Flowhub, Blaze, Treez, Meadow) and wholesale menus (Distru, Apex Trading), then scores inventory
+  health by store, category and brand, predicts days-on-hand, groups SKUs into product lines, and drafts
+  vendor orders with invoices attached. Happy Cabbage sold its Happy Marketers text-marketing suite to
+  Alpine IQ in June 2025 and now focuses on Happy Buyers. A public Happy Buyers External API entered
+  beta in June 2026 and is documented with a Swagger UI, exposing organization metadata, inventory
+  health, product/product-line inventory, packages, daily sales metadata and full order management to
+  API-key holders — the same API the company's own published AI-agent workflows are built on.
+image: https://cdn.prod.website-files.com/5d46254e52d2932dcbc10ee9/65cba367661e3aebedb84daf_HCA_Logo_primary.png
 url: https://raw.githubusercontent.com/api-evangelist/happy-cabbage-analytics/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-22'
 modified: '2026-08-22'
 tags:
-- Company
-apis: []
+- Cannabis
+- Retail
+- Inventory Management
+- Analytics
+- Purchasing
+- Point of Sale
+- Wholesale
+- Demand Forecasting
+- Supply Chain
+- agent-native
+tags_raw:
+- cannabis
+- retail
+- inventory-management
+- analytics
+- purchasing
+- point-of-sale
+- wholesale
+- demand-forecasting
+- supply-chain
+- agent-native
+apis:
+- name: Happy Buyers External API
+  description: >-
+    External REST API for Happy Buyers organization metadata and inventory data. Requests are
+    authenticated with an API key sent in the hca-api-key header and results are scoped to the
+    organization attached to that key. Covers stores, POS brands/categories, universal brands and
+    categories, product and product-line inventory with demand and replenishment metrics, package-level
+    inventory, inventory health (current and historical, by store / POS brand / category), daily sales
+    metadata, blockout dates, and full purchase-order management including order items, invoices and
+    temporary invoice upload/download URLs. List endpoints use limit/offset pagination and return
+    totalCount plus hasMore. Released in beta on 2026-06-05.
+  humanURL: https://cabbage.pub/swagger-ui/index.html
+  baseURL: https://api.happycabbage.ai
+  tags:
+  - Cannabis
+  - Retail
+  - Inventory Management
+  - Purchasing
+  - Wholesale
+  - Demand Forecasting
+  tags_raw:
+  - cannabis
+  - retail
+  - inventory-management
+  - purchasing
+  - wholesale
+  - demand-forecasting
+  properties:
+  - type: OpenAPI
+    url: openapi/happy-cabbage-analytics-happy-buyers-external-openapi.yml
+  - type: Documentation
+    url: https://cabbage.pub/swagger-ui/index.html
+  - type: APIReference
+    url: https://cabbage.pub/swagger-ui/index.html
+  - type: Authentication
+    url: authentication/happy-cabbage-analytics-authentication.yml
+  - type: Conventions
+    url: conventions/happy-cabbage-analytics-conventions.yml
+  - type: ErrorCatalog
+    url: errors/happy-cabbage-analytics-problem-types.yml
+  - type: DataModel
+    url: data-model/happy-cabbage-analytics-data-model.yml
+  - type: Overlay
+    url: overlays/happy-cabbage-analytics-happy-buyers-external-overlay.yaml
+  - type: AgentSkill
+    url: skills/_index.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -20,4 +94,59 @@ maintainers:
   email: info@apis.io
 common:
 - type: Website
-  url: https://forgeglobal.com/happy-cabbage-analytics_stock/
+  url: https://www.happycabbage.io/
+- type: Documentation
+  url: https://cabbage.pub/swagger-ui/index.html
+- type: APIReference
+  url: https://cabbage.pub/swagger-ui/index.html
+- type: Blog
+  url: https://www.happycabbage.io/the-patch
+- type: Support
+  url: https://www.happycabbage.io/contact
+- type: SignUp
+  url: https://www.happycabbage.io/buyers-free-trial
+- type: Login
+  url: https://restock.happycabbage.ai/
+- type: PrivacyPolicy
+  url: https://lrn.mobi/hca_privacy_policy
+- type: GitHubOrganization
+  url: https://github.com/happycabbage
+- type: ChangeLog
+  url: https://www.happycabbage.io/release-notes
+- type: ChangeLog
+  url: changelog/happy-cabbage-analytics-changelog.yml
+- type: Integrations
+  url: https://www.happycabbage.io/integrations
+- type: OpenAPI
+  url: openapi/happy-cabbage-analytics-happy-buyers-external-openapi.yml
+- type: Authentication
+  url: authentication/happy-cabbage-analytics-authentication.yml
+- type: Conventions
+  url: conventions/happy-cabbage-analytics-conventions.yml
+- type: ErrorCatalog
+  url: errors/happy-cabbage-analytics-problem-types.yml
+- type: DataModel
+  url: data-model/happy-cabbage-analytics-data-model.yml
+- type: Lifecycle
+  url: lifecycle/happy-cabbage-analytics-lifecycle.yml
+- type: Conformance
+  url: conformance/happy-cabbage-analytics-conformance.yml
+- type: Packages
+  url: packages/happy-cabbage-analytics-packages.yml
+- type: Plans
+  url: plans/happy-cabbage-analytics-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/happy-cabbage-analytics-rate-limits.yml
+- type: LLMsTxt
+  url: llms/happy-cabbage-analytics-llms.txt
+- type: Overlay
+  url: overlays/happy-cabbage-analytics-happy-buyers-external-overlay.yaml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: DomainSecurity
+  url: security/happy-cabbage-analytics-domain-security.yml
+x-enrichment:
+  date: '2026-08-22'
+  status: enriched
+  artifacts_added: 21
+  pass: local-v1

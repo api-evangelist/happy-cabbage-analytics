@@ -1,0 +1,79 @@
+generated: '2026-08-22'
+method: derived
+source: openapi/happy-cabbage-analytics-happy-buyers-external-openapi.yml
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+schemes:
+- name: ApiKeyAuth
+  type: apiKey
+  in: header
+  parameter: hca-api-key
+  description: External API key issued by Happy Buyers. Send the key in the hca-api-key header.
+  sources:
+  - openapi/happy-cabbage-analytics-happy-buyers-external-openapi.yml
+docs: https://cabbage.pub/swagger-ui/index.html
+note: 'Single scheme. The Happy Buyers External API is API-key only: no OAuth, no OIDC, no mTLS, no bearer tokens.
+  Keys are issued by Happy Buyers per organization and every response is scoped to that organization, so the key
+  IS the tenant selector — there is no account/tenant parameter anywhere in the contract. GET /external/v1/whoami
+  is the documented way to resolve which key and organization you are operating as. Happy Cabbage publishes no prose
+  authentication page; the Swagger UI at cabbage.pub is the whole developer surface.'
+tenancy:
+  model: key-scoped organization
+  resolver_operation: whoami
+  resolver_path: /external/v1/whoami
+  returns:
+  - keyName
+  - organizationName
+  - keyCreatedAt
+  - organizationCreatedAt
+key_scopes:
+  model: per-key permissions
+  declared_in: 403 response descriptions on individual operations only — there is no securityScheme scope list,
+    no scopes reference page and no scope introspection endpoint
+  values:
+  - scope: organization_metadata:read
+    operations:
+    - getStores
+    - getPosBrands
+    - getPosCategories
+    - getUniversalBrands
+  - scope: inventory:read
+    operations:
+    - getProductInventory
+    - getProductLineInventory
+    - findPackages
+    - getStoreInventoryHealths
+    - getStoreInventoryHealthHistories
+    - getPosBrandInventoryHealths
+    - getPosBrandInventoryHealthHistory
+    - getCategoryInventoryHealths
+    - getCategoryInventoryHealthHistories
+    - getDailySalesMetadataForProduct
+  - scope: inventory:write
+    operations:
+    - updateCarryStatus
+  - scope: product_lines:read
+    operations:
+    - getProductLines
+    - getProductLine
+  - scope: product_lines:write
+    operations:
+    - createProductLine
+    - updateProductLine
+  - scope: orders:write
+    operations:
+    - createOrder
+    - updateOrder
+  note: These are API-key permissions, not OAuth scopes, so no scopes/ artifact with an OAuthScopes pointer is emitted.
+    Nineteen of the 40 operations declare no 403 at all — chiefly the order-item, order-invoice, blockout-date and
+    whoami operations — so their scope requirement is undocumented.
+unauthenticated_behaviour:
+  method: probed
+  source: https://api.happycabbage.ai/external/v1/whoami
+  status: 403
+  body: '{"timestamp":"...","status":403,"error":"Forbidden","path":"/..."}'
+  note: The gateway returns 403 rather than the contract-declared 401 for a wholly absent key, and the body is the
+    Spring Boot default envelope with no WWW-Authenticate header.

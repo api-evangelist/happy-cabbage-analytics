@@ -1,0 +1,183 @@
+generated: '2026-08-22'
+method: derived
+source: openapi/happy-cabbage-analytics-happy-buyers-external-openapi.yml
+docs: https://cabbage.pub/swagger-ui/index.html
+note: >-
+  Derived from the Happy Buyers External API contract (OpenAPI 3.0.1, 40 operations) plus the
+  info.description narrative the provider ships inside it. Happy Cabbage publishes no prose developer
+  guide — the Swagger UI at cabbage.pub is the entire public developer surface — so every convention
+  below is read off the contract itself rather than a documentation page.
+authentication:
+  style: api-key-header
+  header: hca-api-key
+  scheme: ApiKeyAuth
+  applied: global
+  tenancy: >-
+    Results are scoped to the organization attached to the key. GET /external/v1/whoami returns the key
+    name, the organization name and both creation timestamps, and is the documented way for an agent to
+    establish which tenant it is operating against before it writes anything.
+  scopes:
+    model: key-scoped permissions, declared only in 403 response descriptions
+    values:
+    - organization_metadata:read
+    - inventory:read
+    - inventory:write
+    - product_lines:read
+    - product_lines:write
+    - orders:write
+    note: >-
+      There is no securityScheme flow, no scope registry endpoint and no scopes page in the docs. The six
+      scope strings are recoverable only by reading the 403 description on each operation, which is why
+      no OAuthScopes artifact is emitted — these are API-key permissions, not OAuth scopes.
+pagination:
+  style: limit-offset
+  request_params:
+  - name: limit
+    in: query
+    description: Maximum number of records requested for this page.
+  - name: offset
+    in: query
+    description: Zero-based result offset.
+  response_envelope:
+    schema_prefix: LimitOffsetResponse
+    fields:
+    - limit
+    - offset
+    - totalCount
+    - hasMore
+    - results
+  note: >-
+    Every list operation returns the same LimitOffsetResponse<T> envelope. hasMore is the cursor-free
+    continuation signal; totalCount is the pre-pagination match count.
+sorting:
+  params:
+  - sortTarget
+  - sortDirection
+filtering:
+  style: rich query parameters
+  note: >-
+    82 distinct query parameters across the list operations — id-set filters (storeIds, brandIds,
+    posBrandIds, universalBrandIds, categoryIds, vendorIds, strainClassificationIds), numeric range
+    filters (min/max cost, price, weight, inventory, days-aged, predicted days-on-hand), date-window
+    filters (createdAtFrom/Until, receivedAtStart/End, activeBefore/activeOnOrAfter, activeInLastDays)
+    and free-text (search, matchingSearchTerms, notMatchingSearchTerms).
+field_expansion:
+  supported: partial
+  mechanism: boolean include* query flags
+  examples:
+  - includeProductLineDetails
+  - includePercentShares
+  - includeAllStores
+  - includeArchived
+  - includeUniversalUncategorized
+  - includePosUncategorized
+  - includePosSubUncategorized
+metadata:
+  custom_fields: false
+  note: No user-defined metadata bag is exposed on any resource.
+request_id_tracing:
+  supported: false
+  note: The contract declares no request-id / correlation-id request or response header.
+versioning:
+  style: path
+  current: /external/v1
+  spec_version: v1
+  note: >-
+    The version is pinned in the path prefix (/external/v1). No version header, no dated version
+    parameter, no version negotiation is documented.
+error_envelope:
+  format: vendor-json
+  rfc9457: false
+  observed_fields:
+  - timestamp
+  - status
+  - error
+  - path
+  note: >-
+    No 4xx/5xx response in the contract declares a body schema. The live envelope observed on
+    unauthenticated calls to api.happycabbage.ai is the Spring Boot default shape. See
+    errors/happy-cabbage-analytics-problem-types.yml.
+rate_limit_signaling:
+  documented: false
+  headers: []
+  exhaustion_status: null
+  note: >-
+    No 429 response, no RateLimit-*/X-RateLimit-*/Retry-After header and no limits page exist anywhere on
+    the public surface. See rate-limits/happy-cabbage-analytics-rate-limits.yml.
+idempotency:
+  supported: false
+  status: absent
+  header: null
+  note: >-
+    No Idempotency-Key header, no client-supplied request token, and no idempotency section anywhere in
+    the contract or on the docs surface. POST /external/v1/orders and POST /external/v1/product-lines are
+    both unguarded creates — a retried call creates a second order or product line. No Idempotency
+    pointer is emitted in apis.yml because the provider does not support it.
+dry_run_mode:
+  supported: false
+  note: No preview/validate-only/simulate parameter on any write operation.
+reversibility:
+  overall: documented
+  grade_basis: >-
+    Reversal operations exist for three of the five write surfaces, but the contract and the public docs
+    state no window for any of them, so this grades `documented` rather than `verified`. No window is
+    asserted here because the provider does not publish one.
+  write_surfaces:
+  - surface: Purchase orders
+    create: createOrder
+    reversal: null
+    reversal_grade: none
+    window: null
+    note: >-
+      There is no cancel, void, delete or status-rollback operation for an order. updateOrder mutates
+      note/name/description only — the OrderResponse status enum (DRAFT, READY_TO_SEND, SUBMITTED,
+      RECEIVED) is read-only in the external contract. An order created through the API cannot be
+      withdrawn through the API.
+  - surface: Order items
+    create: addOrderItem
+    reversal: removeOrderItem
+    reversal_grade: documented
+    window: null
+    note: DELETE /external/v1/orders/{orderId}/items/{itemId}/store/{storeId}. No stated time or status window.
+  - surface: Order invoices
+    create: addOrderInvoice
+    reversal: removeOrderInvoice
+    reversal_grade: documented
+    window: null
+    note: DELETE /external/v1/orders/{orderId}/invoices/{invoiceId}. No stated window.
+  - surface: Blockout dates
+    create: createBlockoutDate
+    reversal: deleteBlockoutDate
+    reversal_grade: documented
+    window: null
+    note: DELETE /external/v1/blockout-dates/{id}. No stated window.
+  - surface: Product carry status
+    create: updateCarryStatus
+    reversal: updateCarryStatus
+    reversal_grade: documented
+    window: null
+    note: >-
+      Self-reversing boolean toggle — PUT continueToCarry=true restores a product discontinued with
+      continueToCarry=false. The contract states the discontinued product stays viewable and is only
+      excluded from reorder recommendations, so the change is non-destructive.
+  - surface: Product lines
+    create: createProductLine
+    reversal: null
+    reversal_grade: none
+    window: null
+    note: >-
+      No DELETE operation for a product line. updateProductLine can rewrite the definition but cannot
+      remove one created in error.
+  - surface: Invoice upload URLs
+    create: generateTemporaryUploadUrl
+    reversal: null
+    reversal_grade: none
+    window: null
+    note: >-
+      The operation summary calls the URL temporary but the contract does not state its lifetime.
+cross_links:
+  errors: errors/happy-cabbage-analytics-problem-types.yml
+  authentication: authentication/happy-cabbage-analytics-authentication.yml
+  lifecycle: lifecycle/happy-cabbage-analytics-lifecycle.yml
+  rate_limits: rate-limits/happy-cabbage-analytics-rate-limits.yml
+  data_model: data-model/happy-cabbage-analytics-data-model.yml

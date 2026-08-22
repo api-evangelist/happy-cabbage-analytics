@@ -1,0 +1,158 @@
+generated: '2026-08-22'
+method: derived
+source: openapi/happy-cabbage-analytics-happy-buyers-external-openapi.yml
+format: vendor-json
+note: The Happy Buyers External API declares 400/401/403/404 responses on its operations but does NOT publish a
+  response body schema for any of them — every 4xx response object in the spec carries a description and no content.
+  The error envelope observed live on unauthenticated requests is the Spring Boot default {"timestamp","status","error","path"}.
+  It is NOT RFC 9457 application/problem+json, and there is no documented machine-readable error code registry.
+  Titles and remediation below are derived from the operation-level response descriptions in the contract; no error
+  catalog page was found on the docs surface.
+observed_envelope:
+  method: probed
+  source: https://api.happycabbage.ai/external/v1/whoami (unauthenticated)
+  content_type: application/json
+  fields:
+  - timestamp
+  - status
+  - error
+  - path
+  example:
+    timestamp: '2026-08-22T13:12:28.775+00:00'
+    status: 403
+    error: Forbidden
+    path: /
+problem_types:
+- status: 400
+  title: Invalid request body
+  operations:
+  - createOrder
+  - createProductLine
+  - updateCarryStatus
+  - updateOrder
+  - updateProductLine
+  remediation: Correct the offending query parameter or request body field and retry. Query filters are validated
+    server-side; limit/offset must be non-negative integers.
+- status: 400
+  title: Invalid query parameter
+  operations:
+  - findPackages
+  - getCategoryInventoryHealthHistories
+  - getCategoryInventoryHealths
+  - getPosBrandInventoryHealthHistory
+  - getPosBrandInventoryHealths
+  - getPosBrands
+  - getPosCategories
+  - getProductInventory
+  - getProductLineInventory
+  - getProductLines
+  - getStoreInventoryHealthHistories
+  - getStoreInventoryHealths
+  - getStores
+  - getUniversalBrands
+  - getUniversalCategories
+  remediation: Correct the offending query parameter or request body field and retry. Query filters are validated
+    server-side; limit/offset must be non-negative integers.
+- status: 401
+  title: Missing, malformed, or invalid API key
+  operations:
+  - createOrder
+  - createProductLine
+  - findPackages
+  - getCategoryInventoryHealthHistories
+  - getCategoryInventoryHealths
+  - getDailySalesMetadataForProduct
+  - getPosBrandInventoryHealthHistory
+  - getPosBrandInventoryHealths
+  - getPosBrands
+  - getPosCategories
+  - getProductInventory
+  - getProductLine
+  - getProductLineInventory
+  - getProductLines
+  - getStoreInventoryHealthHistories
+  - getStoreInventoryHealths
+  - getStores
+  - getUniversalBrands
+  - getUniversalCategories
+  - updateCarryStatus
+  - updateOrder
+  - updateProductLine
+  - whoami
+  remediation: Send a valid External API key in the hca-api-key header. Keys are issued by Happy Buyers per organization.
+- status: 403
+  title: API key does not include product_lines:read
+  operations:
+  - getProductLine
+  - getProductLines
+  remediation: The key authenticated but lacks the scope named in the response description. Ask Happy Buyers to
+    reissue the key with the required scope.
+  required_scope: product_lines:read
+- status: 403
+  title: API key does not include product_lines:write
+  operations:
+  - createProductLine
+  - updateProductLine
+  remediation: The key authenticated but lacks the scope named in the response description. Ask Happy Buyers to
+    reissue the key with the required scope.
+  required_scope: product_lines:write
+- status: 403
+  title: API key does not include inventory:write
+  operations:
+  - updateCarryStatus
+  remediation: The key authenticated but lacks the scope named in the response description. Ask Happy Buyers to
+    reissue the key with the required scope.
+  required_scope: inventory:write
+- status: 403
+  title: API key does not include orders:write
+  operations:
+  - createOrder
+  - updateOrder
+  remediation: The key authenticated but lacks the scope named in the response description. Ask Happy Buyers to
+    reissue the key with the required scope.
+  required_scope: orders:write
+- status: 403
+  title: API key does not include organization_metadata:read
+  operations:
+  - getPosBrands
+  - getPosCategories
+  - getStores
+  - getUniversalBrands
+  remediation: The key authenticated but lacks the scope named in the response description. Ask Happy Buyers to
+    reissue the key with the required scope.
+  required_scope: organization_metadata:read
+- status: 403
+  title: API key does not include inventory:read
+  operations:
+  - findPackages
+  - getCategoryInventoryHealthHistories
+  - getCategoryInventoryHealths
+  - getDailySalesMetadataForProduct
+  - getPosBrandInventoryHealthHistory
+  - getPosBrandInventoryHealths
+  - getProductInventory
+  - getProductLineInventory
+  - getStoreInventoryHealthHistories
+  - getStoreInventoryHealths
+  remediation: The key authenticated but lacks the scope named in the response description. Ask Happy Buyers to
+    reissue the key with the required scope.
+  required_scope: inventory:read
+- status: 404
+  title: Product line not found
+  operations:
+  - getProductLine
+  - updateProductLine
+  remediation: The referenced order, product line, store or product inventory record does not exist in the organization
+    attached to the key.
+- status: 404
+  title: Store or product inventory not found
+  operations:
+  - updateCarryStatus
+  remediation: The referenced order, product line, store or product inventory record does not exist in the organization
+    attached to the key.
+- status: 404
+  title: Order not found
+  operations:
+  - updateOrder
+  remediation: The referenced order, product line, store or product inventory record does not exist in the organization
+    attached to the key.

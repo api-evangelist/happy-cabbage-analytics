@@ -1,0 +1,140 @@
+generated: '2026-08-22'
+method: searched
+source: https://www.happycabbage.io/release-notes
+scheme: dated-entries
+versioned: false
+note: >-
+  Happy Cabbage publishes a dated, filterable release-notes page for the Happy Buyers product. Entries are
+  product-level, not API-level: they carry no version number, no semver tag, and no breaking-vs-additive
+  labelling, and there is no separate API changelog. Only the 2026-06-05 entry announces the External API
+  itself. The recent window below is verbatim-sourced from that page; each entry links to a "Learn more"
+  article on the same site.
+current_version: v1
+current_version_note: From info.version in the External API contract; the release-notes page does not version.
+cadence: irregular, roughly two to five entries per month
+earliest_entry_observed: '2025-04-08'
+latest_entry_observed: '2026-08-12'
+entries:
+- date: '2026-08-12'
+  title: Display state next to brand name
+  type: additions
+  breaking: false
+  highlight: >-
+    Brand names now show their state code (for example "Wana (OH)") wherever brands are listed, including
+    filters, dropdowns and Inventory Health grids.
+- date: '2026-08-11'
+  title: Customize the package identifier on the Replenishment Report
+  type: additions
+  breaking: false
+  highlight: >-
+    Pick which identifier shows on the Replenishment Report (POS ID, Regulatory ID or Barcode). Existing
+    reports keep working, defaulting to Regulatory ID.
+- date: '2026-08-06'
+  title: Brand and category days on hand visible in your cart summary
+  type: additions
+  breaking: false
+  highlight: Cart summary shows current days on hand at brand and category level for each store while building an order.
+- date: '2026-07-29'
+  title: Packages tab is live
+  type: additions
+  breaking: false
+  highlight: >-
+    Package-level inventory visibility, default-sorted by days aged. Corresponds to the
+    GET /external/v1/product-inventory/packages operation in the External API.
+- date: '2026-07-29'
+  title: Invoice uploads on Orders
+  type: additions
+  breaking: false
+  highlight: >-
+    Invoices can be uploaded and attached directly to orders. Corresponds to the order-invoice operations
+    and the temporary upload/download URL operations in the External API.
+- date: '2026-07-27'
+  title: Multiple draft orders
+  type: additions
+  breaking: false
+  highlight: >-
+    Create and manage multiple draft orders before finalizing. The entry explicitly notes this "opens up
+    publishing multiple orders through the API that are ready to refine and send to your vendor".
+- date: '2026-07-15'
+  title: Custom line items across multiple stores
+  type: additions
+  breaking: false
+  highlight: Add a custom line item to an order across multiple stores at once, with per-store quantity tuning.
+- date: '2026-07-13'
+  title: Units to order rounds to case size
+  type: changes
+  breaking: false
+  highlight: Units to order rounds up or down to the nearest case size.
+- date: '2026-07-06'
+  title: 'Inventory Health: brand and category performance'
+  type: additions
+  breaking: false
+  highlight: >-
+    Inventory Health pages split into an overview tab (category and brand performance) and a trends tab
+    (weekly/monthly stats).
+- date: '2026-06-22'
+  title: Custom line items in orders
+  type: additions
+  breaking: false
+  highlight: Add a custom line item when the product is not already in Happy Buyers.
+- date: '2026-06-18'
+  title: Product Line performance fields
+  type: additions
+  breaking: false
+  highlight: >-
+    Product Lines track estimated profit $, aged inventory $, discount $, average discount %, average
+    margin % and inventory cost.
+- date: '2026-06-10'
+  title: Universal brands on Product Lines
+  type: additions
+  breaking: false
+  highlight: >-
+    Product lines can carry a universal brand, set automatically when mappings are configured, and this
+    flows through to orders.
+- date: '2026-06-05'
+  title: External API beta & per-store order settings
+  type: additions
+  breaking: false
+  api_relevant: true
+  highlight: >-
+    "An external API is now in beta", plus per-store overrides for product line desired days on hand, lead
+    time and depth. This is the launch entry for the API this profile documents.
+- date: '2026-05-20'
+  title: Centralized order management
+  type: additions
+  breaking: false
+  highlight: >-
+    Build, send and track orders directly through Happy Buyers, with strain-based order guides and vendor
+    communication.
+- date: '2026-05-08'
+  title: Packages on Meadow
+  type: additions
+  breaking: false
+  highlight: Meadow POS customers get packages support, unlocking aged inventory, inventory cost and THC %.
+- date: '2026-04-20'
+  title: Sales per day heatmap for products
+  type: additions
+  breaking: false
+  highlight: Product detail panel shows a 90-day calendar heatmap of sales status.
+- date: '2026-04-01'
+  title: Replenishment report + METRC package IDs
+  type: additions
+  breaking: false
+  highlight: >-
+    The Replenishment report includes METRC package IDs — the state seed-to-sale tracking identifier —
+    making replenishment actionable against tracked packages.
+- date: '2026-03-26'
+  title: Cart filtering & batch update
+  type: additions
+  breaking: false
+  highlight: Filter the cart by store, category and brand, then batch-update days on hand or lead time.
+- date: '2026-03-20'
+  title: Improved AI product line model
+  type: changes
+  breaking: false
+  highlight: AI-generated product line accuracy lifted from the low 60s to around 87% on average.
+- date: '2026-03-12'
+  title: Automated replenishment report emails
+  type: additions
+  breaking: false
+  highlight: Daily automated replenishment report email; recipients do not need a Happy Buyers login.

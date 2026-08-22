@@ -1,0 +1,101 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements — Happy Buyers External API
+  version: 1.0.0
+extends: ../openapi/happy-cabbage-analytics-happy-buyers-external-openapi.yml
+x-provenance:
+  generated: '2026-08-22'
+  method: generated
+  source: >-
+    Derived from the provider's own contract fetched at https://cabbage.pub/v3/api-docs/external plus the
+    conventions, errors, lifecycle and conformance artifacts in this repository. This overlay records API
+    Evangelist enhancements only; the original specification in openapi/_original/ is never mutated.
+actions:
+- target: $.info
+  description: >-
+    Record the observed lifecycle stage and the base URL the contract is actually served from, both of
+    which the published document omits.
+  update:
+    x-lifecycle-stage: beta
+    x-lifecycle-since: '2026-06-05'
+    x-lifecycle-source: https://www.happycabbage.io/release-notes
+    x-api-evangelist-profile: https://apis.io/provider/happy-cabbage-analytics
+    x-docs-url: https://cabbage.pub/swagger-ui/index.html
+    x-spec-url: https://cabbage.pub/v3/api-docs/external
+- target: $.info
+  description: >-
+    Surface the six API-key permission scopes that are currently discoverable only by reading the 403
+    description on each individual operation.
+  update:
+    x-key-scopes:
+    - organization_metadata:read
+    - inventory:read
+    - inventory:write
+    - product_lines:read
+    - product_lines:write
+    - orders:write
+- target: $.info
+  description: Record the runtime semantics the contract does not state.
+  update:
+    x-idempotency: none
+    x-rate-limits: undocumented
+    x-error-format: vendor-json
+    x-error-fields:
+    - timestamp
+    - status
+    - error
+    - path
+    x-pagination: limit-offset with LimitOffsetResponse envelope (limit, offset, totalCount, hasMore, results)
+- target: $.paths['/external/v1/orders'].post
+  description: >-
+    Flag the unguarded create. There is no Idempotency-Key and no cancel/void operation, so a retried
+    createOrder produces a second purchase order that cannot be withdrawn through the API.
+  update:
+    x-agentic-access:
+      action-class: write
+      consequence: creates a purchase order visible to the retailer's buying team
+      reversible: false
+      reversal-operation: null
+      idempotent: false
+      escalation: confirm-with-human
+- target: $.paths['/external/v1/product-lines'].post
+  description: Unguarded create with no delete operation available to reverse it.
+  update:
+    x-agentic-access:
+      action-class: write
+      consequence: creates a product line that drives replenishment calculations
+      reversible: false
+      reversal-operation: null
+      idempotent: false
+      escalation: confirm-with-human
+- target: $.paths['/external/v1/product-inventory/{productId}/stores/{storeId}/carry-status'].put
+  description: Self-reversing toggle; safe for an agent to set and unset.
+  update:
+    x-agentic-access:
+      action-class: write
+      consequence: discontinues or resumes a product for reorder recommendations; product stays viewable
+      reversible: true
+      reversal-operation: updateCarryStatus
+      idempotent: true
+      escalation: none
+- target: $.paths['/external/v1/orders/{orderId}/items/{itemId}/store/{storeId}'].delete
+  description: The documented reversal for addOrderItem. No window is stated by the provider.
+  update:
+    x-agentic-access:
+      action-class: delete
+      consequence: removes a line item from an existing order
+      reversible: true
+      reversal-operation: addOrderItem
+      reversal-window: unstated
+      escalation: none
+- target: $.paths['/external/v1/whoami'].get
+  description: >-
+    Mark the tenancy-establishing call. An agent should call this first to confirm which organization the
+    key resolves to before performing any write.
+  update:
+    x-agent-preflight: true
+    x-agentic-access:
+      action-class: read
+      consequence: none
+      reversible: true
+      escalation: none
