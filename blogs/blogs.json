@@ -1,0 +1,14 @@
+{
+  "repo": "happy-cabbage-analytics",
+  "feeds": [
+    {
+      "source": "https://cabbage.pub/swagger-ui/index.html",
+      "feed_url": "https://cabbage.pub/swagger-ui/index.html",
+      "title": "",
+      "saved": 0,
+      "method": "none"
+    }
+  ],
+  "post_count": 0,
+  "fetched": "2026-08-22T20:20:02Z"
+}
