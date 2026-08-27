@@ -42,35 +42,16 @@ tags_raw:
 - supply-chain
 - agent-native
 apis:
-- name: Happy Buyers External API
-  description: >-
-    External REST API for Happy Buyers organization metadata and inventory data. Requests are
-    authenticated with an API key sent in the hca-api-key header and results are scoped to the
-    organization attached to that key. Covers stores, POS brands/categories, universal brands and
-    categories, product and product-line inventory with demand and replenishment metrics, package-level
-    inventory, inventory health (current and historical, by store / POS brand / category), daily sales
-    metadata, blockout dates, and full purchase-order management including order items, invoices and
-    temporary invoice upload/download URLs. List endpoints use limit/offset pagination and return
-    totalCount plus hasMore. Released in beta on 2026-06-05.
+- aid: happy-cabbage-analytics:happy-cabbage-analytics-blockout-dates-api
+  name: Happy Cabbage Analytics Blockout Dates API
+  description: Blockout dates
   humanURL: https://cabbage.pub/swagger-ui/index.html
   baseURL: https://api.happycabbage.ai
   tags:
-  - Cannabis
-  - Retail
-  - Inventory Management
-  - Purchasing
-  - Wholesale
-  - Demand Forecasting
-  tags_raw:
-  - cannabis
-  - retail
-  - inventory-management
-  - purchasing
-  - wholesale
-  - demand-forecasting
+  - Blockout Dates
   properties:
   - type: OpenAPI
-    url: openapi/happy-cabbage-analytics-happy-buyers-external-openapi.yml
+    url: openapi/happy-cabbage-analytics-blockout-dates-api-openapi.yml
   - type: Documentation
     url: https://cabbage.pub/swagger-ui/index.html
   - type: APIReference
@@ -83,10 +64,292 @@ apis:
     url: errors/happy-cabbage-analytics-problem-types.yml
   - type: DataModel
     url: data-model/happy-cabbage-analytics-data-model.yml
-  - type: Overlay
-    url: overlays/happy-cabbage-analytics-happy-buyers-external-overlay.yaml
-  - type: AgentSkill
-    url: skills/_index.yml
+- aid: happy-cabbage-analytics:happy-cabbage-analytics-daily-sales-metadata-api
+  name: Happy Cabbage Analytics Daily Sales Metadata API
+  description: Daily product sales and stock metadata
+  humanURL: https://cabbage.pub/swagger-ui/index.html
+  baseURL: https://api.happycabbage.ai
+  tags:
+  - Daily Sales Metadata
+  properties:
+  - type: OpenAPI
+    url: openapi/happy-cabbage-analytics-daily-sales-metadata-api-openapi.yml
+  - type: Documentation
+    url: https://cabbage.pub/swagger-ui/index.html
+  - type: APIReference
+    url: https://cabbage.pub/swagger-ui/index.html
+  - type: Authentication
+    url: authentication/happy-cabbage-analytics-authentication.yml
+  - type: Conventions
+    url: conventions/happy-cabbage-analytics-conventions.yml
+  - type: ErrorCatalog
+    url: errors/happy-cabbage-analytics-problem-types.yml
+  - type: DataModel
+    url: data-model/happy-cabbage-analytics-data-model.yml
+- aid: happy-cabbage-analytics:happy-cabbage-analytics-identity-api
+  name: Happy Cabbage Analytics Identity API
+  description: API key identity and organization context
+  humanURL: https://cabbage.pub/swagger-ui/index.html
+  baseURL: https://api.happycabbage.ai
+  tags:
+  - Identity
+  properties:
+  - type: OpenAPI
+    url: openapi/happy-cabbage-analytics-identity-api-openapi.yml
+  - type: Documentation
+    url: https://cabbage.pub/swagger-ui/index.html
+  - type: APIReference
+    url: https://cabbage.pub/swagger-ui/index.html
+  - type: Authentication
+    url: authentication/happy-cabbage-analytics-authentication.yml
+  - type: Conventions
+    url: conventions/happy-cabbage-analytics-conventions.yml
+  - type: ErrorCatalog
+    url: errors/happy-cabbage-analytics-problem-types.yml
+  - type: DataModel
+    url: data-model/happy-cabbage-analytics-data-model.yml
+- aid: happy-cabbage-analytics:happy-cabbage-analytics-inventory-health-api
+  name: Happy Cabbage Analytics Inventory Health API
+  description: Inventory health data
+  humanURL: https://cabbage.pub/swagger-ui/index.html
+  baseURL: https://api.happycabbage.ai
+  tags:
+  - Inventory Health
+  properties:
+  - type: OpenAPI
+    url: openapi/happy-cabbage-analytics-inventory-health-api-openapi.yml
+  - type: Documentation
+    url: https://cabbage.pub/swagger-ui/index.html
+  - type: APIReference
+    url: https://cabbage.pub/swagger-ui/index.html
+  - type: Authentication
+    url: authentication/happy-cabbage-analytics-authentication.yml
+  - type: Conventions
+    url: conventions/happy-cabbage-analytics-conventions.yml
+  - type: ErrorCatalog
+    url: errors/happy-cabbage-analytics-problem-types.yml
+  - type: DataModel
+    url: data-model/happy-cabbage-analytics-data-model.yml
+- aid: happy-cabbage-analytics:happy-cabbage-analytics-orders-api
+  name: Happy Cabbage Analytics Orders API
+  description: Orders
+  humanURL: https://cabbage.pub/swagger-ui/index.html
+  baseURL: https://api.happycabbage.ai
+  tags:
+  - Orders
+  properties:
+  - type: OpenAPI
+    url: openapi/happy-cabbage-analytics-orders-api-openapi.yml
+  - type: Documentation
+    url: https://cabbage.pub/swagger-ui/index.html
+  - type: APIReference
+    url: https://cabbage.pub/swagger-ui/index.html
+  - type: Authentication
+    url: authentication/happy-cabbage-analytics-authentication.yml
+  - type: Conventions
+    url: conventions/happy-cabbage-analytics-conventions.yml
+  - type: ErrorCatalog
+    url: errors/happy-cabbage-analytics-problem-types.yml
+  - type: DataModel
+    url: data-model/happy-cabbage-analytics-data-model.yml
+- aid: happy-cabbage-analytics:happy-cabbage-analytics-packages-api
+  name: Happy Cabbage Analytics Packages API
+  description: Package-level product inventory
+  humanURL: https://cabbage.pub/swagger-ui/index.html
+  baseURL: https://api.happycabbage.ai
+  tags:
+  - Packages
+  properties:
+  - type: OpenAPI
+    url: openapi/happy-cabbage-analytics-packages-api-openapi.yml
+  - type: Documentation
+    url: https://cabbage.pub/swagger-ui/index.html
+  - type: APIReference
+    url: https://cabbage.pub/swagger-ui/index.html
+  - type: Authentication
+    url: authentication/happy-cabbage-analytics-authentication.yml
+  - type: Conventions
+    url: conventions/happy-cabbage-analytics-conventions.yml
+  - type: ErrorCatalog
+    url: errors/happy-cabbage-analytics-problem-types.yml
+  - type: DataModel
+    url: data-model/happy-cabbage-analytics-data-model.yml
+- aid: happy-cabbage-analytics:happy-cabbage-analytics-pos-brands-api
+  name: Happy Cabbage Analytics POS Brands API
+  description: Organization POS brand metadata and mappings
+  humanURL: https://cabbage.pub/swagger-ui/index.html
+  baseURL: https://api.happycabbage.ai
+  tags:
+  - POS Brands
+  properties:
+  - type: OpenAPI
+    url: openapi/happy-cabbage-analytics-pos-brands-api-openapi.yml
+  - type: Documentation
+    url: https://cabbage.pub/swagger-ui/index.html
+  - type: APIReference
+    url: https://cabbage.pub/swagger-ui/index.html
+  - type: Authentication
+    url: authentication/happy-cabbage-analytics-authentication.yml
+  - type: Conventions
+    url: conventions/happy-cabbage-analytics-conventions.yml
+  - type: ErrorCatalog
+    url: errors/happy-cabbage-analytics-problem-types.yml
+  - type: DataModel
+    url: data-model/happy-cabbage-analytics-data-model.yml
+- aid: happy-cabbage-analytics:happy-cabbage-analytics-pos-categories-api
+  name: Happy Cabbage Analytics POS Categories API
+  description: Organization POS category metadata and mappings
+  humanURL: https://cabbage.pub/swagger-ui/index.html
+  baseURL: https://api.happycabbage.ai
+  tags:
+  - POS Categories
+  properties:
+  - type: OpenAPI
+    url: openapi/happy-cabbage-analytics-pos-categories-api-openapi.yml
+  - type: Documentation
+    url: https://cabbage.pub/swagger-ui/index.html
+  - type: APIReference
+    url: https://cabbage.pub/swagger-ui/index.html
+  - type: Authentication
+    url: authentication/happy-cabbage-analytics-authentication.yml
+  - type: Conventions
+    url: conventions/happy-cabbage-analytics-conventions.yml
+  - type: ErrorCatalog
+    url: errors/happy-cabbage-analytics-problem-types.yml
+  - type: DataModel
+    url: data-model/happy-cabbage-analytics-data-model.yml
+- aid: happy-cabbage-analytics:happy-cabbage-analytics-product-inventory-api
+  name: Happy Cabbage Analytics Product Inventory API
+  description: Product-level inventory, sales, and demand metrics
+  humanURL: https://cabbage.pub/swagger-ui/index.html
+  baseURL: https://api.happycabbage.ai
+  tags:
+  - Product Inventory
+  properties:
+  - type: OpenAPI
+    url: openapi/happy-cabbage-analytics-product-inventory-api-openapi.yml
+  - type: Documentation
+    url: https://cabbage.pub/swagger-ui/index.html
+  - type: APIReference
+    url: https://cabbage.pub/swagger-ui/index.html
+  - type: Authentication
+    url: authentication/happy-cabbage-analytics-authentication.yml
+  - type: Conventions
+    url: conventions/happy-cabbage-analytics-conventions.yml
+  - type: ErrorCatalog
+    url: errors/happy-cabbage-analytics-problem-types.yml
+  - type: DataModel
+    url: data-model/happy-cabbage-analytics-data-model.yml
+- aid: happy-cabbage-analytics:happy-cabbage-analytics-product-line-inventory-api
+  name: Happy Cabbage Analytics Product Line Inventory API
+  description: Product-line inventory, demand, and replenishment metrics
+  humanURL: https://cabbage.pub/swagger-ui/index.html
+  baseURL: https://api.happycabbage.ai
+  tags:
+  - Product Line Inventory
+  properties:
+  - type: OpenAPI
+    url: openapi/happy-cabbage-analytics-product-line-inventory-api-openapi.yml
+  - type: Documentation
+    url: https://cabbage.pub/swagger-ui/index.html
+  - type: APIReference
+    url: https://cabbage.pub/swagger-ui/index.html
+  - type: Authentication
+    url: authentication/happy-cabbage-analytics-authentication.yml
+  - type: Conventions
+    url: conventions/happy-cabbage-analytics-conventions.yml
+  - type: ErrorCatalog
+    url: errors/happy-cabbage-analytics-problem-types.yml
+  - type: DataModel
+    url: data-model/happy-cabbage-analytics-data-model.yml
+- aid: happy-cabbage-analytics:happy-cabbage-analytics-product-lines-api
+  name: Happy Cabbage Analytics Product Lines API
+  description: Product-lines
+  humanURL: https://cabbage.pub/swagger-ui/index.html
+  baseURL: https://api.happycabbage.ai
+  tags:
+  - Product Lines
+  properties:
+  - type: OpenAPI
+    url: openapi/happy-cabbage-analytics-product-lines-api-openapi.yml
+  - type: Documentation
+    url: https://cabbage.pub/swagger-ui/index.html
+  - type: APIReference
+    url: https://cabbage.pub/swagger-ui/index.html
+  - type: Authentication
+    url: authentication/happy-cabbage-analytics-authentication.yml
+  - type: Conventions
+    url: conventions/happy-cabbage-analytics-conventions.yml
+  - type: ErrorCatalog
+    url: errors/happy-cabbage-analytics-problem-types.yml
+  - type: DataModel
+    url: data-model/happy-cabbage-analytics-data-model.yml
+- aid: happy-cabbage-analytics:happy-cabbage-analytics-stores-api
+  name: Happy Cabbage Analytics Stores API
+  description: Organization location metadata
+  humanURL: https://cabbage.pub/swagger-ui/index.html
+  baseURL: https://api.happycabbage.ai
+  tags:
+  - Stores
+  properties:
+  - type: OpenAPI
+    url: openapi/happy-cabbage-analytics-stores-api-openapi.yml
+  - type: Documentation
+    url: https://cabbage.pub/swagger-ui/index.html
+  - type: APIReference
+    url: https://cabbage.pub/swagger-ui/index.html
+  - type: Authentication
+    url: authentication/happy-cabbage-analytics-authentication.yml
+  - type: Conventions
+    url: conventions/happy-cabbage-analytics-conventions.yml
+  - type: ErrorCatalog
+    url: errors/happy-cabbage-analytics-problem-types.yml
+  - type: DataModel
+    url: data-model/happy-cabbage-analytics-data-model.yml
+- aid: happy-cabbage-analytics:happy-cabbage-analytics-universal-brands-api
+  name: Happy Cabbage Analytics Universal Brands API
+  description: Canonical brand metadata across POS systems
+  humanURL: https://cabbage.pub/swagger-ui/index.html
+  baseURL: https://api.happycabbage.ai
+  tags:
+  - Universal Brands
+  properties:
+  - type: OpenAPI
+    url: openapi/happy-cabbage-analytics-universal-brands-api-openapi.yml
+  - type: Documentation
+    url: https://cabbage.pub/swagger-ui/index.html
+  - type: APIReference
+    url: https://cabbage.pub/swagger-ui/index.html
+  - type: Authentication
+    url: authentication/happy-cabbage-analytics-authentication.yml
+  - type: Conventions
+    url: conventions/happy-cabbage-analytics-conventions.yml
+  - type: ErrorCatalog
+    url: errors/happy-cabbage-analytics-problem-types.yml
+  - type: DataModel
+    url: data-model/happy-cabbage-analytics-data-model.yml
+- aid: happy-cabbage-analytics:happy-cabbage-analytics-universal-categories-api
+  name: Happy Cabbage Analytics Universal Categories API
+  description: Canonical product category metadata across POS systems
+  humanURL: https://cabbage.pub/swagger-ui/index.html
+  baseURL: https://api.happycabbage.ai
+  tags:
+  - Universal Categories
+  properties:
+  - type: OpenAPI
+    url: openapi/happy-cabbage-analytics-universal-categories-api-openapi.yml
+  - type: Documentation
+    url: https://cabbage.pub/swagger-ui/index.html
+  - type: APIReference
+    url: https://cabbage.pub/swagger-ui/index.html
+  - type: Authentication
+    url: authentication/happy-cabbage-analytics-authentication.yml
+  - type: Conventions
+    url: conventions/happy-cabbage-analytics-conventions.yml
+  - type: ErrorCatalog
+    url: errors/happy-cabbage-analytics-problem-types.yml
+  - type: DataModel
+    url: data-model/happy-cabbage-analytics-data-model.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
