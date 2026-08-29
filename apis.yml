@@ -368,6 +368,9 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: CapabilityMap
+  url: capabilities/happy-cabbage-analytics-capability-edges.yml
+  name: Happy Cabbage Analytics Business Capability Map
 - type: Website
   url: https://www.happycabbage.io/
 - type: Documentation

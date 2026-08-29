@@ -1,0 +1,49 @@
+slug: happy-cabbage-analytics
+provider: Happy Cabbage Analytics
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Transportation & Logistics
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 3
+edges:
+- tag: Product Inventory
+  spec_file: happy-cabbage-analytics-product-inventory-api-openapi.yml
+  capability_id: BC-530
+  capability_id_l1: BC-530
+  capability_name: Inventory Management
+  confidence: 0.75
+  evidence: GET /external/v1/product-inventory  getProductInventory  List product inventory; PUT .../stores/{storeId}/carry-status  updateCarryStatus
+  reason: Reads per-store product inventory and sets whether a store carries a product — inventory/stock
+    management rather than a specific sub-capability.
+- tag: Inventory Health
+  spec_file: happy-cabbage-analytics-inventory-health-api-openapi.yml
+  capability_id: BC-530
+  capability_id_l1: BC-530
+  capability_name: Inventory Management
+  confidence: 0.7
+  evidence: '"GET /external/v1/inventory-health/stores getStoreInventoryHealths List store inventory health";
+    "List category inventory health history"'
+  reason: Reports stock health metrics and history by store, POS brand and category for a retail inventory
+    platform — inventory position monitoring. Left at L1 because the endpoints report health/utilisation
+    aggregates without naming safety stock, reorder points or accuracy counts, so the sub-capability is
+    ambiguous.
+- tag: Orders
+  spec_file: happy-cabbage-analytics-orders-api-openapi.yml
+  capability_id: BC-500.30
+  capability_id_l1: BC-500
+  capability_name: Purchase Order Management
+  confidence: 0.7
+  evidence: '"POST /external/v1/orders createOrder Create an order", "PUT /external/v1/orders/{orderId}/items
+    addOrderItem Add order item", "POST /external/v1/orders/{orderId}/invoices addOrderInvoice Add order
+    invoice"; vendor: "replenishment and purchase-order workflows"'
+  reason: Orders here are buy-side purchase orders raised by dispensary buyers to replenish inventory,
+    with line items and supplier invoices attached — purchase order creation and lifecycle. Not full confidence
+    because the schemas are generically named (OrderResponse, CreateRequest) and never explicitly say
+    'purchase order'.
