@@ -12,6 +12,18 @@ description: >-
   beta in June 2026 and is documented with a Swagger UI, exposing organization metadata, inventory
   health, product/product-line inventory, packages, daily sales metadata and full order management to
   API-key holders — the same API the company's own published AI-agent workflows are built on.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://cdn.prod.website-files.com/5d46254e52d2932dcbc10ee9/65cba367661e3aebedb84daf_HCA_Logo_primary.png
 url: https://raw.githubusercontent.com/api-evangelist/happy-cabbage-analytics/refs/heads/main/apis.yml
 x-type: company
