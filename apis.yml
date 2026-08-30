@@ -32,14 +32,14 @@ specificationVersion: '0.20'
 created: '2026-08-22'
 modified: '2026-08-22'
 tags:
-- Cannabis
+- cannabis
 - Retail
-- Inventory Management
+- inventory-management
 - Analytics
-- Purchasing
-- Point of Sale
-- Wholesale
-- Demand Forecasting
+- purchasing
+- point-of-sale
+- wholesale
+- demand-forecasting
 - Supply Chain
 - agent-native
 tags_raw:
@@ -148,6 +148,8 @@ apis:
   humanURL: https://cabbage.pub/swagger-ui/index.html
   baseURL: https://api.happycabbage.ai
   tags:
+  - Order
+  tags_raw:
   - Orders
   properties:
   - type: OpenAPI
