@@ -1,0 +1,772 @@
+openapi: 3.2.0
+info:
+  title: Happy Buyers External Product Inventory API
+  description: 'External API for Happy Buyers organization metadata and inventory data.
+
+
+    Requests are authenticated with an API key in the hca-api-key header. Results are scoped to
+
+    the organization attached to that key. List endpoints use limit/offset pagination and return
+
+    totalCount plus hasMore.
+
+    '
+  version: v1
+servers:
+- url: https://api.happycabbage.ai
+  description: External API
+security:
+- ApiKeyAuth: []
+tags:
+- name: Product Inventory
+  description: Product-level inventory, sales, and demand metrics
+paths:
+  /external/v1/product-inventory/{productId}/stores/{storeId}/carry-status:
+    put:
+      tags:
+      - Product Inventory
+      summary: Update product carry status
+      description: 'Updates whether a product should continue to be carried at a store.
+
+        Discontinued products will still be viewable but will not be recommended for reorders.
+
+        Requires `inventory:write`.
+
+        '
+      operationId: updateCarryStatus
+      parameters:
+      - name: productId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: storeId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarryStatusUpdateRequest'
+        required: true
+      responses:
+        '400':
+          description: Invalid request body
+        '401':
+          description: Missing, malformed, or invalid API key
+        '404':
+          description: Store or product inventory not found
+        '200':
+          description: Updated carry status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarryStatusUpdateResponse'
+        '403':
+          description: API key does not include inventory:write
+  /external/v1/product-inventory:
+    get:
+      tags:
+      - Product Inventory
+      summary: List product inventory
+      description: Returns product-level inventory, sales velocity, pricing, cost, age, and replenishment metrics for the API key organization. Requires inventory:read.
+      operationId: getProductInventory
+      parameters:
+      - name: offset
+        in: query
+        description: Zero-based result offset for pagination.
+        required: false
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+          default: 0
+        example: 0
+      - name: limit
+        in: query
+        description: Maximum number of products to return. Maximum is 500.
+        required: false
+        schema:
+          maximum: 500
+          minimum: 0
+          type: integer
+          format: int32
+          default: 100
+        example: 100
+      - name: storeIds
+        in: query
+        description: Store UUID filters. Pass repeated query parameters, for example storeIds=id1&storeIds=id2.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+        example: 11111111-1111-1111-1111-111111111111
+      - name: isInStock
+        in: query
+        description: When true, only products with inventory on hand are returned.
+        required: false
+        schema:
+          type: boolean
+        example: true
+      - name: continueToCarry
+        in: query
+        description: Filter by whether the product should continue to be carried.
+        required: false
+        schema:
+          type: boolean
+        example: true
+      - name: restockOnly
+        in: query
+        description: When true, only products with units to order are returned.
+        required: false
+        schema:
+          type: boolean
+        example: true
+      - name: activeInLastDays
+        in: query
+        description: Minimum active sales days in the lookback window.
+        required: false
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+        example: 7
+      - name: matchingSearchTerms
+        in: query
+        description: Product search terms that must all match product names, while any may match SKUs. Pass repeated query parameters, for example matchingSearchTerms=blue&matchingSearchTerms=dream.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+        example: blue
+      - name: notMatchingSearchTerms
+        in: query
+        description: Product name search terms to exclude. Pass repeated query parameters, for example notMatchingSearchTerms=sample&notMatchingSearchTerms=test.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+        example: sample
+      - name: universalCategoryIds
+        in: query
+        description: Universal category ID filters, passed as repeated query parameters.
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int32
+        example: 12
+      - name: posCategoryIds
+        in: query
+        description: POS category ID filters, passed as repeated query parameters.
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int32
+        example: 34
+      - name: posSubCategoryIds
+        in: query
+        description: POS subcategory ID filters, passed as repeated query parameters.
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int32
+        example: 56
+      - name: vendorIds
+        in: query
+        description: Vendor ID filters, passed as repeated query parameters.
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int32
+        example: 78
+      - name: universalBrandIds
+        in: query
+        description: Universal brand ID filters, passed as repeated query parameters.
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int32
+        example: 90
+      - name: posBrandIds
+        in: query
+        description: POS brand ID filters, passed as repeated query parameters.
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int32
+        example: 42
+      - name: includeUniversalUncategorized
+        in: query
+        description: Include products without a mapped universal category.
+        required: false
+        schema:
+          type: boolean
+        example: true
+      - name: includePosUncategorized
+        in: query
+        description: Include products without a POS category.
+        required: false
+        schema:
+          type: boolean
+        example: true
+      - name: includePosSubUncategorized
+        in: query
+        description: Include products without a POS subcategory.
+        required: false
+        schema:
+          type: boolean
+        example: true
+      - name: minWeight
+        in: query
+        description: Minimum product weight.
+        required: false
+        schema:
+          minimum: 0
+          type: number
+          format: double
+        example: 3.5
+      - name: maxWeight
+        in: query
+        description: Maximum product weight.
+        required: false
+        schema:
+          minimum: 0
+          type: number
+          format: double
+        example: 28.0
+      - name: strainClassificationIds
+        in: query
+        description: Strain classification ID filters, passed as repeated query parameters.
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int32
+        example: 5
+      - name: minPrice
+        in: query
+        description: Minimum unit price.
+        required: false
+        schema:
+          minimum: 0
+          type: number
+          format: double
+        example: 10.0
+      - name: maxPrice
+        in: query
+        description: Maximum unit price.
+        required: false
+        schema:
+          minimum: 0
+          type: number
+          format: double
+        example: 50.0
+      - name: minCost
+        in: query
+        description: Minimum unit cost.
+        required: false
+        schema:
+          minimum: 0
+          type: number
+          format: double
+        example: 5.0
+      - name: maxCost
+        in: query
+        description: Maximum unit cost.
+        required: false
+        schema:
+          minimum: 0
+          type: number
+          format: double
+        example: 30.0
+      - name: minimumPredictedDaysOnHand
+        in: query
+        description: Minimum predicted days on hand.
+        required: false
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+        example: 3
+      - name: maximumPredictedDaysOnHand
+        in: query
+        description: Maximum predicted days on hand.
+        required: false
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+        example: 30
+      - name: minimumPredictedSellableDaysOnHand
+        in: query
+        description: Minimum predicted sellable days on hand.
+        required: false
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+        example: 3
+      - name: maximumPredictedSellableDaysOnHand
+        in: query
+        description: Maximum predicted sellable days on hand.
+        required: false
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+        example: 30
+      - name: minimumInventory
+        in: query
+        description: Minimum current inventory units.
+        required: false
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+        example: 1
+      - name: maximumInventory
+        in: query
+        description: Maximum current inventory units.
+        required: false
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+        example: 100
+      - name: minimumSellableInventory
+        in: query
+        description: Minimum sellable inventory units.
+        required: false
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+        example: 1
+      - name: maximumSellableInventory
+        in: query
+        description: Maximum sellable inventory units.
+        required: false
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+        example: 100
+      - name: minimumAgedInventoryCost
+        in: query
+        description: Minimum cost of inventory aged 90 or more days.
+        required: false
+        schema:
+          minimum: 0
+          type: number
+          format: double
+        example: 100.0
+      - name: maximumAgedInventoryCost
+        in: query
+        description: Maximum cost of inventory aged 90 or more days.
+        required: false
+        schema:
+          minimum: 0
+          type: number
+          format: double
+        example: 1000.0
+      - name: desiredDaysOnHand
+        in: query
+        description: Target days on hand used for replenishment calculations.
+        required: false
+        schema:
+          minimum: 1
+          type: integer
+          format: int32
+          default: 14
+        example: 14
+      - name: leadTime
+        in: query
+        description: Lead time in days used for replenishment calculations.
+        required: false
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+          default: 0
+        example: 0
+      - name: lookbackPeriodDays
+        in: query
+        description: Sales lookback window in days. Allowed values are 1, 7, 14, 21, 30, 60, and 90.
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 30
+          enum:
+          - 1
+          - 7
+          - 14
+          - 21
+          - 30
+          - 60
+          - 90
+        example: 30
+      - name: sortTarget
+        in: query
+        description: Field to sort by.
+        required: false
+        schema:
+          type: string
+          enum:
+          - UNITS_PER_DAY
+          - LAST_ACTIVITY_AT
+        example: UNITS_PER_DAY
+      - name: sortDirection
+        in: query
+        description: Sort direction. Prefer ASC or DESC; lowercase values are deprecated aliases.
+        required: false
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          - ASC
+          - DESC
+          - ASC_NULLS_FIRST
+          - ASC_NULLS_LAST
+          - DESC_NULLS_FIRST
+          - DESC_NULLS_LAST
+        example: DESC
+      responses:
+        '200':
+          description: Paged product inventory results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LimitOffsetResponseProductInventoryResponse'
+        '403':
+          description: API key does not include inventory:read
+        '401':
+          description: Missing, malformed, or invalid API key
+        '400':
+          description: Invalid query parameter
+components:
+  schemas:
+    ProductDetailResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Product display name.
+          example: Acme Gummies 10mg
+        id:
+          type: integer
+          description: Internal product ID. Use this value for product-specific endpoints.
+          format: int32
+        weight:
+          type: number
+          description: Product weight, when available.
+          format: double
+          example: 3.5
+        universalBrandId:
+          type: integer
+          description: Mapped universal brand ID, when available.
+          format: int32
+        universalBrandName:
+          type: string
+          description: Mapped universal brand name, when available.
+        vendorId:
+          type: integer
+          description: Vendor ID, when available.
+          format: int32
+        vendorName:
+          type: string
+          description: Vendor name, when available.
+        strainClassificationId:
+          type: integer
+          description: Strain classification ID, when available.
+          format: int32
+        strainClassificationLabel:
+          type: string
+          description: Strain classification label, when available.
+        strainFamily:
+          type: string
+          description: Strain family, when available.
+          example: HYBRID
+          enum:
+          - INDICA
+          - SATIVA
+          - HYBRID
+        posCategoryId:
+          type: integer
+          description: POS category ID, when available.
+          format: int32
+        posCategoryLabel:
+          type: string
+          description: POS category label, when available.
+        posSubCategoryId:
+          type: integer
+          description: POS subcategory ID, when available.
+          format: int32
+        posSubCategoryLabel:
+          type: string
+          description: POS subcategory label, when available.
+        posIdentifier:
+          type: string
+          description: Product identifier from the source POS system, or an empty string when unavailable.
+        universalCategoryId:
+          type: integer
+          description: Mapped universal category ID, when available.
+          format: int32
+        universalCategoryLabel:
+          type: string
+          description: Mapped universal category label, when available.
+        posBrandId:
+          type: integer
+          description: POS brand ID, when available.
+          format: int32
+        posBrandName:
+          type: string
+          description: POS brand name, when available.
+        sku:
+          type: string
+          description: Product SKU from the source POS system, or an empty string when unavailable.
+        caseSize:
+          type: integer
+          description: Minimum order/case size, when available.
+          format: int32
+          example: 12
+      description: Product metadata for this inventory row.
+    CarryStatusUpdateResponse:
+      type: object
+      properties:
+        productId:
+          type: integer
+          description: Internal product ID.
+          format: int32
+        storeId:
+          type: string
+          description: Store/location UUID.
+          format: uuid
+        continueToCarry:
+          type: boolean
+          description: Whether this product should continue to be carried.
+    LimitOffsetResponseProductInventoryResponse:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: Maximum number of records requested for this page.
+          format: int32
+          example: 100
+        offset:
+          type: integer
+          description: Zero-based result offset used for this page.
+          format: int32
+          example: 0
+        totalCount:
+          type: integer
+          description: Total number of matching records before pagination is applied.
+          format: int32
+          example: 250
+        results:
+          type: array
+          description: Records for the current page.
+          items:
+            $ref: '#/components/schemas/ProductInventoryResponse'
+        hasMore:
+          type: boolean
+          description: True when more records are available after this page.
+          example: true
+    CarryStatusUpdateRequest:
+      required:
+      - continueToCarry
+      type: object
+      properties:
+        continueToCarry:
+          type: boolean
+          description: 'Whether this product should continue to be carried.
+
+            When false: Product is discontinued. It will still be viewable but will not be recommended for reorders.
+
+            When true: Product will continue to be recommended for reorders.
+
+            '
+          example: false
+    ProductInventoryResponse:
+      type: object
+      properties:
+        predictedDaysOnHand:
+          type: integer
+          description: Predicted days on hand based on current inventory and sales velocity.
+          format: int32
+        averageThcPercentageSold:
+          type: number
+          description: Average THC percentage for units sold.
+          format: double
+        distributionFulfillmentStatus:
+          type: string
+          description: Distribution fulfillment status, when distribution data is available.
+          enum:
+          - PARTIAL
+          - UNAVAILABLE
+          - AVAILABLE
+          - NO_DISTRIBUTION
+        continueToCarry:
+          type: boolean
+          description: 'Whether the product should continue to be carried at the store.
+
+            When `false`, the product is discontinued and will not be recommended for reorders.
+
+            '
+        medPrice:
+          type: number
+          description: Medical unit price, when available.
+          format: double
+        recPrice:
+          type: number
+          description: Recreational unit price, when available.
+          format: double
+        unitsNeeded:
+          type: integer
+          description: Units needed to reach the replenishment target.
+          format: int32
+        unitsSold:
+          type: integer
+          description: Units sold in the selected lookback window.
+          format: int32
+        unitsToOrder:
+          type: integer
+          description: Recommended units to order.
+          format: int32
+        dollarsSold:
+          type: number
+          description: Sales dollars in the selected lookback window.
+          format: double
+        discountDollars:
+          type: number
+          description: Discount dollars in the selected lookback window.
+          format: double
+        averageDiscountPercent:
+          type: number
+          description: Average discount percentage in the selected lookback window.
+          format: double
+        averageMargin:
+          type: number
+          description: Average margin percentage.
+          format: double
+        estimatedProfit:
+          type: number
+          description: Estimated profit dollars.
+          format: double
+        inventoryCost:
+          type: number
+          description: Current inventory cost dollars.
+          format: double
+        agedInventoryCost:
+          type: number
+          description: Cost dollars for inventory aged 90 or more days.
+          format: double
+        averageThcPercentageOnHand:
+          type: number
+          description: Average THC percentage for units currently on hand.
+          format: double
+        unitCost:
+          type: number
+          description: Unit cost, when available.
+          format: double
+        currentInventory:
+          type: integer
+          description: Current inventory units on hand.
+          format: int32
+          example: 24
+        storeName:
+          type: string
+          description: Store/location display name for this inventory row.
+        unitPrice:
+          type: number
+          description: Unit price, when available.
+          format: double
+        storeId:
+          type: string
+          description: Store/location UUID for this inventory row.
+          format: uuid
+        sellableUnitsOnHand:
+          type: integer
+          description: Sellable units on hand.
+          format: int32
+        unitsAged0To30:
+          type: integer
+          description: Current inventory units aged 0 to 30 days.
+          format: int32
+          example: 10
+        unitsAged31To60:
+          type: integer
+          description: Current inventory units aged 31 to 60 days.
+          format: int32
+          example: 8
+        unitsAged61To90:
+          type: integer
+          description: Current inventory units aged 61 to 90 days.
+          format: int32
+          example: 4
+        unitsAged90Plus:
+          type: integer
+          description: Current inventory units aged 90 or more days.
+          format: int32
+          example: 2
+        unitsPerDay:
+          type: number
+          description: Average units sold per day in the selected lookback window.
+          format: double
+        sellableInventory:
+          type: integer
+          description: Current sellable inventory units.
+          format: int32
+          example: 20
+        daysOutOfStock:
+          type: integer
+          description: Number of days the product was out of stock.
+          format: int32
+          example: 3
+        productDetail:
+          $ref: '#/components/schemas/ProductDetailResponse'
+        lastActivity:
+          type: string
+          description: Most recent inventory or sales activity timestamp, when available.
+          format: date-time
+        firstSold:
+          type: string
+          description: First sale timestamp in the selected lookback data, when available.
+          format: date-time
+        lastSold:
+          type: string
+          description: Most recent sale timestamp in the selected lookback data, when available.
+          format: date-time
+        unitsAtDistro:
+          type: integer
+          description: Units available at a fulfillment/distribution location.
+          format: int32
+      description: Records for the current page.
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      description: External API key issued by Happy Buyers. Send the key in the hca-api-key header.
+      name: hca-api-key
+      in: header

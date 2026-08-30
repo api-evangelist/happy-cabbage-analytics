@@ -1,0 +1,360 @@
+openapi: 3.2.0
+info:
+  title: Happy Buyers External Blockout Dates API
+  description: 'External API for Happy Buyers organization metadata and inventory data.
+
+
+    Requests are authenticated with an API key in the hca-api-key header. Results are scoped to
+
+    the organization attached to that key. List endpoints use limit/offset pagination and return
+
+    totalCount plus hasMore.
+
+    '
+  version: v1
+servers:
+- url: https://api.happycabbage.ai
+  description: External API
+security:
+- ApiKeyAuth: []
+tags:
+- name: Blockout Dates
+  description: Blockout dates
+paths:
+  /external/v1/blockout-dates/{id}:
+    get:
+      tags:
+      - Blockout Dates
+      summary: Get a blockout date
+      description: Returns one blockout date. Requires `blockout_dates:read`.
+      operationId: getBlockoutDate
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlockoutDateResponse'
+    put:
+      tags:
+      - Blockout Dates
+      summary: Update a blockout date
+      description: Updates a blockout date. Requires `blockout_dates:write`.
+      operationId: updateBlockoutDate
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlockoutDateRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlockoutDateResponse'
+    delete:
+      tags:
+      - Blockout Dates
+      summary: Delete a blockout date
+      description: Deletes a blockout date. Requires `blockout_dates:write`.
+      operationId: deleteBlockoutDate
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+  /external/v1/blockout-dates:
+    get:
+      tags:
+      - Blockout Dates
+      summary: List blockout dates
+      description: List blockout dates. Requires `blockout_dates:read`.
+      operationId: getBlockoutDates
+      parameters:
+      - name: limit
+        in: query
+        description: Maximum records to return. Defaults to 100.
+        required: false
+        schema:
+          maximum: 500
+          minimum: 0
+          type: string
+          description: Maximum records to return. Defaults to 100.
+          default: '100'
+      - name: offset
+        in: query
+        description: Zero-based result offset. Defaults to 0.
+        required: false
+        schema:
+          minimum: 0
+          type: string
+          description: Zero-based result offset. Defaults to 0.
+          default: '0'
+      - name: sortTarget
+        in: query
+        description: Field used to sort results. Defaults to START_DATE.
+        required: false
+        schema:
+          type: string
+          description: Field used to sort results. Defaults to START_DATE.
+      - name: sortDirection
+        in: query
+        description: Sort direction. Defaults to ASC.
+        required: false
+        schema:
+          type: string
+          description: Sort direction. Defaults to ASC.
+          default: ASC
+      - name: storeId
+        in: query
+        description: Only return blockout dates for this store UUID.
+        required: false
+        schema:
+          type: string
+          description: Only return blockout dates for this store UUID.
+      - name: includeAllStores
+        in: query
+        description: When filtering by `storeId`, include blockout dates that apply to all stores when `true`, or exclude them when `false`.
+        required: false
+        schema:
+          type: string
+          description: When filtering by `storeId`, include blockout dates that apply to all stores when `true`, or exclude them when `false`.
+      - name: search
+        in: query
+        description: Case-insensitive blockout date name or description search text.
+        required: false
+        schema:
+          type: string
+          description: Case-insensitive blockout date name or description search text.
+      - name: isAllStores
+        in: query
+        description: Only return blockout dates that apply to all stores.
+        required: false
+        schema:
+          type: string
+          description: Only return blockout dates that apply to all stores.
+      - name: isRecurring
+        in: query
+        description: Only return recurring or non-recurring blockout dates.
+        required: false
+        schema:
+          type: string
+          description: Only return recurring or non-recurring blockout dates.
+      - name: activeOnOrAfter
+        in: query
+        description: Only return blockout dates active on or after this date, inclusive.
+        required: false
+        schema:
+          type: string
+          description: Only return blockout dates active on or after this date, inclusive.
+      - name: activeBefore
+        in: query
+        description: Only return blockout dates active before this date, exclusive.
+        required: false
+        schema:
+          type: string
+          description: Only return blockout dates active before this date, exclusive.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LimitOffsetResponseBlockoutDateResponse'
+    post:
+      tags:
+      - Blockout Dates
+      summary: Create a blockout date
+      description: Creates a blockout date. Requires `blockout_dates:write`.
+      operationId: createBlockoutDate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlockoutDateRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlockoutDateResponse'
+components:
+  schemas:
+    BlockoutDateResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Blockout date display name.
+          example: Thanksgiving
+        id:
+          type: integer
+          description: Blockout date ID.
+          format: int32
+          example: 123
+        description:
+          type: string
+          description: Optional blockout date description.
+        isRecurring:
+          type: boolean
+          description: Whether the blockout date repeats annually.
+        createdAt:
+          type: string
+          description: Blockout date creation timestamp.
+          format: date-time
+        updatedAt:
+          type: string
+          description: Blockout date last-update timestamp.
+          format: date-time
+        startDate:
+          type: string
+          description: Inclusive first blocked-out date.
+          format: date
+        endDate:
+          type: string
+          description: Inclusive last blocked-out date.
+          format: date
+        isAllStores:
+          type: boolean
+          description: Whether the blockout date applies to every store.
+        storeIds:
+          type: array
+          description: Store UUIDs affected when isAllStores is false.
+          items:
+            type: string
+            description: Store UUIDs affected when isAllStores is false.
+            format: uuid
+        posBrandIds:
+          type: array
+          description: POS brand IDs whose products are blocked out.
+          items:
+            type: integer
+            description: POS brand IDs whose products are blocked out.
+            format: int32
+        universalCategoryIds:
+          type: array
+          description: Universal category IDs whose products are blocked out.
+          items:
+            type: integer
+            description: Universal category IDs whose products are blocked out.
+            format: int32
+      description: A blockout date for the API key organization.
+    LimitOffsetResponseBlockoutDateResponse:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: Maximum number of records requested for this page.
+          format: int32
+          example: 100
+        offset:
+          type: integer
+          description: Zero-based result offset used for this page.
+          format: int32
+          example: 0
+        totalCount:
+          type: integer
+          description: Total number of matching records before pagination is applied.
+          format: int32
+          example: 250
+        results:
+          type: array
+          description: Records for the current page.
+          items:
+            $ref: '#/components/schemas/BlockoutDateResponse'
+        hasMore:
+          type: boolean
+          description: True when more records are available after this page.
+          example: true
+    BlockoutDateRequest:
+      required:
+      - endDate
+      - isAllStores
+      - isRecurring
+      - name
+      - posBrandIds
+      - startDate
+      - storeIds
+      - universalCategoryIds
+      type: object
+      properties:
+        name:
+          type: string
+          description: Blockout date display name.
+          example: Thanksgiving
+        description:
+          type: string
+          description: Optional blockout date description.
+        startDate:
+          type: string
+          description: Inclusive first blocked-out date.
+          format: date
+          example: '2026-11-26'
+        endDate:
+          type: string
+          description: Inclusive last blocked-out date.
+          format: date
+          example: '2026-11-27'
+        isRecurring:
+          type: boolean
+          description: Whether the blockout date repeats annually.
+          example: false
+        isAllStores:
+          type: boolean
+          description: Whether this blockout date applies to every store. When false, it applies only to `storeIds`.
+          example: false
+        storeIds:
+          type: array
+          description: Store UUIDs affected when `isAllStores` is false.
+          items:
+            type: string
+            description: Store UUIDs affected when `isAllStores` is false.
+            format: uuid
+        posBrandIds:
+          type: array
+          description: POS brand IDs whose products are blocked out.
+          items:
+            type: integer
+            description: POS brand IDs whose products are blocked out.
+            format: int32
+        universalCategoryIds:
+          type: array
+          description: Universal category IDs whose products are blocked out.
+          items:
+            type: integer
+            description: Universal category IDs whose products are blocked out.
+            format: int32
+      description: Request body for creating or updating a blockout date.
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      description: External API key issued by Happy Buyers. Send the key in the hca-api-key header.
+      name: hca-api-key
+      in: header

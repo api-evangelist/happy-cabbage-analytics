@@ -1,0 +1,170 @@
+openapi: 3.2.0
+info:
+  title: Happy Buyers External POS Categories API
+  description: 'External API for Happy Buyers organization metadata and inventory data.
+
+
+    Requests are authenticated with an API key in the hca-api-key header. Results are scoped to
+
+    the organization attached to that key. List endpoints use limit/offset pagination and return
+
+    totalCount plus hasMore.
+
+    '
+  version: v1
+servers:
+- url: https://api.happycabbage.ai
+  description: External API
+security:
+- ApiKeyAuth: []
+tags:
+- name: POS Categories
+  description: Organization POS category metadata and mappings
+paths:
+  /external/v1/pos-categories:
+    get:
+      tags:
+      - POS Categories
+      summary: List POS categories
+      description: Returns POS-specific categories and subcategories for the API key organization, including mapped universal category information when available. Requires organization_metadata:read.
+      operationId: getPosCategories
+      parameters:
+      - name: limit
+        in: query
+        description: Maximum number of POS categories to return. Maximum is 100.
+        required: false
+        schema:
+          maximum: 100
+          minimum: 0
+          type: integer
+          format: int32
+          default: 100
+        example: 100
+      - name: offset
+        in: query
+        description: Zero-based result offset for pagination.
+        required: false
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+          default: 0
+        example: 0
+      - name: search
+        in: query
+        description: Case-insensitive POS category name or label search text.
+        required: false
+        schema:
+          type: string
+        example: edible
+      - name: sortTarget
+        in: query
+        description: Field to sort by.
+        required: false
+        schema:
+          type: string
+          enum:
+          - LABEL
+          - CREATED_AT
+        example: LABEL
+      - name: sortDirection
+        in: query
+        description: Sort direction. Prefer ASC or DESC; lowercase values are deprecated aliases.
+        required: false
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          - ASC
+          - DESC
+          - ASC_NULLS_FIRST
+          - ASC_NULLS_LAST
+          - DESC_NULLS_FIRST
+          - DESC_NULLS_LAST
+        example: ASC
+      - name: isSubCategory
+        in: query
+        description: When true, only subcategories are returned; when false, only top-level categories are returned.
+        required: false
+        schema:
+          type: boolean
+        example: false
+      responses:
+        '403':
+          description: API key does not include organization_metadata:read
+        '200':
+          description: Paged POS category results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LimitOffsetResponsePosCategoryResponse'
+        '401':
+          description: Missing, malformed, or invalid API key
+        '400':
+          description: Invalid query parameter
+components:
+  schemas:
+    PosCategoryResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          description: POS category machine name.
+          example: flower
+        label:
+          type: string
+          description: POS category display label.
+          example: Flower
+        mappedCategoryId:
+          type: integer
+          description: Mapped universal category ID, when this POS category has a mapping.
+          format: int32
+        isSubCategory:
+          type: boolean
+          description: True when this POS category is a subcategory.
+          example: false
+        posIdentifier:
+          type: string
+          description: Category identifier from the source POS system.
+          example: category-123
+        mappedCategoryName:
+          type: string
+          description: Mapped universal category machine name, or an empty string when unmapped.
+        mappedCategoryLabel:
+          type: string
+          description: Mapped universal category display label, or an empty string when unmapped.
+      description: Records for the current page.
+    LimitOffsetResponsePosCategoryResponse:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: Maximum number of records requested for this page.
+          format: int32
+          example: 100
+        offset:
+          type: integer
+          description: Zero-based result offset used for this page.
+          format: int32
+          example: 0
+        totalCount:
+          type: integer
+          description: Total number of matching records before pagination is applied.
+          format: int32
+          example: 250
+        results:
+          type: array
+          description: Records for the current page.
+          items:
+            $ref: '#/components/schemas/PosCategoryResponse'
+        hasMore:
+          type: boolean
+          description: True when more records are available after this page.
+          example: true
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      description: External API key issued by Happy Buyers. Send the key in the hca-api-key header.
+      name: hca-api-key
+      in: header

@@ -1,0 +1,105 @@
+openapi: 3.2.0
+info:
+  title: Happy Buyers External Daily Sales Metadata API
+  description: 'External API for Happy Buyers organization metadata and inventory data.
+
+
+    Requests are authenticated with an API key in the hca-api-key header. Results are scoped to
+
+    the organization attached to that key. List endpoints use limit/offset pagination and return
+
+    totalCount plus hasMore.
+
+    '
+  version: v1
+servers:
+- url: https://api.happycabbage.ai
+  description: External API
+security:
+- ApiKeyAuth: []
+tags:
+- name: Daily Sales Metadata
+  description: Daily product sales and stock metadata
+paths:
+  /external/v1/daily-sales-metadata/stores/{storeId}/products/{productId}:
+    get:
+      tags:
+      - Daily Sales Metadata
+      summary: List daily sales metadata for a product
+      description: Returns the last 90 days of daily sales metadata for one product and store in the API key organization. Date boundaries are calculated in the organization's configured timezone and today is excluded. Requires inventory:read.
+      operationId: getDailySalesMetadataForProduct
+      parameters:
+      - name: storeId
+        in: path
+        description: Store/location UUID.
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: 1ff7efc9-e196-43fb-8638-f5399f137ba6
+      - name: productId
+        in: path
+        description: Internal product ID returned as productDetail.id from product inventory.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 12345
+      responses:
+        '403':
+          description: API key does not include inventory:read
+        '401':
+          description: Missing, malformed, or invalid API key
+        '200':
+          description: Daily sales metadata results
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DailySalesMetadataResponse'
+components:
+  schemas:
+    DailySalesMetadataResponse:
+      type: object
+      properties:
+        day:
+          type: string
+          description: Local sales date in the organization's configured timezone.
+          format: date
+          example: '2026-01-02'
+        unitsSold:
+          type: integer
+          description: Total units sold on this day.
+          format: int32
+          example: 12
+        dollarsSold:
+          type: number
+          description: Gross sales dollars on this day.
+          format: double
+          example: 240.0
+        discountDollars:
+          type: number
+          description: Discount dollars applied to sales on this day.
+          format: double
+          example: 18.5
+        thcPercentageSold:
+          type: number
+          description: Sum of sold package THC percentages used with known-THC units to calculate a weighted daily average.
+          format: double
+          example: 252.0
+        quantitySoldWithTHCPercentage:
+          type: integer
+          description: Units sold with a known THC percentage.
+          format: int32
+          example: 10
+        inStockAtEndOfDay:
+          type: boolean
+          description: Whether the product was determined to be in stock at the end of this day. Empty when stock status could not be determined.
+          example: true
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      description: External API key issued by Happy Buyers. Send the key in the hca-api-key header.
+      name: hca-api-key
+      in: header

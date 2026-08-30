@@ -1,0 +1,499 @@
+openapi: 3.2.0
+info:
+  title: Happy Buyers External Product Line Inventory API
+  description: 'External API for Happy Buyers organization metadata and inventory data.
+
+
+    Requests are authenticated with an API key in the hca-api-key header. Results are scoped to
+
+    the organization attached to that key. List endpoints use limit/offset pagination and return
+
+    totalCount plus hasMore.
+
+    '
+  version: v1
+servers:
+- url: https://api.happycabbage.ai
+  description: External API
+security:
+- ApiKeyAuth: []
+tags:
+- name: Product Line Inventory
+  description: Product-line inventory, demand, and replenishment metrics
+paths:
+  /external/v1/product-line-inventory:
+    get:
+      tags:
+      - Product Line Inventory
+      summary: List product line inventory
+      description: Returns demand-group/product-line inventory, sales velocity, aging, and replenishment metrics for the API key organization. Requires inventory:read.
+      operationId: getProductLineInventory
+      parameters:
+      - name: offset
+        in: query
+        description: Zero-based result offset for pagination.
+        required: false
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+          default: 0
+        example: 0
+      - name: limit
+        in: query
+        description: Maximum number of product lines to return. Maximum is 500.
+        required: false
+        schema:
+          maximum: 500
+          minimum: 0
+          type: integer
+          format: int32
+          default: 100
+        example: 100
+      - name: storeIds
+        in: query
+        description: Store UUID filters. Pass repeated query parameters, for example storeIds=id1&storeIds=id2.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+        example: 11111111-1111-1111-1111-111111111111
+      - name: restockOnly
+        in: query
+        description: When true, only product lines with units to order are returned.
+        required: false
+        schema:
+          type: boolean
+        example: true
+      - name: lowDepthOnly
+        in: query
+        description: When true, only product lines below desired product depth are returned.
+        required: false
+        schema:
+          type: boolean
+        example: true
+      - name: isFavorite
+        in: query
+        description: Filter by whether the product line is marked as a favorite.
+        required: false
+        schema:
+          type: boolean
+        example: true
+      - name: universalCategoryIds
+        in: query
+        description: Universal category ID filters. Pass repeated query parameters, for example universalCategoryIds=1&universalCategoryIds=2.
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int32
+        example: 12
+      - name: posBrandIds
+        in: query
+        description: POS brand ID filters. Pass repeated query parameters, for example posBrandIds=1&posBrandIds=2.
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int32
+        example: 42
+      - name: search
+        in: query
+        description: Case-insensitive product line search text.
+        required: false
+        schema:
+          type: string
+        example: gummies
+      - name: productLineId
+        in: query
+        description: Exact product line ID filter.
+        required: false
+        schema:
+          type: integer
+          format: int32
+        example: 123
+      - name: sortTarget
+        in: query
+        description: Field to sort by.
+        required: false
+        schema:
+          type: string
+          enum:
+          - UNITS_PER_DAY
+          - REPORT_RUN_AT
+          - AGED_INVENTORY_COST
+          - INVENTORY_COST
+          - DOLLARS_SOLD
+          - ESTIMATED_PROFIT
+          - AVERAGE_DISCOUNT_PERCENT
+          - AVERAGE_MARGIN_PERCENT
+        example: UNITS_PER_DAY
+      - name: sortDirection
+        in: query
+        description: Sort direction. Prefer ASC or DESC; lowercase values are deprecated aliases.
+        required: false
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          - ASC
+          - DESC
+          - ASC_NULLS_FIRST
+          - ASC_NULLS_LAST
+          - DESC_NULLS_FIRST
+          - DESC_NULLS_LAST
+        example: DESC
+      - name: universalBrandIds
+        in: query
+        description: Universal brand ID filters, passed as repeated query parameters.
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int32
+        example: 90
+      - name: includeProductLineDetails
+        in: query
+        description: Whether or not to include product line details with the inventory response.
+        required: false
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '403':
+          description: API key does not include inventory:read
+        '401':
+          description: Missing, malformed, or invalid API key
+        '200':
+          description: Paged product line inventory results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LimitOffsetResponseProductLineInventoryResponse'
+        '400':
+          description: Invalid query parameter
+components:
+  schemas:
+    ProductLineInventoryResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Most recent report status for this product line, when available.
+          enum:
+          - OUT_OF_DATE
+          - LOW_STOCK
+        predictedDaysOnHand:
+          type: integer
+          description: Predicted days on hand. Empty when unitsPerDay is zero.
+          format: int32
+        targetProductDepth:
+          type: integer
+          description: Target number of distinct products for this store's product line.
+          format: int32
+        averageThcPercentageSold:
+          type: number
+          description: Average THC percentage for units sold. Empty when no units were sold.
+          format: double
+        unitsNeeded:
+          type: integer
+          description: Units needed to reach the replenishment target.
+          format: int32
+        unitsSold:
+          type: integer
+          description: Units sold in the selected lookback window.
+          format: int32
+        dollarsSold:
+          type: number
+          description: Gross dollars sold in the selected lookback window.
+          format: double
+        averageDiscountPercent:
+          type: number
+          description: Average discount percentage in the selected lookback window.
+          format: double
+        estimatedProfit:
+          type: number
+          description: Estimated profit in the selected lookback window.
+          format: double
+        inventoryCost:
+          type: number
+          description: Current inventory cost for the product line.
+          format: double
+        agedInventoryCost:
+          type: number
+          description: Current inventory cost for inventory aged more than 60 days.
+          format: double
+        averageThcPercentageOnHand:
+          type: number
+          description: Average THC percentage for units currently on hand. Empty if none on hand.
+          format: double
+        currentInventory:
+          type: integer
+          description: Current inventory units on hand across products in the line.
+          format: int32
+        averageMarginPercent:
+          type: number
+          description: Average margin percentage in the selected lookback window.
+          format: double
+        sativaProductDepth:
+          type: integer
+          description: Current number of distinct sativa products.
+          format: int32
+        hybridProductDepth:
+          type: integer
+          description: Current number of distinct hybrid products.
+          format: int32
+        indicaProductDepth:
+          type: integer
+          description: Current number of distinct indica products.
+          format: int32
+        storeName:
+          type: string
+          description: Store/location display name for this inventory row.
+        storeId:
+          type: string
+          description: Store/location UUID for this product-line inventory row.
+          format: uuid
+        reportRunAt:
+          type: string
+          description: Timestamp when the product-line report was last calculated.
+          format: date-time
+        unitsAged0To30:
+          type: integer
+          description: Current inventory units aged 0 to 30 days.
+          format: int32
+        unitsAged31To60:
+          type: integer
+          description: Current inventory units aged 31 to 60 days.
+          format: int32
+        unitsAged61To90:
+          type: integer
+          description: Current inventory units aged 61 to 90 days.
+          format: int32
+        unitsAged90Plus:
+          type: integer
+          description: Current inventory units aged 90 or more days.
+          format: int32
+        unitsPerDay:
+          type: number
+          description: Average units sold per day for the product line.
+          format: double
+        unitsAtDistro:
+          type: integer
+          description: Units available at a fulfillment/distribution location.
+          format: int32
+        productLineDetail:
+          $ref: '#/components/schemas/ProductLineDetailResponse'
+        productLineId:
+          type: integer
+          description: Product line id for this product-line inventory row.
+          format: int32
+        currentDepth:
+          type: integer
+          description: Current number of distinct products.
+          format: int32
+      description: Records for the current page.
+    ProductLineDetailResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Product line/demand group display name.
+          example: Acme Gummies
+        id:
+          type: integer
+          description: Product line/demand group ID.
+          format: int32
+          example: 123
+        targetProductDepth:
+          type: integer
+          description: Target product depth for this product line.
+          format: int32
+        desiredDaysOnHand:
+          type: integer
+          description: Target days on hand used for product-line replenishment calculations.
+          format: int32
+        leadTime:
+          type: integer
+          description: Lead time in days used for product-line replenishment calculations.
+          format: int32
+        universalBrandId:
+          type: integer
+          description: Universal brand ID associated with the product line, when available. This is a derived field, set automatically when the product line's query params have one or more brand mapped to the same universal brand or only one universal brand.
+          format: int32
+        universalBrandName:
+          type: string
+          description: Universal brand name associated with the product line, when available.
+        minimumOrderQuantity:
+          type: integer
+          description: Minimum order quantity (case size) for this product line.
+          format: int32
+        universalCategoryId:
+          type: integer
+          description: Universal category ID, when available. This is a derived field, set automatically when the product line's query params have only one category.
+          format: int32
+        universalCategoryLabel:
+          type: string
+          description: Universal category label, when available.
+        posBrandId:
+          type: integer
+          description: POS brand ID associated with the product line, when available. This is a derived field, set automatically when the product line's query params have only one brand.
+          format: int32
+        posBrandName:
+          type: string
+          description: POS brand name associated with the product line, when available.
+        productQueryParams:
+          $ref: '#/components/schemas/ProductQueryParams'
+        lookbackPeriod:
+          type: integer
+          description: Sales lookback period in days used for product-line velocity calculations.
+          format: int32
+    ProductQueryParams:
+      type: object
+      properties:
+        offset:
+          minimum: 0
+          type: integer
+          format: int32
+          default: 0
+        limit:
+          maximum: 500
+          minimum: 0
+          type: integer
+          format: int32
+          default: 100
+        restockOnly:
+          type: boolean
+        activeInLastDays:
+          minimum: 0
+          type: integer
+          format: int32
+        matchingSearchTerms:
+          type: array
+          items:
+            type: string
+        notMatchingSearchTerms:
+          type: array
+          items:
+            type: string
+        universalCategoryIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+        posCategoryIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+        posSubCategoryIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+        vendorIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+        universalBrandIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+        posBrandIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+        includeUniversalUncategorized:
+          type: boolean
+        includePosUncategorized:
+          type: boolean
+        includePosSubUncategorized:
+          type: boolean
+        minWeight:
+          minimum: 0
+          type: number
+          format: double
+        maxWeight:
+          minimum: 0
+          type: number
+          format: double
+        strainClassificationIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+        minPrice:
+          minimum: 0
+          type: number
+          format: double
+        maxPrice:
+          minimum: 0
+          type: number
+          format: double
+        minCost:
+          minimum: 0
+          type: number
+          format: double
+        maxCost:
+          minimum: 0
+          type: number
+          format: double
+        sortTarget:
+          type: string
+          enum:
+          - UNITS_PER_DAY
+          - LAST_ACTIVITY_AT
+        sortDirection:
+          type: string
+          enum:
+          - asc
+          - desc
+          - ASC
+          - DESC
+          - ASC_NULLS_FIRST
+          - ASC_NULLS_LAST
+          - DESC_NULLS_FIRST
+          - DESC_NULLS_LAST
+      description: The product query params used to find products matching this product line.
+    LimitOffsetResponseProductLineInventoryResponse:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: Maximum number of records requested for this page.
+          format: int32
+          example: 100
+        offset:
+          type: integer
+          description: Zero-based result offset used for this page.
+          format: int32
+          example: 0
+        totalCount:
+          type: integer
+          description: Total number of matching records before pagination is applied.
+          format: int32
+          example: 250
+        results:
+          type: array
+          description: Records for the current page.
+          items:
+            $ref: '#/components/schemas/ProductLineInventoryResponse'
+        hasMore:
+          type: boolean
+          description: True when more records are available after this page.
+          example: true
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      description: External API key issued by Happy Buyers. Send the key in the hca-api-key header.
+      name: hca-api-key
+      in: header

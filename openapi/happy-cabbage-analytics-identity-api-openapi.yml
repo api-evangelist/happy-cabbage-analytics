@@ -1,0 +1,67 @@
+openapi: 3.2.0
+info:
+  title: Happy Buyers External Identity API
+  description: 'External API for Happy Buyers organization metadata and inventory data.
+
+
+    Requests are authenticated with an API key in the hca-api-key header. Results are scoped to
+
+    the organization attached to that key. List endpoints use limit/offset pagination and return
+
+    totalCount plus hasMore.
+
+    '
+  version: v1
+servers:
+- url: https://api.happycabbage.ai
+  description: External API
+security:
+- ApiKeyAuth: []
+tags:
+- name: Identity
+  description: API key identity and organization context
+paths:
+  /external/v1/whoami:
+    get:
+      tags:
+      - Identity
+      summary: Identify the current API key
+      description: Returns the API key name, key creation time, and organization context for the authenticated hca-api-key header.
+      operationId: whoami
+      responses:
+        '200':
+          description: Authenticated API key identity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdentityResponse'
+        '401':
+          description: Missing, malformed, or invalid API key
+components:
+  schemas:
+    IdentityResponse:
+      type: object
+      properties:
+        keyName:
+          type: string
+          description: Display name of the API key used for the request.
+          example: Partner reporting key
+        organizationName:
+          type: string
+          description: Organization name associated with the API key.
+          example: Happy Buyers
+        keyCreatedAt:
+          type: string
+          description: Timestamp when the API key was created.
+          format: date-time
+          example: '2026-01-01T00:00:00Z'
+        organizationCreatedAt:
+          type: string
+          description: Timestamp when the organization was created, when available.
+          format: date-time
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      description: External API key issued by Happy Buyers. Send the key in the hca-api-key header.
+      name: hca-api-key
+      in: header
