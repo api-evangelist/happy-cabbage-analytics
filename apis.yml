@@ -32,14 +32,14 @@ specificationVersion: '0.20'
 created: '2026-08-22'
 modified: '2026-08-22'
 tags:
-- cannabis
+- Cannabis
 - Retail
-- inventory-management
+- Inventory Management
 - Analytics
-- purchasing
-- point-of-sale
-- wholesale
-- demand-forecasting
+- Purchasing
+- Point-of-Sale
+- Wholesale
+- Demand Forecasting
 - Supply Chain
 - agent-native
 tags_raw:
