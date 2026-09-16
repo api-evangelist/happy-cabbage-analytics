@@ -1,17 +1,16 @@
 aid: happy-cabbage-analytics
 name: Happy Cabbage Analytics
-description: >-
-  Happy Cabbage Analytics is a cannabis retail software company founded in 2019 and headquartered in
-  San Francisco, California, whose Happy Buyers platform gives dispensary buyers AI-assisted inventory
+description: Happy Cabbage Analytics is a cannabis retail software company founded in 2019 and headquartered
+  in San Francisco, California, whose Happy Buyers platform gives dispensary buyers AI-assisted inventory
   management, demand forecasting, replenishment and purchase-order workflows on top of data pulled from
-  their point-of-sale system. The platform reads live sell-through from POS integrations (Dutchie,
-  Flowhub, Blaze, Treez, Meadow) and wholesale menus (Distru, Apex Trading), then scores inventory
-  health by store, category and brand, predicts days-on-hand, groups SKUs into product lines, and drafts
-  vendor orders with invoices attached. Happy Cabbage sold its Happy Marketers text-marketing suite to
-  Alpine IQ in June 2025 and now focuses on Happy Buyers. A public Happy Buyers External API entered
-  beta in June 2026 and is documented with a Swagger UI, exposing organization metadata, inventory
-  health, product/product-line inventory, packages, daily sales metadata and full order management to
-  API-key holders — the same API the company's own published AI-agent workflows are built on.
+  their point-of-sale system. The platform reads live sell-through from POS integrations (Dutchie, Flowhub,
+  Blaze, Treez, Meadow) and wholesale menus (Distru, Apex Trading), then scores inventory health by store,
+  category and brand, predicts days-on-hand, groups SKUs into product lines, and drafts vendor orders
+  with invoices attached. Happy Cabbage sold its Happy Marketers text-marketing suite to Alpine IQ in
+  June 2025 and now focuses on Happy Buyers. A public Happy Buyers External API entered beta in June 2026
+  and is documented with a Swagger UI, exposing organization metadata, inventory health, product/product-line
+  inventory, packages, daily sales metadata and full order management to API-key holders — the same API
+  the company's own published AI-agent workflows are built on.
 deliveryModel:
   model: saas
   open_source: false
@@ -44,7 +43,7 @@ x-type: company
 x-source: harvest:secondary-market
 specificationVersion: '0.20'
 created: '2026-08-22'
-modified: '2026-08-22'
+modified: '2026-09-16'
 tags:
 - Cannabis
 - Retail
@@ -412,7 +411,7 @@ common:
 - type: Integrations
   url: https://www.happycabbage.io/integrations
 - type: OpenAPI
-  url: openapi/happy-cabbage-analytics-happy-buyers-external-openapi.yml
+  url: openapi/_original/happy-cabbage-analytics-happy-buyers-external-openapi.yml
 - type: Authentication
   url: authentication/happy-cabbage-analytics-authentication.yml
 - type: Conventions
