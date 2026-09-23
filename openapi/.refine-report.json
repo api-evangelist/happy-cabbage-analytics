@@ -1,0 +1,48 @@
+{
+  "provider": "happy-cabbage-analytics",
+  "sources": [
+    "_original/happy-cabbage-analytics-happy-buyers-external-openapi.json"
+  ],
+  "outputs": [
+    "happy-cabbage-analytics-blockout-dates-api-openapi.yml",
+    "happy-cabbage-analytics-daily-sales-metadata-api-openapi.yml",
+    "happy-cabbage-analytics-identity-api-openapi.yml",
+    "happy-cabbage-analytics-inventory-health-api-openapi.yml",
+    "happy-cabbage-analytics-orders-api-openapi.yml",
+    "happy-cabbage-analytics-pos-brands-api-openapi.yml",
+    "happy-cabbage-analytics-pos-categories-api-openapi.yml",
+    "happy-cabbage-analytics-packages-api-openapi.yml",
+    "happy-cabbage-analytics-product-inventory-api-openapi.yml",
+    "happy-cabbage-analytics-product-line-inventory-api-openapi.yml",
+    "happy-cabbage-analytics-product-lines-api-openapi.yml",
+    "happy-cabbage-analytics-stores-api-openapi.yml",
+    "happy-cabbage-analytics-universal-brands-api-openapi.yml",
+    "happy-cabbage-analytics-universal-categories-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "1 archived document(s) dropped as subsets of other archived documents",
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "happy-cabbage-analytics-happy-buyers-external-openapi.json: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "_original/happy-cabbage-analytics-happy-buyers-external-openapi.yml: archived document superseded by a larger archived document",
+    "happy-cabbage-analytics-blockout-dates-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "happy-cabbage-analytics-daily-sales-metadata-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "happy-cabbage-analytics-identity-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "happy-cabbage-analytics-inventory-health-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "happy-cabbage-analytics-orders-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "happy-cabbage-analytics-packages-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "happy-cabbage-analytics-pos-brands-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "happy-cabbage-analytics-pos-categories-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "happy-cabbage-analytics-product-inventory-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "happy-cabbage-analytics-product-line-inventory-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "happy-cabbage-analytics-product-lines-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "happy-cabbage-analytics-stores-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "happy-cabbage-analytics-universal-brands-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "happy-cabbage-analytics-universal-categories-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}

@@ -8,9 +8,7 @@ info:
 
     the organization attached to that key. List endpoints use limit/offset pagination and return
 
-    totalCount plus hasMore.
-
-    '
+    totalCount plus hasMore.'
   version: v1
 servers:
 - url: https://api.happycabbage.ai

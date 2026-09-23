@@ -8,9 +8,7 @@ info:
 
     the organization attached to that key. List endpoints use limit/offset pagination and return
 
-    totalCount plus hasMore.
-
-    '
+    totalCount plus hasMore.'
   version: v1
 servers:
 - url: https://api.happycabbage.ai
@@ -722,6 +720,73 @@ paths:
           description: Invalid query parameter
 components:
   schemas:
+    PosBrandResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          description: POS brand display name.
+          example: Acme
+        id:
+          type: integer
+          description: Happy Buyers POS brand ID.
+          format: int32
+          example: 42
+        productCount:
+          type: integer
+          description: Number of products currently associated with this POS brand.
+          format: int32
+          example: 17
+        mappedUniversalBrandId:
+          type: integer
+          description: Mapped universal brand ID, when this POS brand has a mapping.
+          format: int32
+        posIdentifier:
+          type: string
+          description: Brand identifier from the source POS system.
+          example: brand-123
+        mappedUniversalBrandName:
+          type: string
+          description: Mapped universal brand name, or an empty string when unmapped.
+      description: Records for the current page.
+    StoreResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Full display name of the store/location.
+          example: Downtown Retail
+        id:
+          type: string
+          description: Store/location UUID.
+          format: uuid
+          example: 11111111-1111-1111-1111-111111111111
+        type:
+          type: string
+          description: Store/location type.
+          example: RETAIL
+          enum:
+          - RETAIL
+          - DISTRIBUTION_CENTER
+          - CULTIVATION
+          - MANUFACTURING
+        createdAt:
+          type: string
+          description: Timestamp when the store/location was created.
+          format: date-time
+          example: '2026-01-01T00:00:00Z'
+        stateCode:
+          type: string
+          description: Two-letter state code for the store/location.
+          example: CA
+        fulfilledById:
+          type: string
+          description: Distribution center UUID that fulfills this location, when a fulfillment relationship exists.
+          format: uuid
+        fulfilledByStoreName:
+          type: string
+          description: Name of the fulfillment location, when configured.
+      description: Records for the current page.
     PosBrandHistoryResponse:
       type: object
       properties:
@@ -863,7 +928,7 @@ components:
           format: double
           example: 6.25
       description: Records for the current page.
-    LimitOffsetResponseCategoryHistoryResponse:
+    LimitOffsetResponsePosBrandHistoryResponse:
       type: object
       properties:
         limit:
@@ -885,7 +950,7 @@ components:
           type: array
           description: Records for the current page.
           items:
-            $ref: '#/components/schemas/CategoryHistoryResponse'
+            $ref: '#/components/schemas/PosBrandHistoryResponse'
         hasMore:
           type: boolean
           description: True when more records are available after this page.
@@ -917,7 +982,7 @@ components:
           type: boolean
           description: True when more records are available after this page.
           example: true
-    LimitOffsetResponsePosBrandResponse:
+    LimitOffsetResponseCategoryHistoryResponse:
       type: object
       properties:
         limit:
@@ -939,76 +1004,11 @@ components:
           type: array
           description: Records for the current page.
           items:
-            $ref: '#/components/schemas/PosBrandResponse'
+            $ref: '#/components/schemas/CategoryHistoryResponse'
         hasMore:
           type: boolean
           description: True when more records are available after this page.
           example: true
-    LimitOffsetResponseStoreResponse:
-      type: object
-      properties:
-        limit:
-          type: integer
-          description: Maximum number of records requested for this page.
-          format: int32
-          example: 100
-        offset:
-          type: integer
-          description: Zero-based result offset used for this page.
-          format: int32
-          example: 0
-        totalCount:
-          type: integer
-          description: Total number of matching records before pagination is applied.
-          format: int32
-          example: 250
-        results:
-          type: array
-          description: Records for the current page.
-          items:
-            $ref: '#/components/schemas/StoreResponse'
-        hasMore:
-          type: boolean
-          description: True when more records are available after this page.
-          example: true
-    StoreResponse:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Full display name of the store/location.
-          example: Downtown Retail
-        id:
-          type: string
-          description: Store/location UUID.
-          format: uuid
-          example: 11111111-1111-1111-1111-111111111111
-        type:
-          type: string
-          description: Store/location type.
-          example: RETAIL
-          enum:
-          - RETAIL
-          - DISTRIBUTION_CENTER
-          - CULTIVATION
-          - MANUFACTURING
-        createdAt:
-          type: string
-          description: Timestamp when the store/location was created.
-          format: date-time
-          example: '2026-01-01T00:00:00Z'
-        stateCode:
-          type: string
-          description: Two-letter state code for the store/location.
-          example: CA
-        fulfilledById:
-          type: string
-          description: Distribution center UUID that fulfills this location, when a fulfillment relationship exists.
-          format: uuid
-        fulfilledByStoreName:
-          type: string
-          description: Name of the fulfillment location, when configured.
-      description: Records for the current page.
     CategoryResponse:
       type: object
       properties:
@@ -1265,7 +1265,7 @@ components:
           format: double
           example: 6.25
       description: Records for the current page.
-    LimitOffsetResponseCategoryResponse:
+    LimitOffsetResponseStoreResponse:
       type: object
       properties:
         limit:
@@ -1287,41 +1287,12 @@ components:
           type: array
           description: Records for the current page.
           items:
-            $ref: '#/components/schemas/CategoryResponse'
+            $ref: '#/components/schemas/StoreResponse'
         hasMore:
           type: boolean
           description: True when more records are available after this page.
           example: true
-    PosBrandResponse:
-      type: object
-      properties:
-        name:
-          type: string
-          description: POS brand display name.
-          example: Acme
-        id:
-          type: integer
-          description: Happy Buyers POS brand ID.
-          format: int32
-          example: 42
-        productCount:
-          type: integer
-          description: Number of products currently associated with this POS brand.
-          format: int32
-          example: 17
-        mappedUniversalBrandId:
-          type: integer
-          description: Mapped universal brand ID, when this POS brand has a mapping.
-          format: int32
-        posIdentifier:
-          type: string
-          description: Brand identifier from the source POS system.
-          example: brand-123
-        mappedUniversalBrandName:
-          type: string
-          description: Mapped universal brand name, or an empty string when unmapped.
-      description: Records for the current page.
-    LimitOffsetResponsePosBrandHistoryResponse:
+    LimitOffsetResponsePosBrandResponse:
       type: object
       properties:
         limit:
@@ -1343,7 +1314,7 @@ components:
           type: array
           description: Records for the current page.
           items:
-            $ref: '#/components/schemas/PosBrandHistoryResponse'
+            $ref: '#/components/schemas/PosBrandResponse'
         hasMore:
           type: boolean
           description: True when more records are available after this page.
@@ -1489,6 +1460,33 @@ components:
           format: double
           example: 6.25
       description: Records for the current page.
+    LimitOffsetResponseCategoryResponse:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: Maximum number of records requested for this page.
+          format: int32
+          example: 100
+        offset:
+          type: integer
+          description: Zero-based result offset used for this page.
+          format: int32
+          example: 0
+        totalCount:
+          type: integer
+          description: Total number of matching records before pagination is applied.
+          format: int32
+          example: 250
+        results:
+          type: array
+          description: Records for the current page.
+          items:
+            $ref: '#/components/schemas/CategoryResponse'
+        hasMore:
+          type: boolean
+          description: True when more records are available after this page.
+          example: true
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

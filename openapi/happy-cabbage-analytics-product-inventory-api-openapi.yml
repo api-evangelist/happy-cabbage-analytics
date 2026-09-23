@@ -8,9 +8,7 @@ info:
 
     the organization attached to that key. List endpoints use limit/offset pagination and return
 
-    totalCount plus hasMore.
-
-    '
+    totalCount plus hasMore.'
   version: v1
 servers:
 - url: https://api.happycabbage.ai
@@ -30,9 +28,7 @@ paths:
 
         Discontinued products will still be viewable but will not be recommended for reorders.
 
-        Requires `inventory:write`.
-
-        '
+        Requires `inventory:write`.'
       operationId: updateCarryStatus
       parameters:
       - name: productId
@@ -553,62 +549,6 @@ components:
           format: int32
           example: 12
       description: Product metadata for this inventory row.
-    CarryStatusUpdateResponse:
-      type: object
-      properties:
-        productId:
-          type: integer
-          description: Internal product ID.
-          format: int32
-        storeId:
-          type: string
-          description: Store/location UUID.
-          format: uuid
-        continueToCarry:
-          type: boolean
-          description: Whether this product should continue to be carried.
-    LimitOffsetResponseProductInventoryResponse:
-      type: object
-      properties:
-        limit:
-          type: integer
-          description: Maximum number of records requested for this page.
-          format: int32
-          example: 100
-        offset:
-          type: integer
-          description: Zero-based result offset used for this page.
-          format: int32
-          example: 0
-        totalCount:
-          type: integer
-          description: Total number of matching records before pagination is applied.
-          format: int32
-          example: 250
-        results:
-          type: array
-          description: Records for the current page.
-          items:
-            $ref: '#/components/schemas/ProductInventoryResponse'
-        hasMore:
-          type: boolean
-          description: True when more records are available after this page.
-          example: true
-    CarryStatusUpdateRequest:
-      required:
-      - continueToCarry
-      type: object
-      properties:
-        continueToCarry:
-          type: boolean
-          description: 'Whether this product should continue to be carried.
-
-            When false: Product is discontinued. It will still be viewable but will not be recommended for reorders.
-
-            When true: Product will continue to be recommended for reorders.
-
-            '
-          example: false
     ProductInventoryResponse:
       type: object
       properties:
@@ -764,6 +704,62 @@ components:
           description: Units available at a fulfillment/distribution location.
           format: int32
       description: Records for the current page.
+    LimitOffsetResponseProductInventoryResponse:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: Maximum number of records requested for this page.
+          format: int32
+          example: 100
+        offset:
+          type: integer
+          description: Zero-based result offset used for this page.
+          format: int32
+          example: 0
+        totalCount:
+          type: integer
+          description: Total number of matching records before pagination is applied.
+          format: int32
+          example: 250
+        results:
+          type: array
+          description: Records for the current page.
+          items:
+            $ref: '#/components/schemas/ProductInventoryResponse'
+        hasMore:
+          type: boolean
+          description: True when more records are available after this page.
+          example: true
+    CarryStatusUpdateResponse:
+      type: object
+      properties:
+        productId:
+          type: integer
+          description: Internal product ID.
+          format: int32
+        storeId:
+          type: string
+          description: Store/location UUID.
+          format: uuid
+        continueToCarry:
+          type: boolean
+          description: Whether this product should continue to be carried.
+    CarryStatusUpdateRequest:
+      required:
+      - continueToCarry
+      type: object
+      properties:
+        continueToCarry:
+          type: boolean
+          description: 'Whether this product should continue to be carried.
+
+            When false: Product is discontinued. It will still be viewable but will not be recommended for reorders.
+
+            When true: Product will continue to be recommended for reorders.
+
+            '
+          example: false
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

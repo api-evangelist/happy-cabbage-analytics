@@ -8,9 +8,7 @@ info:
 
     the organization attached to that key. List endpoints use limit/offset pagination and return
 
-    totalCount plus hasMore.
-
-    '
+    totalCount plus hasMore.'
   version: v1
 servers:
 - url: https://api.happycabbage.ai
@@ -180,125 +178,33 @@ paths:
           description: Invalid query parameter
 components:
   schemas:
-    ProductLineInventoryResponse:
+    LimitOffsetResponseProductLineInventoryResponse:
       type: object
       properties:
-        status:
-          type: string
-          description: Most recent report status for this product line, when available.
-          enum:
-          - OUT_OF_DATE
-          - LOW_STOCK
-        predictedDaysOnHand:
+        limit:
           type: integer
-          description: Predicted days on hand. Empty when unitsPerDay is zero.
+          description: Maximum number of records requested for this page.
           format: int32
-        targetProductDepth:
+          example: 100
+        offset:
           type: integer
-          description: Target number of distinct products for this store's product line.
+          description: Zero-based result offset used for this page.
           format: int32
-        averageThcPercentageSold:
-          type: number
-          description: Average THC percentage for units sold. Empty when no units were sold.
-          format: double
-        unitsNeeded:
+          example: 0
+        totalCount:
           type: integer
-          description: Units needed to reach the replenishment target.
+          description: Total number of matching records before pagination is applied.
           format: int32
-        unitsSold:
-          type: integer
-          description: Units sold in the selected lookback window.
-          format: int32
-        dollarsSold:
-          type: number
-          description: Gross dollars sold in the selected lookback window.
-          format: double
-        averageDiscountPercent:
-          type: number
-          description: Average discount percentage in the selected lookback window.
-          format: double
-        estimatedProfit:
-          type: number
-          description: Estimated profit in the selected lookback window.
-          format: double
-        inventoryCost:
-          type: number
-          description: Current inventory cost for the product line.
-          format: double
-        agedInventoryCost:
-          type: number
-          description: Current inventory cost for inventory aged more than 60 days.
-          format: double
-        averageThcPercentageOnHand:
-          type: number
-          description: Average THC percentage for units currently on hand. Empty if none on hand.
-          format: double
-        currentInventory:
-          type: integer
-          description: Current inventory units on hand across products in the line.
-          format: int32
-        averageMarginPercent:
-          type: number
-          description: Average margin percentage in the selected lookback window.
-          format: double
-        sativaProductDepth:
-          type: integer
-          description: Current number of distinct sativa products.
-          format: int32
-        hybridProductDepth:
-          type: integer
-          description: Current number of distinct hybrid products.
-          format: int32
-        indicaProductDepth:
-          type: integer
-          description: Current number of distinct indica products.
-          format: int32
-        storeName:
-          type: string
-          description: Store/location display name for this inventory row.
-        storeId:
-          type: string
-          description: Store/location UUID for this product-line inventory row.
-          format: uuid
-        reportRunAt:
-          type: string
-          description: Timestamp when the product-line report was last calculated.
-          format: date-time
-        unitsAged0To30:
-          type: integer
-          description: Current inventory units aged 0 to 30 days.
-          format: int32
-        unitsAged31To60:
-          type: integer
-          description: Current inventory units aged 31 to 60 days.
-          format: int32
-        unitsAged61To90:
-          type: integer
-          description: Current inventory units aged 61 to 90 days.
-          format: int32
-        unitsAged90Plus:
-          type: integer
-          description: Current inventory units aged 90 or more days.
-          format: int32
-        unitsPerDay:
-          type: number
-          description: Average units sold per day for the product line.
-          format: double
-        unitsAtDistro:
-          type: integer
-          description: Units available at a fulfillment/distribution location.
-          format: int32
-        productLineDetail:
-          $ref: '#/components/schemas/ProductLineDetailResponse'
-        productLineId:
-          type: integer
-          description: Product line id for this product-line inventory row.
-          format: int32
-        currentDepth:
-          type: integer
-          description: Current number of distinct products.
-          format: int32
-      description: Records for the current page.
+          example: 250
+        results:
+          type: array
+          description: Records for the current page.
+          items:
+            $ref: '#/components/schemas/ProductLineInventoryResponse'
+        hasMore:
+          type: boolean
+          description: True when more records are available after this page.
+          example: true
     ProductLineDetailResponse:
       type: object
       properties:
@@ -464,33 +370,125 @@ components:
           - DESC_NULLS_FIRST
           - DESC_NULLS_LAST
       description: The product query params used to find products matching this product line.
-    LimitOffsetResponseProductLineInventoryResponse:
+    ProductLineInventoryResponse:
       type: object
       properties:
-        limit:
+        status:
+          type: string
+          description: Most recent report status for this product line, when available.
+          enum:
+          - OUT_OF_DATE
+          - LOW_STOCK
+        predictedDaysOnHand:
           type: integer
-          description: Maximum number of records requested for this page.
+          description: Predicted days on hand. Empty when unitsPerDay is zero.
           format: int32
-          example: 100
-        offset:
+        targetProductDepth:
           type: integer
-          description: Zero-based result offset used for this page.
+          description: Target number of distinct products for this store's product line.
           format: int32
-          example: 0
-        totalCount:
+        averageThcPercentageSold:
+          type: number
+          description: Average THC percentage for units sold. Empty when no units were sold.
+          format: double
+        unitsNeeded:
           type: integer
-          description: Total number of matching records before pagination is applied.
+          description: Units needed to reach the replenishment target.
           format: int32
-          example: 250
-        results:
-          type: array
-          description: Records for the current page.
-          items:
-            $ref: '#/components/schemas/ProductLineInventoryResponse'
-        hasMore:
-          type: boolean
-          description: True when more records are available after this page.
-          example: true
+        unitsSold:
+          type: integer
+          description: Units sold in the selected lookback window.
+          format: int32
+        dollarsSold:
+          type: number
+          description: Gross dollars sold in the selected lookback window.
+          format: double
+        averageDiscountPercent:
+          type: number
+          description: Average discount percentage in the selected lookback window.
+          format: double
+        estimatedProfit:
+          type: number
+          description: Estimated profit in the selected lookback window.
+          format: double
+        inventoryCost:
+          type: number
+          description: Current inventory cost for the product line.
+          format: double
+        agedInventoryCost:
+          type: number
+          description: Current inventory cost for inventory aged more than 60 days.
+          format: double
+        averageThcPercentageOnHand:
+          type: number
+          description: Average THC percentage for units currently on hand. Empty if none on hand.
+          format: double
+        currentInventory:
+          type: integer
+          description: Current inventory units on hand across products in the line.
+          format: int32
+        averageMarginPercent:
+          type: number
+          description: Average margin percentage in the selected lookback window.
+          format: double
+        sativaProductDepth:
+          type: integer
+          description: Current number of distinct sativa products.
+          format: int32
+        hybridProductDepth:
+          type: integer
+          description: Current number of distinct hybrid products.
+          format: int32
+        indicaProductDepth:
+          type: integer
+          description: Current number of distinct indica products.
+          format: int32
+        storeName:
+          type: string
+          description: Store/location display name for this inventory row.
+        storeId:
+          type: string
+          description: Store/location UUID for this product-line inventory row.
+          format: uuid
+        reportRunAt:
+          type: string
+          description: Timestamp when the product-line report was last calculated.
+          format: date-time
+        unitsAged0To30:
+          type: integer
+          description: Current inventory units aged 0 to 30 days.
+          format: int32
+        unitsAged31To60:
+          type: integer
+          description: Current inventory units aged 31 to 60 days.
+          format: int32
+        unitsAged61To90:
+          type: integer
+          description: Current inventory units aged 61 to 90 days.
+          format: int32
+        unitsAged90Plus:
+          type: integer
+          description: Current inventory units aged 90 or more days.
+          format: int32
+        unitsPerDay:
+          type: number
+          description: Average units sold per day for the product line.
+          format: double
+        unitsAtDistro:
+          type: integer
+          description: Units available at a fulfillment/distribution location.
+          format: int32
+        productLineDetail:
+          $ref: '#/components/schemas/ProductLineDetailResponse'
+        productLineId:
+          type: integer
+          description: Product line id for this product-line inventory row.
+          format: int32
+        currentDepth:
+          type: integer
+          description: Current number of distinct products.
+          format: int32
+      description: Records for the current page.
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
