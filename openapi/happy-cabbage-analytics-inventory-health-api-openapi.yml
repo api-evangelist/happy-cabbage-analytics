@@ -720,72 +720,129 @@ paths:
           description: Invalid query parameter
 components:
   schemas:
-    PosBrandResponse:
+    CategoryResponse:
       type: object
       properties:
-        name:
-          type: string
-          description: POS brand display name.
-          example: Acme
-        id:
+        categoryId:
           type: integer
-          description: Happy Buyers POS brand ID.
+          description: POS category ID.
           format: int32
           example: 42
-        productCount:
+        categoryName:
+          type: string
+          description: POS category name.
+          example: Flower
+        predictedDaysOnHand:
           type: integer
-          description: Number of products currently associated with this POS brand.
+          description: Predicted days on hand based on inventory and sales velocity.
           format: int32
-          example: 17
-        mappedUniversalBrandId:
-          type: integer
-          description: Mapped universal brand ID, when this POS brand has a mapping.
-          format: int32
-        posIdentifier:
-          type: string
-          description: Brand identifier from the source POS system.
-          example: brand-123
-        mappedUniversalBrandName:
-          type: string
-          description: Mapped universal brand name, or an empty string when unmapped.
-      description: Records for the current page.
-    StoreResponse:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Full display name of the store/location.
-          example: Downtown Retail
-        id:
-          type: string
-          description: Store/location UUID.
-          format: uuid
-          example: 11111111-1111-1111-1111-111111111111
-        type:
-          type: string
-          description: Store/location type.
-          example: RETAIL
-          enum:
-          - RETAIL
-          - DISTRIBUTION_CENTER
-          - CULTIVATION
-          - MANUFACTURING
         createdAt:
           type: string
-          description: Timestamp when the store/location was created.
+          description: Creation timestamp for the underlying inventory health data.
           format: date-time
-          example: '2026-01-01T00:00:00Z'
-        stateCode:
+        updatedAt:
           type: string
-          description: Two-letter state code for the store/location.
-          example: CA
-        fulfilledById:
+          description: Most recent update timestamp for the underlying inventory health data.
+          format: date-time
+        unitsSold:
+          type: integer
+          description: Units sold in the projected inventory health period.
+          format: int32
+          example: 120
+        dollarsSold:
+          type: number
+          description: Sales dollars in the projected inventory health period.
+          format: double
+          example: 3200.0
+        discountDollars:
+          type: number
+          description: Discount dollars in the projected inventory health period.
+          format: double
+          example: 150.0
+        averageDiscountPercent:
+          type: number
+          description: Average discount percentage.
+          format: double
+          example: 4.5
+        averageMargin:
+          type: number
+          description: Average margin percentage.
+          format: double
+          example: 42.5
+        inventoryCost:
+          type: number
+          description: Current inventory cost dollars.
+          format: double
+          example: 1200.0
+        agedInventoryCost:
+          type: number
+          description: Cost dollars for inventory aged 90 or more days.
+          format: double
+          example: 300.0
+        storeName:
           type: string
-          description: Distribution center UUID that fulfills this location, when a fulfillment relationship exists.
+          description: Store/location display name.
+          example: Downtown
+        storeId:
+          type: string
+          description: Store/location UUID for this inventory health row.
           format: uuid
-        fulfilledByStoreName:
-          type: string
-          description: Name of the fulfillment location, when configured.
+        totalProfit:
+          type: number
+          description: Total profit dollars.
+          format: double
+          example: 875.25
+        percentShareOfProfit:
+          type: number
+          description: Percent share of total profit for the current result set.
+          format: double
+        percentShareOfAgedInventoryCost:
+          type: number
+          description: Percent share of aged inventory cost for the current result set.
+          format: double
+        percentShareOfDollarsSold:
+          type: number
+          description: Percent share of dollars sold for the current result set.
+          format: double
+        percentShareOfUnitsSold:
+          type: number
+          description: Percent share of units sold for the current result set.
+          format: double
+        unitsInStock:
+          type: integer
+          description: Current inventory units on hand.
+          format: int32
+          example: 80
+        sellableUnitsInStock:
+          type: integer
+          description: Current sellable inventory units on hand.
+          format: int32
+          example: 72
+        unitsAged0To30:
+          type: integer
+          description: Current inventory units aged 0 to 30 days.
+          format: int32
+          example: 25
+        unitsAged31To60:
+          type: integer
+          description: Current inventory units aged 31 to 60 days.
+          format: int32
+          example: 20
+        unitsAged61To90:
+          type: integer
+          description: Current inventory units aged 61 to 90 days.
+          format: int32
+          example: 15
+        unitsAged90Plus:
+          type: integer
+          description: Current inventory units aged 90 or more days.
+          format: int32
+          example: 10
+        unitsPerDay:
+          type: number
+          description: Average units sold per day.
+          format: double
+          example: 6.25
       description: Records for the current page.
     PosBrandHistoryResponse:
       type: object
@@ -955,61 +1012,36 @@ components:
           type: boolean
           description: True when more records are available after this page.
           example: true
-    LimitOffsetResponseStoreHistoryResponse:
+    PosBrandResponse:
       type: object
       properties:
-        limit:
+        name:
+          type: string
+          description: POS brand display name.
+          example: Acme
+        id:
           type: integer
-          description: Maximum number of records requested for this page.
+          description: Happy Buyers POS brand ID.
           format: int32
-          example: 100
-        offset:
+          example: 42
+        productCount:
           type: integer
-          description: Zero-based result offset used for this page.
+          description: Number of products currently associated with this POS brand.
           format: int32
-          example: 0
-        totalCount:
+          example: 17
+        mappedUniversalBrandId:
           type: integer
-          description: Total number of matching records before pagination is applied.
+          description: Mapped universal brand ID, when this POS brand has a mapping.
           format: int32
-          example: 250
-        results:
-          type: array
-          description: Records for the current page.
-          items:
-            $ref: '#/components/schemas/StoreHistoryResponse'
-        hasMore:
-          type: boolean
-          description: True when more records are available after this page.
-          example: true
-    LimitOffsetResponseCategoryHistoryResponse:
-      type: object
-      properties:
-        limit:
-          type: integer
-          description: Maximum number of records requested for this page.
-          format: int32
-          example: 100
-        offset:
-          type: integer
-          description: Zero-based result offset used for this page.
-          format: int32
-          example: 0
-        totalCount:
-          type: integer
-          description: Total number of matching records before pagination is applied.
-          format: int32
-          example: 250
-        results:
-          type: array
-          description: Records for the current page.
-          items:
-            $ref: '#/components/schemas/CategoryHistoryResponse'
-        hasMore:
-          type: boolean
-          description: True when more records are available after this page.
-          example: true
-    CategoryResponse:
+        posIdentifier:
+          type: string
+          description: Brand identifier from the source POS system.
+          example: brand-123
+        mappedUniversalBrandName:
+          type: string
+          description: Mapped universal brand name, or an empty string when unmapped.
+      description: Records for the current page.
+    CategoryHistoryResponse:
       type: object
       properties:
         categoryId:
@@ -1017,6 +1049,23 @@ components:
           description: POS category ID.
           format: int32
           example: 42
+        startDate:
+          type: string
+          description: Inclusive start date for this history period.
+          format: date
+          example: '2026-01-05'
+        endDate:
+          type: string
+          description: Inclusive end date for this history period.
+          format: date
+          example: '2026-01-11'
+        periodType:
+          type: string
+          description: Inventory history period granularity.
+          example: WEEKLY
+          enum:
+          - WEEKLY
+          - MONTHLY
         categoryName:
           type: string
           description: POS category name.
@@ -1292,7 +1341,7 @@ components:
           type: boolean
           description: True when more records are available after this page.
           example: true
-    LimitOffsetResponsePosBrandResponse:
+    LimitOffsetResponseCategoryHistoryResponse:
       type: object
       properties:
         limit:
@@ -1314,152 +1363,11 @@ components:
           type: array
           description: Records for the current page.
           items:
-            $ref: '#/components/schemas/PosBrandResponse'
+            $ref: '#/components/schemas/CategoryHistoryResponse'
         hasMore:
           type: boolean
           description: True when more records are available after this page.
           example: true
-    CategoryHistoryResponse:
-      type: object
-      properties:
-        categoryId:
-          type: integer
-          description: POS category ID.
-          format: int32
-          example: 42
-        startDate:
-          type: string
-          description: Inclusive start date for this history period.
-          format: date
-          example: '2026-01-05'
-        endDate:
-          type: string
-          description: Inclusive end date for this history period.
-          format: date
-          example: '2026-01-11'
-        periodType:
-          type: string
-          description: Inventory history period granularity.
-          example: WEEKLY
-          enum:
-          - WEEKLY
-          - MONTHLY
-        categoryName:
-          type: string
-          description: POS category name.
-          example: Flower
-        predictedDaysOnHand:
-          type: integer
-          description: Predicted days on hand based on inventory and sales velocity.
-          format: int32
-        createdAt:
-          type: string
-          description: Creation timestamp for the underlying inventory health data.
-          format: date-time
-        updatedAt:
-          type: string
-          description: Most recent update timestamp for the underlying inventory health data.
-          format: date-time
-        unitsSold:
-          type: integer
-          description: Units sold in the projected inventory health period.
-          format: int32
-          example: 120
-        dollarsSold:
-          type: number
-          description: Sales dollars in the projected inventory health period.
-          format: double
-          example: 3200.0
-        discountDollars:
-          type: number
-          description: Discount dollars in the projected inventory health period.
-          format: double
-          example: 150.0
-        averageDiscountPercent:
-          type: number
-          description: Average discount percentage.
-          format: double
-          example: 4.5
-        averageMargin:
-          type: number
-          description: Average margin percentage.
-          format: double
-          example: 42.5
-        inventoryCost:
-          type: number
-          description: Current inventory cost dollars.
-          format: double
-          example: 1200.0
-        agedInventoryCost:
-          type: number
-          description: Cost dollars for inventory aged 90 or more days.
-          format: double
-          example: 300.0
-        storeName:
-          type: string
-          description: Store/location display name.
-          example: Downtown
-        storeId:
-          type: string
-          description: Store/location UUID for this inventory health row.
-          format: uuid
-        totalProfit:
-          type: number
-          description: Total profit dollars.
-          format: double
-          example: 875.25
-        percentShareOfProfit:
-          type: number
-          description: Percent share of total profit for the current result set.
-          format: double
-        percentShareOfAgedInventoryCost:
-          type: number
-          description: Percent share of aged inventory cost for the current result set.
-          format: double
-        percentShareOfDollarsSold:
-          type: number
-          description: Percent share of dollars sold for the current result set.
-          format: double
-        percentShareOfUnitsSold:
-          type: number
-          description: Percent share of units sold for the current result set.
-          format: double
-        unitsInStock:
-          type: integer
-          description: Current inventory units on hand.
-          format: int32
-          example: 80
-        sellableUnitsInStock:
-          type: integer
-          description: Current sellable inventory units on hand.
-          format: int32
-          example: 72
-        unitsAged0To30:
-          type: integer
-          description: Current inventory units aged 0 to 30 days.
-          format: int32
-          example: 25
-        unitsAged31To60:
-          type: integer
-          description: Current inventory units aged 31 to 60 days.
-          format: int32
-          example: 20
-        unitsAged61To90:
-          type: integer
-          description: Current inventory units aged 61 to 90 days.
-          format: int32
-          example: 15
-        unitsAged90Plus:
-          type: integer
-          description: Current inventory units aged 90 or more days.
-          format: int32
-          example: 10
-        unitsPerDay:
-          type: number
-          description: Average units sold per day.
-          format: double
-          example: 6.25
-      description: Records for the current page.
     LimitOffsetResponseCategoryResponse:
       type: object
       properties:
@@ -1483,6 +1391,98 @@ components:
           description: Records for the current page.
           items:
             $ref: '#/components/schemas/CategoryResponse'
+        hasMore:
+          type: boolean
+          description: True when more records are available after this page.
+          example: true
+    LimitOffsetResponseStoreHistoryResponse:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: Maximum number of records requested for this page.
+          format: int32
+          example: 100
+        offset:
+          type: integer
+          description: Zero-based result offset used for this page.
+          format: int32
+          example: 0
+        totalCount:
+          type: integer
+          description: Total number of matching records before pagination is applied.
+          format: int32
+          example: 250
+        results:
+          type: array
+          description: Records for the current page.
+          items:
+            $ref: '#/components/schemas/StoreHistoryResponse'
+        hasMore:
+          type: boolean
+          description: True when more records are available after this page.
+          example: true
+    StoreResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Full display name of the store/location.
+          example: Downtown Retail
+        id:
+          type: string
+          description: Store/location UUID.
+          format: uuid
+          example: 11111111-1111-1111-1111-111111111111
+        type:
+          type: string
+          description: Store/location type.
+          example: RETAIL
+          enum:
+          - RETAIL
+          - DISTRIBUTION_CENTER
+          - CULTIVATION
+          - MANUFACTURING
+        createdAt:
+          type: string
+          description: Timestamp when the store/location was created.
+          format: date-time
+          example: '2026-01-01T00:00:00Z'
+        stateCode:
+          type: string
+          description: Two-letter state code for the store/location.
+          example: CA
+        fulfilledById:
+          type: string
+          description: Distribution center UUID that fulfills this location, when a fulfillment relationship exists.
+          format: uuid
+        fulfilledByStoreName:
+          type: string
+          description: Name of the fulfillment location, when configured.
+      description: Records for the current page.
+    LimitOffsetResponsePosBrandResponse:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: Maximum number of records requested for this page.
+          format: int32
+          example: 100
+        offset:
+          type: integer
+          description: Zero-based result offset used for this page.
+          format: int32
+          example: 0
+        totalCount:
+          type: integer
+          description: Total number of matching records before pagination is applied.
+          format: int32
+          example: 250
+        results:
+          type: array
+          description: Records for the current page.
+          items:
+            $ref: '#/components/schemas/PosBrandResponse'
         hasMore:
           type: boolean
           description: True when more records are available after this page.

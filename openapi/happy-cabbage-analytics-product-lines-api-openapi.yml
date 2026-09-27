@@ -504,7 +504,7 @@ components:
           format: int32
           example: 12
       description: Product metadata for this inventory row.
-    LimitOffsetResponseProductLineDetailResponse:
+    LimitOffsetResponseProductInventoryResponse:
       type: object
       properties:
         limit:
@@ -526,11 +526,130 @@ components:
           type: array
           description: Records for the current page.
           items:
-            $ref: '#/components/schemas/ProductLineDetailResponse'
+            $ref: '#/components/schemas/ProductInventoryResponse'
         hasMore:
           type: boolean
           description: True when more records are available after this page.
           example: true
+    ProductLineDetailResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Product line/demand group display name.
+          example: Acme Gummies
+        id:
+          type: integer
+          description: Product line/demand group ID.
+          format: int32
+          example: 123
+        targetProductDepth:
+          type: integer
+          description: Target product depth for this product line.
+          format: int32
+        desiredDaysOnHand:
+          type: integer
+          description: Target days on hand used for product-line replenishment calculations.
+          format: int32
+        leadTime:
+          type: integer
+          description: Lead time in days used for product-line replenishment calculations.
+          format: int32
+        universalBrandId:
+          type: integer
+          description: Universal brand ID associated with the product line, when available. This is a derived field, set automatically when the product line's query params have one or more brand mapped to the same universal brand or only one universal brand.
+          format: int32
+        universalBrandName:
+          type: string
+          description: Universal brand name associated with the product line, when available.
+        minimumOrderQuantity:
+          type: integer
+          description: Minimum order quantity (case size) for this product line.
+          format: int32
+        universalCategoryId:
+          type: integer
+          description: Universal category ID, when available. This is a derived field, set automatically when the product line's query params have only one category.
+          format: int32
+        universalCategoryLabel:
+          type: string
+          description: Universal category label, when available.
+        posBrandId:
+          type: integer
+          description: POS brand ID associated with the product line, when available. This is a derived field, set automatically when the product line's query params have only one brand.
+          format: int32
+        posBrandName:
+          type: string
+          description: POS brand name associated with the product line, when available.
+        productQueryParams:
+          $ref: '#/components/schemas/ProductQueryParams'
+        lookbackPeriod:
+          type: integer
+          description: Sales lookback period in days used for product-line velocity calculations.
+          format: int32
+    ProductLineCreateRequest:
+      required:
+      - name
+      - productQueryParams
+      type: object
+      properties:
+        name:
+          type: string
+          description: Product line display name.
+          example: Acme Gummies
+        productQueryParams:
+          $ref: '#/components/schemas/ProductQueryParams'
+        isFavorite:
+          type: boolean
+          description: Whether the product line is marked as a favorite.
+          example: true
+        desiredDaysOnHand:
+          minimum: 1
+          type: integer
+          description: Target days on hand used for product-line replenishment calculations.
+          format: int32
+        leadTime:
+          minimum: 0
+          type: integer
+          description: Lead time in days used for product-line replenishment calculations.
+          format: int32
+        lookbackPeriod:
+          minimum: 1
+          type: integer
+          description: Sales lookback period in days used for product-line velocity calculations.
+          format: int32
+        autoRunDays:
+          type: array
+          description: Days of week to auto-run this product line, using ISO day-of-week values. Defaults to Monday through Friday.
+          example:
+          - 1
+          - 3
+          - 5
+          items:
+            type: integer
+            description: Days of week to auto-run this product line, using ISO day-of-week values. Defaults to Monday through Friday.
+            format: int32
+          default:
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+        reportEmailTargetDefaults:
+          type: array
+          description: Default email recipients for product-line reports.
+          items:
+            type: string
+            description: Default email recipients for product-line reports.
+        minimumOrderQuantityDefault:
+          minimum: 1
+          type: integer
+          description: Default minimum order quantity (case size) for products in this product line.
+          format: int32
+        targetProductDepth:
+          minimum: 0
+          type: integer
+          description: Target product depth for this product line.
+          format: int32
     ProductInventoryResponse:
       type: object
       properties:
@@ -686,61 +805,33 @@ components:
           description: Units available at a fulfillment/distribution location.
           format: int32
       description: Records for the current page.
-    ProductLineDetailResponse:
+    LimitOffsetResponseProductLineDetailResponse:
       type: object
       properties:
-        name:
-          type: string
-          description: Product line/demand group display name.
-          example: Acme Gummies
-        id:
+        limit:
           type: integer
-          description: Product line/demand group ID.
+          description: Maximum number of records requested for this page.
           format: int32
-          example: 123
-        targetProductDepth:
+          example: 100
+        offset:
           type: integer
-          description: Target product depth for this product line.
+          description: Zero-based result offset used for this page.
           format: int32
-        desiredDaysOnHand:
+          example: 0
+        totalCount:
           type: integer
-          description: Target days on hand used for product-line replenishment calculations.
+          description: Total number of matching records before pagination is applied.
           format: int32
-        leadTime:
-          type: integer
-          description: Lead time in days used for product-line replenishment calculations.
-          format: int32
-        universalBrandId:
-          type: integer
-          description: Universal brand ID associated with the product line, when available. This is a derived field, set automatically when the product line's query params have one or more brand mapped to the same universal brand or only one universal brand.
-          format: int32
-        universalBrandName:
-          type: string
-          description: Universal brand name associated with the product line, when available.
-        minimumOrderQuantity:
-          type: integer
-          description: Minimum order quantity (case size) for this product line.
-          format: int32
-        universalCategoryId:
-          type: integer
-          description: Universal category ID, when available. This is a derived field, set automatically when the product line's query params have only one category.
-          format: int32
-        universalCategoryLabel:
-          type: string
-          description: Universal category label, when available.
-        posBrandId:
-          type: integer
-          description: POS brand ID associated with the product line, when available. This is a derived field, set automatically when the product line's query params have only one brand.
-          format: int32
-        posBrandName:
-          type: string
-          description: POS brand name associated with the product line, when available.
-        productQueryParams:
-          $ref: '#/components/schemas/ProductQueryParams'
-        lookbackPeriod:
-          type: integer
-          description: Sales lookback period in days used for product-line velocity calculations.
-          format: int32
+          example: 250
+        results:
+          type: array
+          description: Records for the current page.
+          items:
+            $ref: '#/components/schemas/ProductLineDetailResponse'
+        hasMore:
+          type: boolean
+          description: True when more records are available after this page.
+          example: true
     ProductQueryParams:
       type: object
       properties:
@@ -851,33 +942,6 @@ components:
           - DESC_NULLS_FIRST
           - DESC_NULLS_LAST
       description: The product query params used to find products matching this product line.
-    LimitOffsetResponseProductInventoryResponse:
-      type: object
-      properties:
-        limit:
-          type: integer
-          description: Maximum number of records requested for this page.
-          format: int32
-          example: 100
-        offset:
-          type: integer
-          description: Zero-based result offset used for this page.
-          format: int32
-          example: 0
-        totalCount:
-          type: integer
-          description: Total number of matching records before pagination is applied.
-          format: int32
-          example: 250
-        results:
-          type: array
-          description: Records for the current page.
-          items:
-            $ref: '#/components/schemas/ProductInventoryResponse'
-        hasMore:
-          type: boolean
-          description: True when more records are available after this page.
-          example: true
     ProductLineUpdateRequest:
       required:
       - name
@@ -935,70 +999,6 @@ components:
         autoDemandGroupCreateLogId:
           type: integer
           description: Auto-created demand group log ID, when this product line is auto-generated.
-          format: int32
-    ProductLineCreateRequest:
-      required:
-      - name
-      - productQueryParams
-      type: object
-      properties:
-        name:
-          type: string
-          description: Product line display name.
-          example: Acme Gummies
-        productQueryParams:
-          $ref: '#/components/schemas/ProductQueryParams'
-        isFavorite:
-          type: boolean
-          description: Whether the product line is marked as a favorite.
-          example: true
-        desiredDaysOnHand:
-          minimum: 1
-          type: integer
-          description: Target days on hand used for product-line replenishment calculations.
-          format: int32
-        leadTime:
-          minimum: 0
-          type: integer
-          description: Lead time in days used for product-line replenishment calculations.
-          format: int32
-        lookbackPeriod:
-          minimum: 1
-          type: integer
-          description: Sales lookback period in days used for product-line velocity calculations.
-          format: int32
-        autoRunDays:
-          type: array
-          description: Days of week to auto-run this product line, using ISO day-of-week values. Defaults to Monday through Friday.
-          example:
-          - 1
-          - 3
-          - 5
-          items:
-            type: integer
-            description: Days of week to auto-run this product line, using ISO day-of-week values. Defaults to Monday through Friday.
-            format: int32
-          default:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-        reportEmailTargetDefaults:
-          type: array
-          description: Default email recipients for product-line reports.
-          items:
-            type: string
-            description: Default email recipients for product-line reports.
-        minimumOrderQuantityDefault:
-          minimum: 1
-          type: integer
-          description: Default minimum order quantity (case size) for products in this product line.
-          format: int32
-        targetProductDepth:
-          minimum: 0
-          type: integer
-          description: Target product depth for this product line.
           format: int32
   securitySchemes:
     ApiKeyAuth:

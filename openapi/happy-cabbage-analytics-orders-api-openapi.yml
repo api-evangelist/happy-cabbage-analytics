@@ -519,6 +519,42 @@ paths:
                 type: object
 components:
   schemas:
+    CreateRequest:
+      type: object
+      properties:
+        note:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+    LimitOffsetResponseOrderInvoiceResponse:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: Maximum number of records requested for this page.
+          format: int32
+          example: 100
+        offset:
+          type: integer
+          description: Zero-based result offset used for this page.
+          format: int32
+          example: 0
+        totalCount:
+          type: integer
+          description: Total number of matching records before pagination is applied.
+          format: int32
+          example: 250
+        results:
+          type: array
+          description: Records for the current page.
+          items:
+            $ref: '#/components/schemas/OrderInvoiceResponse'
+        hasMore:
+          type: boolean
+          description: True when more records are available after this page.
+          example: true
     OrderResponse:
       type: object
       properties:
@@ -562,42 +598,7 @@ components:
         createdByUserLastName:
           type: string
           description: Last name of the user who created the order.
-    CreateRequest:
-      type: object
-      properties:
-        note:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-    OrderInvoiceResponse:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Optional invoice display name.
-        id:
-          type: integer
-          description: Invoice `id`.
-          format: int32
-        filename:
-          type: string
-          description: Invoice filename.
-        createdAt:
-          type: string
-          description: Timestamp the invoice metadata was created.
-          format: date-time
-        updatedAt:
-          type: string
-          description: Timestamp the invoice metadata was last updated.
-          format: date-time
-        orderId:
-          type: integer
-          description: Owning order `id`.
-          format: int32
-      description: Order invoice metadata.
-    OrderInvoiceCreateRequest:
+    OrderInvoiceUpdateRequest:
       required:
       - filename
       type: object
@@ -609,7 +610,34 @@ components:
           type: string
           description: Invoice filename.
           example: invoice.pdf
-      description: Request body for adding an invoice to an order.
+      description: Request body for updating an order invoice.
+    LimitOffsetResponseOrderItemResponse:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: Maximum number of records requested for this page.
+          format: int32
+          example: 100
+        offset:
+          type: integer
+          description: Zero-based result offset used for this page.
+          format: int32
+          example: 0
+        totalCount:
+          type: integer
+          description: Total number of matching records before pagination is applied.
+          format: int32
+          example: 250
+        results:
+          type: array
+          description: Records for the current page.
+          items:
+            $ref: '#/components/schemas/OrderItemResponse'
+        hasMore:
+          type: boolean
+          description: True when more records are available after this page.
+          example: true
     UpdateRequest:
       type: object
       properties:
@@ -622,6 +650,16 @@ components:
           type: string
         description:
           type: string
+    OrderInvoiceUrlRequest:
+      type: object
+      properties:
+        durationSeconds:
+          maximum: 604800
+          minimum: 1
+          type: integer
+          description: Temporary URL duration in seconds. Defaults to service configuration.
+          format: int32
+      description: Request body for generating a temporary invoice file URL.
     OrderItemResponse:
       type: object
       properties:
@@ -750,6 +788,45 @@ components:
           type: integer
           description: Product-line `id`. Present when the item is a product line.
           format: int32
+    OrderInvoiceResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Optional invoice display name.
+        id:
+          type: integer
+          description: Invoice `id`.
+          format: int32
+        filename:
+          type: string
+          description: Invoice filename.
+        createdAt:
+          type: string
+          description: Timestamp the invoice metadata was created.
+          format: date-time
+        updatedAt:
+          type: string
+          description: Timestamp the invoice metadata was last updated.
+          format: date-time
+        orderId:
+          type: integer
+          description: Owning order `id`.
+          format: int32
+      description: Order invoice metadata.
+    OrderInvoiceCreateRequest:
+      required:
+      - filename
+      type: object
+      properties:
+        name:
+          type: string
+          description: Optional invoice display name.
+        filename:
+          type: string
+          description: Invoice filename.
+          example: invoice.pdf
+      description: Request body for adding an invoice to an order.
     LimitOffsetResponseOrderResponse:
       type: object
       properties:
@@ -777,56 +854,6 @@ components:
           type: boolean
           description: True when more records are available after this page.
           example: true
-    LimitOffsetResponseOrderInvoiceResponse:
-      type: object
-      properties:
-        limit:
-          type: integer
-          description: Maximum number of records requested for this page.
-          format: int32
-          example: 100
-        offset:
-          type: integer
-          description: Zero-based result offset used for this page.
-          format: int32
-          example: 0
-        totalCount:
-          type: integer
-          description: Total number of matching records before pagination is applied.
-          format: int32
-          example: 250
-        results:
-          type: array
-          description: Records for the current page.
-          items:
-            $ref: '#/components/schemas/OrderInvoiceResponse'
-        hasMore:
-          type: boolean
-          description: True when more records are available after this page.
-          example: true
-    OrderInvoiceUrlRequest:
-      type: object
-      properties:
-        durationSeconds:
-          maximum: 604800
-          minimum: 1
-          type: integer
-          description: Temporary URL duration in seconds. Defaults to service configuration.
-          format: int32
-      description: Request body for generating a temporary invoice file URL.
-    OrderInvoiceUpdateRequest:
-      required:
-      - filename
-      type: object
-      properties:
-        name:
-          type: string
-          description: Optional invoice display name.
-        filename:
-          type: string
-          description: Invoice filename.
-          example: invoice.pdf
-      description: Request body for updating an order invoice.
     OrderItemAddRequest:
       required:
       - storeId
@@ -911,33 +938,6 @@ components:
           format: int32
           example: 8
       description: Request body for adding an item to an order.
-    LimitOffsetResponseOrderItemResponse:
-      type: object
-      properties:
-        limit:
-          type: integer
-          description: Maximum number of records requested for this page.
-          format: int32
-          example: 100
-        offset:
-          type: integer
-          description: Zero-based result offset used for this page.
-          format: int32
-          example: 0
-        totalCount:
-          type: integer
-          description: Total number of matching records before pagination is applied.
-          format: int32
-          example: 250
-        results:
-          type: array
-          description: Records for the current page.
-          items:
-            $ref: '#/components/schemas/OrderItemResponse'
-        hasMore:
-          type: boolean
-          description: True when more records are available after this page.
-          example: true
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
