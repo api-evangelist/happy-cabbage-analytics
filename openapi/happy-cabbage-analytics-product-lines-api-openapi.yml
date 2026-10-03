@@ -419,91 +419,6 @@ paths:
                 $ref: '#/components/schemas/LimitOffsetResponseProductInventoryResponse'
 components:
   schemas:
-    ProductDetailResponse:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Product display name.
-          example: Acme Gummies 10mg
-        id:
-          type: integer
-          description: Internal product ID. Use this value for product-specific endpoints.
-          format: int32
-        weight:
-          type: number
-          description: Product weight, when available.
-          format: double
-          example: 3.5
-        universalBrandId:
-          type: integer
-          description: Mapped universal brand ID, when available.
-          format: int32
-        universalBrandName:
-          type: string
-          description: Mapped universal brand name, when available.
-        vendorId:
-          type: integer
-          description: Vendor ID, when available.
-          format: int32
-        vendorName:
-          type: string
-          description: Vendor name, when available.
-        strainClassificationId:
-          type: integer
-          description: Strain classification ID, when available.
-          format: int32
-        strainClassificationLabel:
-          type: string
-          description: Strain classification label, when available.
-        strainFamily:
-          type: string
-          description: Strain family, when available.
-          example: HYBRID
-          enum:
-          - INDICA
-          - SATIVA
-          - HYBRID
-        posCategoryId:
-          type: integer
-          description: POS category ID, when available.
-          format: int32
-        posCategoryLabel:
-          type: string
-          description: POS category label, when available.
-        posSubCategoryId:
-          type: integer
-          description: POS subcategory ID, when available.
-          format: int32
-        posSubCategoryLabel:
-          type: string
-          description: POS subcategory label, when available.
-        posIdentifier:
-          type: string
-          description: Product identifier from the source POS system, or an empty string when unavailable.
-        universalCategoryId:
-          type: integer
-          description: Mapped universal category ID, when available.
-          format: int32
-        universalCategoryLabel:
-          type: string
-          description: Mapped universal category label, when available.
-        posBrandId:
-          type: integer
-          description: POS brand ID, when available.
-          format: int32
-        posBrandName:
-          type: string
-          description: POS brand name, when available.
-        sku:
-          type: string
-          description: Product SKU from the source POS system, or an empty string when unavailable.
-        caseSize:
-          type: integer
-          description: Minimum order/case size, when available.
-          format: int32
-          example: 12
-      description: Product metadata for this inventory row.
     LimitOffsetResponseProductInventoryResponse:
       type: object
       properties:
@@ -531,6 +446,64 @@ components:
           type: boolean
           description: True when more records are available after this page.
           example: true
+    ProductLineUpdateRequest:
+      required:
+      - name
+      - productQueryParams
+      type: object
+      properties:
+        name:
+          type: string
+          description: Product line/demand group display name.
+          example: Acme Gummies
+        productQueryParams:
+          $ref: '#/components/schemas/ProductQueryParams'
+        isFavorite:
+          type: boolean
+          description: Whether the product line is marked as a favorite.
+          example: true
+        desiredDaysOnHand:
+          minimum: 1
+          type: integer
+          description: Target days on hand used for product-line replenishment calculations.
+          format: int32
+        leadTime:
+          minimum: 0
+          type: integer
+          description: Lead time in days used for product-line replenishment calculations.
+          format: int32
+        lookbackPeriod:
+          minimum: 1
+          type: integer
+          description: Sales lookback period in days used for product-line velocity calculations.
+          format: int32
+        autoRunDays:
+          type: array
+          description: Days of week to auto-run this product line, using ISO day-of-week values.
+          items:
+            type: integer
+            description: Days of week to auto-run this product line, using ISO day-of-week values.
+            format: int32
+        reportEmailTargetDefaults:
+          type: array
+          description: Default email recipients for product-line reports.
+          items:
+            type: string
+            description: Default email recipients for product-line reports.
+        minimumOrderQuantityDefault:
+          minimum: 0
+          type: integer
+          description: Default minimum order quantity (case size) for products in this product line.
+          format: int32
+        targetProductDepth:
+          minimum: 0
+          type: integer
+          description: Target product depth for this product line.
+          format: int32
+        autoDemandGroupCreateLogId:
+          type: integer
+          description: Auto-created demand group log ID, when this product line is auto-generated.
+          format: int32
     ProductLineDetailResponse:
       type: object
       properties:
@@ -586,6 +559,116 @@ components:
           type: integer
           description: Sales lookback period in days used for product-line velocity calculations.
           format: int32
+    ProductQueryParams:
+      type: object
+      properties:
+        offset:
+          minimum: 0
+          type: integer
+          format: int32
+          default: 0
+        limit:
+          maximum: 500
+          minimum: 0
+          type: integer
+          format: int32
+          default: 100
+        restockOnly:
+          type: boolean
+        activeInLastDays:
+          minimum: 0
+          type: integer
+          format: int32
+        matchingSearchTerms:
+          type: array
+          items:
+            type: string
+        notMatchingSearchTerms:
+          type: array
+          items:
+            type: string
+        universalCategoryIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+        posCategoryIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+        posSubCategoryIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+        vendorIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+        universalBrandIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+        posBrandIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+        includeUniversalUncategorized:
+          type: boolean
+        includePosUncategorized:
+          type: boolean
+        includePosSubUncategorized:
+          type: boolean
+        minWeight:
+          minimum: 0
+          type: number
+          format: double
+        maxWeight:
+          minimum: 0
+          type: number
+          format: double
+        strainClassificationIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+        minPrice:
+          minimum: 0
+          type: number
+          format: double
+        maxPrice:
+          minimum: 0
+          type: number
+          format: double
+        minCost:
+          minimum: 0
+          type: number
+          format: double
+        maxCost:
+          minimum: 0
+          type: number
+          format: double
+        sortTarget:
+          type: string
+          enum:
+          - UNITS_PER_DAY
+          - LAST_ACTIVITY_AT
+        sortDirection:
+          type: string
+          enum:
+          - asc
+          - desc
+          - ASC
+          - DESC
+          - ASC_NULLS_FIRST
+          - ASC_NULLS_LAST
+          - DESC_NULLS_FIRST
+          - DESC_NULLS_LAST
+      description: The product query params used to find products matching this product line.
     ProductLineCreateRequest:
       required:
       - name
@@ -832,174 +915,91 @@ components:
           type: boolean
           description: True when more records are available after this page.
           example: true
-    ProductQueryParams:
-      type: object
-      properties:
-        offset:
-          minimum: 0
-          type: integer
-          format: int32
-          default: 0
-        limit:
-          maximum: 500
-          minimum: 0
-          type: integer
-          format: int32
-          default: 100
-        restockOnly:
-          type: boolean
-        activeInLastDays:
-          minimum: 0
-          type: integer
-          format: int32
-        matchingSearchTerms:
-          type: array
-          items:
-            type: string
-        notMatchingSearchTerms:
-          type: array
-          items:
-            type: string
-        universalCategoryIds:
-          type: array
-          items:
-            type: integer
-            format: int32
-        posCategoryIds:
-          type: array
-          items:
-            type: integer
-            format: int32
-        posSubCategoryIds:
-          type: array
-          items:
-            type: integer
-            format: int32
-        vendorIds:
-          type: array
-          items:
-            type: integer
-            format: int32
-        universalBrandIds:
-          type: array
-          items:
-            type: integer
-            format: int32
-        posBrandIds:
-          type: array
-          items:
-            type: integer
-            format: int32
-        includeUniversalUncategorized:
-          type: boolean
-        includePosUncategorized:
-          type: boolean
-        includePosSubUncategorized:
-          type: boolean
-        minWeight:
-          minimum: 0
-          type: number
-          format: double
-        maxWeight:
-          minimum: 0
-          type: number
-          format: double
-        strainClassificationIds:
-          type: array
-          items:
-            type: integer
-            format: int32
-        minPrice:
-          minimum: 0
-          type: number
-          format: double
-        maxPrice:
-          minimum: 0
-          type: number
-          format: double
-        minCost:
-          minimum: 0
-          type: number
-          format: double
-        maxCost:
-          minimum: 0
-          type: number
-          format: double
-        sortTarget:
-          type: string
-          enum:
-          - UNITS_PER_DAY
-          - LAST_ACTIVITY_AT
-        sortDirection:
-          type: string
-          enum:
-          - asc
-          - desc
-          - ASC
-          - DESC
-          - ASC_NULLS_FIRST
-          - ASC_NULLS_LAST
-          - DESC_NULLS_FIRST
-          - DESC_NULLS_LAST
-      description: The product query params used to find products matching this product line.
-    ProductLineUpdateRequest:
-      required:
-      - name
-      - productQueryParams
+    ProductDetailResponse:
       type: object
       properties:
         name:
           type: string
-          description: Product line/demand group display name.
-          example: Acme Gummies
-        productQueryParams:
-          $ref: '#/components/schemas/ProductQueryParams'
-        isFavorite:
-          type: boolean
-          description: Whether the product line is marked as a favorite.
-          example: true
-        desiredDaysOnHand:
-          minimum: 1
+          description: Product display name.
+          example: Acme Gummies 10mg
+        id:
           type: integer
-          description: Target days on hand used for product-line replenishment calculations.
+          description: Internal product ID. Use this value for product-specific endpoints.
           format: int32
-        leadTime:
-          minimum: 0
+        weight:
+          type: number
+          description: Product weight, when available.
+          format: double
+          example: 3.5
+        universalBrandId:
           type: integer
-          description: Lead time in days used for product-line replenishment calculations.
+          description: Mapped universal brand ID, when available.
           format: int32
-        lookbackPeriod:
-          minimum: 1
+        universalBrandName:
+          type: string
+          description: Mapped universal brand name, when available.
+        vendorId:
           type: integer
-          description: Sales lookback period in days used for product-line velocity calculations.
+          description: Vendor ID, when available.
           format: int32
-        autoRunDays:
-          type: array
-          description: Days of week to auto-run this product line, using ISO day-of-week values.
-          items:
-            type: integer
-            description: Days of week to auto-run this product line, using ISO day-of-week values.
-            format: int32
-        reportEmailTargetDefaults:
-          type: array
-          description: Default email recipients for product-line reports.
-          items:
-            type: string
-            description: Default email recipients for product-line reports.
-        minimumOrderQuantityDefault:
-          minimum: 0
+        vendorName:
+          type: string
+          description: Vendor name, when available.
+        strainClassificationId:
           type: integer
-          description: Default minimum order quantity (case size) for products in this product line.
+          description: Strain classification ID, when available.
           format: int32
-        targetProductDepth:
-          minimum: 0
+        strainClassificationLabel:
+          type: string
+          description: Strain classification label, when available.
+        strainFamily:
+          type: string
+          description: Strain family, when available.
+          example: HYBRID
+          enum:
+          - INDICA
+          - SATIVA
+          - HYBRID
+        posCategoryId:
           type: integer
-          description: Target product depth for this product line.
+          description: POS category ID, when available.
           format: int32
-        autoDemandGroupCreateLogId:
+        posCategoryLabel:
+          type: string
+          description: POS category label, when available.
+        posSubCategoryId:
           type: integer
-          description: Auto-created demand group log ID, when this product line is auto-generated.
+          description: POS subcategory ID, when available.
           format: int32
+        posSubCategoryLabel:
+          type: string
+          description: POS subcategory label, when available.
+        posIdentifier:
+          type: string
+          description: Product identifier from the source POS system, or an empty string when unavailable.
+        universalCategoryId:
+          type: integer
+          description: Mapped universal category ID, when available.
+          format: int32
+        universalCategoryLabel:
+          type: string
+          description: Mapped universal category label, when available.
+        posBrandId:
+          type: integer
+          description: POS brand ID, when available.
+          format: int32
+        posBrandName:
+          type: string
+          description: POS brand name, when available.
+        sku:
+          type: string
+          description: Product SKU from the source POS system, or an empty string when unavailable.
+        caseSize:
+          type: integer
+          description: Minimum order/case size, when available.
+          format: int32
+          example: 12
+      description: Product metadata for this inventory row.
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

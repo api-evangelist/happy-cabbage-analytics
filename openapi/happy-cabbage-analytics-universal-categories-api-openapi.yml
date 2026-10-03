@@ -93,6 +93,23 @@ paths:
           description: Invalid query parameter
 components:
   schemas:
+    UniversalCategoryResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Canonical category machine name.
+          example: flower
+        id:
+          type: integer
+          description: Canonical category ID.
+          format: int32
+          example: 12
+        label:
+          type: string
+          description: Canonical category display label.
+          example: Flower
+      description: Records for the current page.
     LimitOffsetResponseUniversalCategoryResponse:
       type: object
       properties:
@@ -120,23 +137,6 @@ components:
           type: boolean
           description: True when more records are available after this page.
           example: true
-    UniversalCategoryResponse:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Canonical category machine name.
-          example: flower
-        id:
-          type: integer
-          description: Canonical category ID.
-          format: int32
-          example: 12
-        label:
-          type: string
-          description: Canonical category display label.
-          example: Flower
-      description: Records for the current page.
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

@@ -288,33 +288,6 @@ components:
           - DESC_NULLS_FIRST
           - DESC_NULLS_LAST
       description: The product query params used to find products matching this product line.
-    LimitOffsetResponseProductLineInventoryResponse:
-      type: object
-      properties:
-        limit:
-          type: integer
-          description: Maximum number of records requested for this page.
-          format: int32
-          example: 100
-        offset:
-          type: integer
-          description: Zero-based result offset used for this page.
-          format: int32
-          example: 0
-        totalCount:
-          type: integer
-          description: Total number of matching records before pagination is applied.
-          format: int32
-          example: 250
-        results:
-          type: array
-          description: Records for the current page.
-          items:
-            $ref: '#/components/schemas/ProductLineInventoryResponse'
-        hasMore:
-          type: boolean
-          description: True when more records are available after this page.
-          example: true
     ProductLineInventoryResponse:
       type: object
       properties:
@@ -489,6 +462,33 @@ components:
           type: integer
           description: Sales lookback period in days used for product-line velocity calculations.
           format: int32
+    LimitOffsetResponseProductLineInventoryResponse:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: Maximum number of records requested for this page.
+          format: int32
+          example: 100
+        offset:
+          type: integer
+          description: Zero-based result offset used for this page.
+          format: int32
+          example: 0
+        totalCount:
+          type: integer
+          description: Total number of matching records before pagination is applied.
+          format: int32
+          example: 250
+        results:
+          type: array
+          description: Records for the current page.
+          items:
+            $ref: '#/components/schemas/ProductLineInventoryResponse'
+        hasMore:
+          type: boolean
+          description: True when more records are available after this page.
+          example: true
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

@@ -205,6 +205,65 @@ paths:
                 $ref: '#/components/schemas/BlockoutDateResponse'
 components:
   schemas:
+    BlockoutDateRequest:
+      required:
+      - endDate
+      - isAllStores
+      - isRecurring
+      - name
+      - posBrandIds
+      - startDate
+      - storeIds
+      - universalCategoryIds
+      type: object
+      properties:
+        name:
+          type: string
+          description: Blockout date display name.
+          example: Thanksgiving
+        description:
+          type: string
+          description: Optional blockout date description.
+        startDate:
+          type: string
+          description: Inclusive first blocked-out date.
+          format: date
+          example: '2026-11-26'
+        endDate:
+          type: string
+          description: Inclusive last blocked-out date.
+          format: date
+          example: '2026-11-27'
+        isRecurring:
+          type: boolean
+          description: Whether the blockout date repeats annually.
+          example: false
+        isAllStores:
+          type: boolean
+          description: Whether this blockout date applies to every store. When false, it applies only to `storeIds`.
+          example: false
+        storeIds:
+          type: array
+          description: Store UUIDs affected when `isAllStores` is false.
+          items:
+            type: string
+            description: Store UUIDs affected when `isAllStores` is false.
+            format: uuid
+        posBrandIds:
+          type: array
+          description: POS brand IDs whose products are blocked out.
+          items:
+            type: integer
+            description: POS brand IDs whose products are blocked out.
+            format: int32
+        universalCategoryIds:
+          type: array
+          description: Universal category IDs whose products are blocked out.
+          items:
+            type: integer
+            description: Universal category IDs whose products are blocked out.
+            format: int32
+      description: Request body for creating or updating a blockout date.
     LimitOffsetResponseBlockoutDateResponse:
       type: object
       properties:
@@ -291,65 +350,6 @@ components:
             description: Universal category IDs whose products are blocked out.
             format: int32
       description: A blockout date for the API key organization.
-    BlockoutDateRequest:
-      required:
-      - endDate
-      - isAllStores
-      - isRecurring
-      - name
-      - posBrandIds
-      - startDate
-      - storeIds
-      - universalCategoryIds
-      type: object
-      properties:
-        name:
-          type: string
-          description: Blockout date display name.
-          example: Thanksgiving
-        description:
-          type: string
-          description: Optional blockout date description.
-        startDate:
-          type: string
-          description: Inclusive first blocked-out date.
-          format: date
-          example: '2026-11-26'
-        endDate:
-          type: string
-          description: Inclusive last blocked-out date.
-          format: date
-          example: '2026-11-27'
-        isRecurring:
-          type: boolean
-          description: Whether the blockout date repeats annually.
-          example: false
-        isAllStores:
-          type: boolean
-          description: Whether this blockout date applies to every store. When false, it applies only to `storeIds`.
-          example: false
-        storeIds:
-          type: array
-          description: Store UUIDs affected when `isAllStores` is false.
-          items:
-            type: string
-            description: Store UUIDs affected when `isAllStores` is false.
-            format: uuid
-        posBrandIds:
-          type: array
-          description: POS brand IDs whose products are blocked out.
-          items:
-            type: integer
-            description: POS brand IDs whose products are blocked out.
-            format: int32
-        universalCategoryIds:
-          type: array
-          description: Universal category IDs whose products are blocked out.
-          items:
-            type: integer
-            description: Universal category IDs whose products are blocked out.
-            format: int32
-      description: Request body for creating or updating a blockout date.
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

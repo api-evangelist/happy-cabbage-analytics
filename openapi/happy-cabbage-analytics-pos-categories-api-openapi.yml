@@ -103,33 +103,6 @@ paths:
           description: Invalid query parameter
 components:
   schemas:
-    LimitOffsetResponsePosCategoryResponse:
-      type: object
-      properties:
-        limit:
-          type: integer
-          description: Maximum number of records requested for this page.
-          format: int32
-          example: 100
-        offset:
-          type: integer
-          description: Zero-based result offset used for this page.
-          format: int32
-          example: 0
-        totalCount:
-          type: integer
-          description: Total number of matching records before pagination is applied.
-          format: int32
-          example: 250
-        results:
-          type: array
-          description: Records for the current page.
-          items:
-            $ref: '#/components/schemas/PosCategoryResponse'
-        hasMore:
-          type: boolean
-          description: True when more records are available after this page.
-          example: true
     PosCategoryResponse:
       type: object
       properties:
@@ -160,6 +133,33 @@ components:
           type: string
           description: Mapped universal category display label, or an empty string when unmapped.
       description: Records for the current page.
+    LimitOffsetResponsePosCategoryResponse:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: Maximum number of records requested for this page.
+          format: int32
+          example: 100
+        offset:
+          type: integer
+          description: Zero-based result offset used for this page.
+          format: int32
+          example: 0
+        totalCount:
+          type: integer
+          description: Total number of matching records before pagination is applied.
+          format: int32
+          example: 250
+        results:
+          type: array
+          description: Records for the current page.
+          items:
+            $ref: '#/components/schemas/PosCategoryResponse'
+        hasMore:
+          type: boolean
+          description: True when more records are available after this page.
+          example: true
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
