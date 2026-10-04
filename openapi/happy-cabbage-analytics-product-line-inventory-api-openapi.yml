@@ -178,116 +178,6 @@ paths:
           description: Invalid query parameter
 components:
   schemas:
-    ProductQueryParams:
-      type: object
-      properties:
-        offset:
-          minimum: 0
-          type: integer
-          format: int32
-          default: 0
-        limit:
-          maximum: 500
-          minimum: 0
-          type: integer
-          format: int32
-          default: 100
-        restockOnly:
-          type: boolean
-        activeInLastDays:
-          minimum: 0
-          type: integer
-          format: int32
-        matchingSearchTerms:
-          type: array
-          items:
-            type: string
-        notMatchingSearchTerms:
-          type: array
-          items:
-            type: string
-        universalCategoryIds:
-          type: array
-          items:
-            type: integer
-            format: int32
-        posCategoryIds:
-          type: array
-          items:
-            type: integer
-            format: int32
-        posSubCategoryIds:
-          type: array
-          items:
-            type: integer
-            format: int32
-        vendorIds:
-          type: array
-          items:
-            type: integer
-            format: int32
-        universalBrandIds:
-          type: array
-          items:
-            type: integer
-            format: int32
-        posBrandIds:
-          type: array
-          items:
-            type: integer
-            format: int32
-        includeUniversalUncategorized:
-          type: boolean
-        includePosUncategorized:
-          type: boolean
-        includePosSubUncategorized:
-          type: boolean
-        minWeight:
-          minimum: 0
-          type: number
-          format: double
-        maxWeight:
-          minimum: 0
-          type: number
-          format: double
-        strainClassificationIds:
-          type: array
-          items:
-            type: integer
-            format: int32
-        minPrice:
-          minimum: 0
-          type: number
-          format: double
-        maxPrice:
-          minimum: 0
-          type: number
-          format: double
-        minCost:
-          minimum: 0
-          type: number
-          format: double
-        maxCost:
-          minimum: 0
-          type: number
-          format: double
-        sortTarget:
-          type: string
-          enum:
-          - UNITS_PER_DAY
-          - LAST_ACTIVITY_AT
-        sortDirection:
-          type: string
-          enum:
-          - asc
-          - desc
-          - ASC
-          - DESC
-          - ASC_NULLS_FIRST
-          - ASC_NULLS_LAST
-          - DESC_NULLS_FIRST
-          - DESC_NULLS_LAST
-      description: The product query params used to find products matching this product line.
     ProductLineInventoryResponse:
       type: object
       properties:
@@ -407,6 +297,33 @@ components:
           description: Current number of distinct products.
           format: int32
       description: Records for the current page.
+    LimitOffsetResponseProductLineInventoryResponse:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: Maximum number of records requested for this page.
+          format: int32
+          example: 100
+        offset:
+          type: integer
+          description: Zero-based result offset used for this page.
+          format: int32
+          example: 0
+        totalCount:
+          type: integer
+          description: Total number of matching records before pagination is applied.
+          format: int32
+          example: 250
+        results:
+          type: array
+          description: Records for the current page.
+          items:
+            $ref: '#/components/schemas/ProductLineInventoryResponse'
+        hasMore:
+          type: boolean
+          description: True when more records are available after this page.
+          example: true
     ProductLineDetailResponse:
       type: object
       properties:
@@ -462,33 +379,116 @@ components:
           type: integer
           description: Sales lookback period in days used for product-line velocity calculations.
           format: int32
-    LimitOffsetResponseProductLineInventoryResponse:
+    ProductQueryParams:
       type: object
       properties:
-        limit:
-          type: integer
-          description: Maximum number of records requested for this page.
-          format: int32
-          example: 100
         offset:
+          minimum: 0
           type: integer
-          description: Zero-based result offset used for this page.
           format: int32
-          example: 0
-        totalCount:
+          default: 0
+        limit:
+          maximum: 500
+          minimum: 0
           type: integer
-          description: Total number of matching records before pagination is applied.
           format: int32
-          example: 250
-        results:
-          type: array
-          description: Records for the current page.
-          items:
-            $ref: '#/components/schemas/ProductLineInventoryResponse'
-        hasMore:
+          default: 100
+        restockOnly:
           type: boolean
-          description: True when more records are available after this page.
-          example: true
+        activeInLastDays:
+          minimum: 0
+          type: integer
+          format: int32
+        matchingSearchTerms:
+          type: array
+          items:
+            type: string
+        notMatchingSearchTerms:
+          type: array
+          items:
+            type: string
+        universalCategoryIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+        posCategoryIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+        posSubCategoryIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+        vendorIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+        universalBrandIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+        posBrandIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+        includeUniversalUncategorized:
+          type: boolean
+        includePosUncategorized:
+          type: boolean
+        includePosSubUncategorized:
+          type: boolean
+        minWeight:
+          minimum: 0
+          type: number
+          format: double
+        maxWeight:
+          minimum: 0
+          type: number
+          format: double
+        strainClassificationIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+        minPrice:
+          minimum: 0
+          type: number
+          format: double
+        maxPrice:
+          minimum: 0
+          type: number
+          format: double
+        minCost:
+          minimum: 0
+          type: number
+          format: double
+        maxCost:
+          minimum: 0
+          type: number
+          format: double
+        sortTarget:
+          type: string
+          enum:
+          - UNITS_PER_DAY
+          - LAST_ACTIVITY_AT
+        sortDirection:
+          type: string
+          enum:
+          - asc
+          - desc
+          - ASC
+          - DESC
+          - ASC_NULLS_FIRST
+          - ASC_NULLS_LAST
+          - DESC_NULLS_FIRST
+          - DESC_NULLS_LAST
+      description: The product query params used to find products matching this product line.
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

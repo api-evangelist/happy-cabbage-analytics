@@ -519,42 +519,32 @@ paths:
                 type: object
 components:
   schemas:
-    CreateRequest:
+    OrderInvoiceResponse:
       type: object
       properties:
-        note:
-          type: string
         name:
           type: string
-        description:
+          description: Optional invoice display name.
+        id:
+          type: integer
+          description: Invoice `id`.
+          format: int32
+        filename:
           type: string
-    LimitOffsetResponseOrderResponse:
-      type: object
-      properties:
-        limit:
+          description: Invoice filename.
+        createdAt:
+          type: string
+          description: Timestamp the invoice metadata was created.
+          format: date-time
+        updatedAt:
+          type: string
+          description: Timestamp the invoice metadata was last updated.
+          format: date-time
+        orderId:
           type: integer
-          description: Maximum number of records requested for this page.
+          description: Owning order `id`.
           format: int32
-          example: 100
-        offset:
-          type: integer
-          description: Zero-based result offset used for this page.
-          format: int32
-          example: 0
-        totalCount:
-          type: integer
-          description: Total number of matching records before pagination is applied.
-          format: int32
-          example: 250
-        results:
-          type: array
-          description: Records for the current page.
-          items:
-            $ref: '#/components/schemas/OrderResponse'
-        hasMore:
-          type: boolean
-          description: True when more records are available after this page.
-          example: true
+      description: Order invoice metadata.
     OrderResponse:
       type: object
       properties:
@@ -598,6 +588,219 @@ components:
         createdByUserLastName:
           type: string
           description: Last name of the user who created the order.
+    OrderInvoiceUpdateRequest:
+      required:
+      - filename
+      type: object
+      properties:
+        name:
+          type: string
+          description: Optional invoice display name.
+        filename:
+          type: string
+          description: Invoice filename.
+          example: invoice.pdf
+      description: Request body for updating an order invoice.
+    OrderInvoiceUrlRequest:
+      type: object
+      properties:
+        durationSeconds:
+          maximum: 604800
+          minimum: 1
+          type: integer
+          description: Temporary URL duration in seconds. Defaults to service configuration.
+          format: int32
+      description: Request body for generating a temporary invoice file URL.
+    UpdateRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        note:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+    OrderInvoiceCreateRequest:
+      required:
+      - filename
+      type: object
+      properties:
+        name:
+          type: string
+          description: Optional invoice display name.
+        filename:
+          type: string
+          description: Invoice filename.
+          example: invoice.pdf
+      description: Request body for adding an invoice to an order.
+    LimitOffsetResponseOrderItemResponse:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: Maximum number of records requested for this page.
+          format: int32
+          example: 100
+        offset:
+          type: integer
+          description: Zero-based result offset used for this page.
+          format: int32
+          example: 0
+        totalCount:
+          type: integer
+          description: Total number of matching records before pagination is applied.
+          format: int32
+          example: 250
+        results:
+          type: array
+          description: Records for the current page.
+          items:
+            $ref: '#/components/schemas/OrderItemResponse'
+        hasMore:
+          type: boolean
+          description: True when more records are available after this page.
+          example: true
+    LimitOffsetResponseOrderInvoiceResponse:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: Maximum number of records requested for this page.
+          format: int32
+          example: 100
+        offset:
+          type: integer
+          description: Zero-based result offset used for this page.
+          format: int32
+          example: 0
+        totalCount:
+          type: integer
+          description: Total number of matching records before pagination is applied.
+          format: int32
+          example: 250
+        results:
+          type: array
+          description: Records for the current page.
+          items:
+            $ref: '#/components/schemas/OrderInvoiceResponse'
+        hasMore:
+          type: boolean
+          description: True when more records are available after this page.
+          example: true
+    LimitOffsetResponseOrderResponse:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: Maximum number of records requested for this page.
+          format: int32
+          example: 100
+        offset:
+          type: integer
+          description: Zero-based result offset used for this page.
+          format: int32
+          example: 0
+        totalCount:
+          type: integer
+          description: Total number of matching records before pagination is applied.
+          format: int32
+          example: 250
+        results:
+          type: array
+          description: Records for the current page.
+          items:
+            $ref: '#/components/schemas/OrderResponse'
+        hasMore:
+          type: boolean
+          description: True when more records are available after this page.
+          example: true
+    OrderItemAddRequest:
+      required:
+      - storeId
+      type: object
+      properties:
+        productId:
+          type: integer
+          description: Product `id` when adding an individual product.
+          format: int32
+          example: 123
+        productLineId:
+          type: integer
+          description: Product-line `id` when adding a product-line item.
+          format: int32
+          example: 456
+        storeId:
+          type: string
+          description: Store/location `UUID` for the item.
+          format: uuid
+        quantity:
+          minimum: 0
+          type: integer
+          description: Quantity explicitly placed on the order item.
+          format: int32
+          example: 10
+        desiredDaysOnHand:
+          minimum: 0
+          type: integer
+          description: Target days on hand used for order calculations.
+          format: int32
+          example: 14
+        leadTime:
+          minimum: 0
+          type: integer
+          description: Lead time in days used for order calculations.
+          format: int32
+          example: 2
+        lookbackPeriod:
+          minimum: 0
+          type: integer
+          description: Lookback period in days used for demand calculations.
+          format: int32
+          example: 30
+        unitCost:
+          minimum: 0
+          type: number
+          description: Order item unit cost override.
+          format: double
+          example: 12.5
+        strainsNeeded:
+          minimum: 0
+          type: integer
+          description: Strains needed override for product-line items.
+          format: int32
+          example: 4
+        note:
+          type: string
+          description: Optional order item note.
+        customName:
+          type: string
+          description: Custom item name, required when adding a custom item.
+        customPosBrandId:
+          type: integer
+          description: '`POS` brand `id` for a custom item.'
+          format: int32
+          example: 12
+        customUniversalCategoryId:
+          type: integer
+          description: '`Universal` category `id` for a custom item.'
+          format: int32
+          example: 34
+        customCaseSize:
+          minimum: 1
+          type: integer
+          description: Custom item case size.
+          format: int32
+          example: 6
+        targetProductDepth:
+          minimum: 0
+          type: integer
+          description: Target product depth for product-line items.
+          format: int32
+          example: 8
+      description: Request body for adding an item to an order.
     OrderItemResponse:
       type: object
       properties:
@@ -726,218 +929,15 @@ components:
           type: integer
           description: Product-line `id`. Present when the item is a product line.
           format: int32
-    OrderInvoiceCreateRequest:
-      required:
-      - filename
+    CreateRequest:
       type: object
       properties:
-        name:
-          type: string
-          description: Optional invoice display name.
-        filename:
-          type: string
-          description: Invoice filename.
-          example: invoice.pdf
-      description: Request body for adding an invoice to an order.
-    LimitOffsetResponseOrderInvoiceResponse:
-      type: object
-      properties:
-        limit:
-          type: integer
-          description: Maximum number of records requested for this page.
-          format: int32
-          example: 100
-        offset:
-          type: integer
-          description: Zero-based result offset used for this page.
-          format: int32
-          example: 0
-        totalCount:
-          type: integer
-          description: Total number of matching records before pagination is applied.
-          format: int32
-          example: 250
-        results:
-          type: array
-          description: Records for the current page.
-          items:
-            $ref: '#/components/schemas/OrderInvoiceResponse'
-        hasMore:
-          type: boolean
-          description: True when more records are available after this page.
-          example: true
-    LimitOffsetResponseOrderItemResponse:
-      type: object
-      properties:
-        limit:
-          type: integer
-          description: Maximum number of records requested for this page.
-          format: int32
-          example: 100
-        offset:
-          type: integer
-          description: Zero-based result offset used for this page.
-          format: int32
-          example: 0
-        totalCount:
-          type: integer
-          description: Total number of matching records before pagination is applied.
-          format: int32
-          example: 250
-        results:
-          type: array
-          description: Records for the current page.
-          items:
-            $ref: '#/components/schemas/OrderItemResponse'
-        hasMore:
-          type: boolean
-          description: True when more records are available after this page.
-          example: true
-    OrderItemAddRequest:
-      required:
-      - storeId
-      type: object
-      properties:
-        productId:
-          type: integer
-          description: Product `id` when adding an individual product.
-          format: int32
-          example: 123
-        productLineId:
-          type: integer
-          description: Product-line `id` when adding a product-line item.
-          format: int32
-          example: 456
-        storeId:
-          type: string
-          description: Store/location `UUID` for the item.
-          format: uuid
-        quantity:
-          minimum: 0
-          type: integer
-          description: Quantity explicitly placed on the order item.
-          format: int32
-          example: 10
-        desiredDaysOnHand:
-          minimum: 0
-          type: integer
-          description: Target days on hand used for order calculations.
-          format: int32
-          example: 14
-        leadTime:
-          minimum: 0
-          type: integer
-          description: Lead time in days used for order calculations.
-          format: int32
-          example: 2
-        lookbackPeriod:
-          minimum: 0
-          type: integer
-          description: Lookback period in days used for demand calculations.
-          format: int32
-          example: 30
-        unitCost:
-          minimum: 0
-          type: number
-          description: Order item unit cost override.
-          format: double
-          example: 12.5
-        strainsNeeded:
-          minimum: 0
-          type: integer
-          description: Strains needed override for product-line items.
-          format: int32
-          example: 4
-        note:
-          type: string
-          description: Optional order item note.
-        customName:
-          type: string
-          description: Custom item name, required when adding a custom item.
-        customPosBrandId:
-          type: integer
-          description: '`POS` brand `id` for a custom item.'
-          format: int32
-          example: 12
-        customUniversalCategoryId:
-          type: integer
-          description: '`Universal` category `id` for a custom item.'
-          format: int32
-          example: 34
-        customCaseSize:
-          minimum: 1
-          type: integer
-          description: Custom item case size.
-          format: int32
-          example: 6
-        targetProductDepth:
-          minimum: 0
-          type: integer
-          description: Target product depth for product-line items.
-          format: int32
-          example: 8
-      description: Request body for adding an item to an order.
-    UpdateRequest:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
         note:
           type: string
         name:
           type: string
         description:
           type: string
-    OrderInvoiceUrlRequest:
-      type: object
-      properties:
-        durationSeconds:
-          maximum: 604800
-          minimum: 1
-          type: integer
-          description: Temporary URL duration in seconds. Defaults to service configuration.
-          format: int32
-      description: Request body for generating a temporary invoice file URL.
-    OrderInvoiceUpdateRequest:
-      required:
-      - filename
-      type: object
-      properties:
-        name:
-          type: string
-          description: Optional invoice display name.
-        filename:
-          type: string
-          description: Invoice filename.
-          example: invoice.pdf
-      description: Request body for updating an order invoice.
-    OrderInvoiceResponse:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Optional invoice display name.
-        id:
-          type: integer
-          description: Invoice `id`.
-          format: int32
-        filename:
-          type: string
-          description: Invoice filename.
-        createdAt:
-          type: string
-          description: Timestamp the invoice metadata was created.
-          format: date-time
-        updatedAt:
-          type: string
-          description: Timestamp the invoice metadata was last updated.
-          format: date-time
-        orderId:
-          type: integer
-          description: Owning order `id`.
-          format: int32
-      description: Order invoice metadata.
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

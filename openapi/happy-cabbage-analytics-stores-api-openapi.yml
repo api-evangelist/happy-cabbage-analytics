@@ -90,6 +90,33 @@ paths:
           description: Invalid query parameter
 components:
   schemas:
+    LimitOffsetResponseStoreResponse:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: Maximum number of records requested for this page.
+          format: int32
+          example: 100
+        offset:
+          type: integer
+          description: Zero-based result offset used for this page.
+          format: int32
+          example: 0
+        totalCount:
+          type: integer
+          description: Total number of matching records before pagination is applied.
+          format: int32
+          example: 250
+        results:
+          type: array
+          description: Records for the current page.
+          items:
+            $ref: '#/components/schemas/StoreResponse'
+        hasMore:
+          type: boolean
+          description: True when more records are available after this page.
+          example: true
     StoreResponse:
       type: object
       properties:
@@ -128,33 +155,6 @@ components:
           type: string
           description: Name of the fulfillment location, when configured.
       description: Records for the current page.
-    LimitOffsetResponseStoreResponse:
-      type: object
-      properties:
-        limit:
-          type: integer
-          description: Maximum number of records requested for this page.
-          format: int32
-          example: 100
-        offset:
-          type: integer
-          description: Zero-based result offset used for this page.
-          format: int32
-          example: 0
-        totalCount:
-          type: integer
-          description: Total number of matching records before pagination is applied.
-          format: int32
-          example: 250
-        results:
-          type: array
-          description: Records for the current page.
-          items:
-            $ref: '#/components/schemas/StoreResponse'
-        hasMore:
-          type: boolean
-          description: True when more records are available after this page.
-          example: true
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

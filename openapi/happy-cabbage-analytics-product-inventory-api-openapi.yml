@@ -464,6 +464,147 @@ paths:
           description: Invalid query parameter
 components:
   schemas:
+    CarryStatusUpdateResponse:
+      type: object
+      properties:
+        productId:
+          type: integer
+          description: Internal product ID.
+          format: int32
+        storeId:
+          type: string
+          description: Store/location UUID.
+          format: uuid
+        continueToCarry:
+          type: boolean
+          description: Whether this product should continue to be carried.
+    LimitOffsetResponseProductInventoryResponse:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: Maximum number of records requested for this page.
+          format: int32
+          example: 100
+        offset:
+          type: integer
+          description: Zero-based result offset used for this page.
+          format: int32
+          example: 0
+        totalCount:
+          type: integer
+          description: Total number of matching records before pagination is applied.
+          format: int32
+          example: 250
+        results:
+          type: array
+          description: Records for the current page.
+          items:
+            $ref: '#/components/schemas/ProductInventoryResponse'
+        hasMore:
+          type: boolean
+          description: True when more records are available after this page.
+          example: true
+    ProductDetailResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Product display name.
+          example: Acme Gummies 10mg
+        id:
+          type: integer
+          description: Internal product ID. Use this value for product-specific endpoints.
+          format: int32
+        weight:
+          type: number
+          description: Product weight, when available.
+          format: double
+          example: 3.5
+        universalBrandId:
+          type: integer
+          description: Mapped universal brand ID, when available.
+          format: int32
+        universalBrandName:
+          type: string
+          description: Mapped universal brand name, when available.
+        vendorId:
+          type: integer
+          description: Vendor ID, when available.
+          format: int32
+        vendorName:
+          type: string
+          description: Vendor name, when available.
+        strainClassificationId:
+          type: integer
+          description: Strain classification ID, when available.
+          format: int32
+        strainClassificationLabel:
+          type: string
+          description: Strain classification label, when available.
+        strainFamily:
+          type: string
+          description: Strain family, when available.
+          example: HYBRID
+          enum:
+          - INDICA
+          - SATIVA
+          - HYBRID
+        posCategoryId:
+          type: integer
+          description: POS category ID, when available.
+          format: int32
+        posCategoryLabel:
+          type: string
+          description: POS category label, when available.
+        posSubCategoryId:
+          type: integer
+          description: POS subcategory ID, when available.
+          format: int32
+        posSubCategoryLabel:
+          type: string
+          description: POS subcategory label, when available.
+        posIdentifier:
+          type: string
+          description: Product identifier from the source POS system, or an empty string when unavailable.
+        universalCategoryId:
+          type: integer
+          description: Mapped universal category ID, when available.
+          format: int32
+        universalCategoryLabel:
+          type: string
+          description: Mapped universal category label, when available.
+        posBrandId:
+          type: integer
+          description: POS brand ID, when available.
+          format: int32
+        posBrandName:
+          type: string
+          description: POS brand name, when available.
+        sku:
+          type: string
+          description: Product SKU from the source POS system, or an empty string when unavailable.
+        caseSize:
+          type: integer
+          description: Minimum order/case size, when available.
+          format: int32
+          example: 12
+      description: Product metadata for this inventory row.
+    CarryStatusUpdateRequest:
+      required:
+      - continueToCarry
+      type: object
+      properties:
+        continueToCarry:
+          type: boolean
+          description: 'Whether this product should continue to be carried.
+
+            When false: Product is discontinued. It will still be viewable but will not be recommended for reorders.
+
+            When true: Product will continue to be recommended for reorders.
+
+            '
+          example: false
     ProductInventoryResponse:
       type: object
       properties:
@@ -619,147 +760,6 @@ components:
           description: Units available at a fulfillment/distribution location.
           format: int32
       description: Records for the current page.
-    CarryStatusUpdateRequest:
-      required:
-      - continueToCarry
-      type: object
-      properties:
-        continueToCarry:
-          type: boolean
-          description: 'Whether this product should continue to be carried.
-
-            When false: Product is discontinued. It will still be viewable but will not be recommended for reorders.
-
-            When true: Product will continue to be recommended for reorders.
-
-            '
-          example: false
-    CarryStatusUpdateResponse:
-      type: object
-      properties:
-        productId:
-          type: integer
-          description: Internal product ID.
-          format: int32
-        storeId:
-          type: string
-          description: Store/location UUID.
-          format: uuid
-        continueToCarry:
-          type: boolean
-          description: Whether this product should continue to be carried.
-    LimitOffsetResponseProductInventoryResponse:
-      type: object
-      properties:
-        limit:
-          type: integer
-          description: Maximum number of records requested for this page.
-          format: int32
-          example: 100
-        offset:
-          type: integer
-          description: Zero-based result offset used for this page.
-          format: int32
-          example: 0
-        totalCount:
-          type: integer
-          description: Total number of matching records before pagination is applied.
-          format: int32
-          example: 250
-        results:
-          type: array
-          description: Records for the current page.
-          items:
-            $ref: '#/components/schemas/ProductInventoryResponse'
-        hasMore:
-          type: boolean
-          description: True when more records are available after this page.
-          example: true
-    ProductDetailResponse:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Product display name.
-          example: Acme Gummies 10mg
-        id:
-          type: integer
-          description: Internal product ID. Use this value for product-specific endpoints.
-          format: int32
-        weight:
-          type: number
-          description: Product weight, when available.
-          format: double
-          example: 3.5
-        universalBrandId:
-          type: integer
-          description: Mapped universal brand ID, when available.
-          format: int32
-        universalBrandName:
-          type: string
-          description: Mapped universal brand name, when available.
-        vendorId:
-          type: integer
-          description: Vendor ID, when available.
-          format: int32
-        vendorName:
-          type: string
-          description: Vendor name, when available.
-        strainClassificationId:
-          type: integer
-          description: Strain classification ID, when available.
-          format: int32
-        strainClassificationLabel:
-          type: string
-          description: Strain classification label, when available.
-        strainFamily:
-          type: string
-          description: Strain family, when available.
-          example: HYBRID
-          enum:
-          - INDICA
-          - SATIVA
-          - HYBRID
-        posCategoryId:
-          type: integer
-          description: POS category ID, when available.
-          format: int32
-        posCategoryLabel:
-          type: string
-          description: POS category label, when available.
-        posSubCategoryId:
-          type: integer
-          description: POS subcategory ID, when available.
-          format: int32
-        posSubCategoryLabel:
-          type: string
-          description: POS subcategory label, when available.
-        posIdentifier:
-          type: string
-          description: Product identifier from the source POS system, or an empty string when unavailable.
-        universalCategoryId:
-          type: integer
-          description: Mapped universal category ID, when available.
-          format: int32
-        universalCategoryLabel:
-          type: string
-          description: Mapped universal category label, when available.
-        posBrandId:
-          type: integer
-          description: POS brand ID, when available.
-          format: int32
-        posBrandName:
-          type: string
-          description: POS brand name, when available.
-        sku:
-          type: string
-          description: Product SKU from the source POS system, or an empty string when unavailable.
-        caseSize:
-          type: integer
-          description: Minimum order/case size, when available.
-          format: int32
-          example: 12
-      description: Product metadata for this inventory row.
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
