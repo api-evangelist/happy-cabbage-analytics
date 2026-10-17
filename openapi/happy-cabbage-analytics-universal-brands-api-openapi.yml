@@ -95,6 +95,24 @@ paths:
           description: Invalid query parameter
 components:
   schemas:
+    UniversalBrandResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Canonical brand name.
+          example: Acme
+        id:
+          type: integer
+          description: Canonical brand ID.
+          format: int32
+          example: 42
+        productCount:
+          type: integer
+          description: Number of products currently associated with this brand.
+          format: int32
+          example: 17
+      description: Records for the current page.
     LimitOffsetResponseUniversalBrandResponse:
       type: object
       properties:
@@ -122,24 +140,6 @@ components:
           type: boolean
           description: True when more records are available after this page.
           example: true
-    UniversalBrandResponse:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Canonical brand name.
-          example: Acme
-        id:
-          type: integer
-          description: Canonical brand ID.
-          format: int32
-          example: 42
-        productCount:
-          type: integer
-          description: Number of products currently associated with this brand.
-          format: int32
-          example: 17
-      description: Records for the current page.
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

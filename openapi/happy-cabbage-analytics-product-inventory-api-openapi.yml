@@ -464,20 +464,6 @@ paths:
           description: Invalid query parameter
 components:
   schemas:
-    CarryStatusUpdateResponse:
-      type: object
-      properties:
-        productId:
-          type: integer
-          description: Internal product ID.
-          format: int32
-        storeId:
-          type: string
-          description: Store/location UUID.
-          format: uuid
-        continueToCarry:
-          type: boolean
-          description: Whether this product should continue to be carried.
     LimitOffsetResponseProductInventoryResponse:
       type: object
       properties:
@@ -505,6 +491,21 @@ components:
           type: boolean
           description: True when more records are available after this page.
           example: true
+    CarryStatusUpdateRequest:
+      required:
+      - continueToCarry
+      type: object
+      properties:
+        continueToCarry:
+          type: boolean
+          description: 'Whether this product should continue to be carried.
+
+            When false: Product is discontinued. It will still be viewable but will not be recommended for reorders.
+
+            When true: Product will continue to be recommended for reorders.
+
+            '
+          example: false
     ProductDetailResponse:
       type: object
       properties:
@@ -590,21 +591,6 @@ components:
           format: int32
           example: 12
       description: Product metadata for this inventory row.
-    CarryStatusUpdateRequest:
-      required:
-      - continueToCarry
-      type: object
-      properties:
-        continueToCarry:
-          type: boolean
-          description: 'Whether this product should continue to be carried.
-
-            When false: Product is discontinued. It will still be viewable but will not be recommended for reorders.
-
-            When true: Product will continue to be recommended for reorders.
-
-            '
-          example: false
     ProductInventoryResponse:
       type: object
       properties:
@@ -760,6 +746,20 @@ components:
           description: Units available at a fulfillment/distribution location.
           format: int32
       description: Records for the current page.
+    CarryStatusUpdateResponse:
+      type: object
+      properties:
+        productId:
+          type: integer
+          description: Internal product ID.
+          format: int32
+        storeId:
+          type: string
+          description: Store/location UUID.
+          format: uuid
+        continueToCarry:
+          type: boolean
+          description: Whether this product should continue to be carried.
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

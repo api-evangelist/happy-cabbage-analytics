@@ -419,6 +419,91 @@ paths:
                 $ref: '#/components/schemas/LimitOffsetResponseProductInventoryResponse'
 components:
   schemas:
+    LimitOffsetResponseProductInventoryResponse:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: Maximum number of records requested for this page.
+          format: int32
+          example: 100
+        offset:
+          type: integer
+          description: Zero-based result offset used for this page.
+          format: int32
+          example: 0
+        totalCount:
+          type: integer
+          description: Total number of matching records before pagination is applied.
+          format: int32
+          example: 250
+        results:
+          type: array
+          description: Records for the current page.
+          items:
+            $ref: '#/components/schemas/ProductInventoryResponse'
+        hasMore:
+          type: boolean
+          description: True when more records are available after this page.
+          example: true
+    ProductLineUpdateRequest:
+      required:
+      - name
+      - productQueryParams
+      type: object
+      properties:
+        name:
+          type: string
+          description: Product line/demand group display name.
+          example: Acme Gummies
+        productQueryParams:
+          $ref: '#/components/schemas/ProductQueryParams'
+        isFavorite:
+          type: boolean
+          description: Whether the product line is marked as a favorite.
+          example: true
+        desiredDaysOnHand:
+          minimum: 1
+          type: integer
+          description: Target days on hand used for product-line replenishment calculations.
+          format: int32
+        leadTime:
+          minimum: 0
+          type: integer
+          description: Lead time in days used for product-line replenishment calculations.
+          format: int32
+        lookbackPeriod:
+          minimum: 1
+          type: integer
+          description: Sales lookback period in days used for product-line velocity calculations.
+          format: int32
+        autoRunDays:
+          type: array
+          description: Days of week to auto-run this product line, using ISO day-of-week values.
+          items:
+            type: integer
+            description: Days of week to auto-run this product line, using ISO day-of-week values.
+            format: int32
+        reportEmailTargetDefaults:
+          type: array
+          description: Default email recipients for product-line reports.
+          items:
+            type: string
+            description: Default email recipients for product-line reports.
+        minimumOrderQuantityDefault:
+          minimum: 0
+          type: integer
+          description: Default minimum order quantity (case size) for products in this product line.
+          format: int32
+        targetProductDepth:
+          minimum: 0
+          type: integer
+          description: Target product depth for this product line.
+          format: int32
+        autoDemandGroupCreateLogId:
+          type: integer
+          description: Auto-created demand group log ID, when this product line is auto-generated.
+          format: int32
     ProductLineDetailResponse:
       type: object
       properties:
@@ -474,33 +559,6 @@ components:
           type: integer
           description: Sales lookback period in days used for product-line velocity calculations.
           format: int32
-    LimitOffsetResponseProductInventoryResponse:
-      type: object
-      properties:
-        limit:
-          type: integer
-          description: Maximum number of records requested for this page.
-          format: int32
-          example: 100
-        offset:
-          type: integer
-          description: Zero-based result offset used for this page.
-          format: int32
-          example: 0
-        totalCount:
-          type: integer
-          description: Total number of matching records before pagination is applied.
-          format: int32
-          example: 250
-        results:
-          type: array
-          description: Records for the current page.
-          items:
-            $ref: '#/components/schemas/ProductInventoryResponse'
-        hasMore:
-          type: boolean
-          description: True when more records are available after this page.
-          example: true
     ProductDetailResponse:
       type: object
       properties:
@@ -586,6 +644,33 @@ components:
           format: int32
           example: 12
       description: Product metadata for this inventory row.
+    LimitOffsetResponseProductLineDetailResponse:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: Maximum number of records requested for this page.
+          format: int32
+          example: 100
+        offset:
+          type: integer
+          description: Zero-based result offset used for this page.
+          format: int32
+          example: 0
+        totalCount:
+          type: integer
+          description: Total number of matching records before pagination is applied.
+          format: int32
+          example: 250
+        results:
+          type: array
+          description: Records for the current page.
+          items:
+            $ref: '#/components/schemas/ProductLineDetailResponse'
+        hasMore:
+          type: boolean
+          description: True when more records are available after this page.
+          example: true
     ProductQueryParams:
       type: object
       properties:
@@ -696,70 +781,6 @@ components:
           - DESC_NULLS_FIRST
           - DESC_NULLS_LAST
       description: The product query params used to find products matching this product line.
-    ProductLineCreateRequest:
-      required:
-      - name
-      - productQueryParams
-      type: object
-      properties:
-        name:
-          type: string
-          description: Product line display name.
-          example: Acme Gummies
-        productQueryParams:
-          $ref: '#/components/schemas/ProductQueryParams'
-        isFavorite:
-          type: boolean
-          description: Whether the product line is marked as a favorite.
-          example: true
-        desiredDaysOnHand:
-          minimum: 1
-          type: integer
-          description: Target days on hand used for product-line replenishment calculations.
-          format: int32
-        leadTime:
-          minimum: 0
-          type: integer
-          description: Lead time in days used for product-line replenishment calculations.
-          format: int32
-        lookbackPeriod:
-          minimum: 1
-          type: integer
-          description: Sales lookback period in days used for product-line velocity calculations.
-          format: int32
-        autoRunDays:
-          type: array
-          description: Days of week to auto-run this product line, using ISO day-of-week values. Defaults to Monday through Friday.
-          example:
-          - 1
-          - 3
-          - 5
-          items:
-            type: integer
-            description: Days of week to auto-run this product line, using ISO day-of-week values. Defaults to Monday through Friday.
-            format: int32
-          default:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-        reportEmailTargetDefaults:
-          type: array
-          description: Default email recipients for product-line reports.
-          items:
-            type: string
-            description: Default email recipients for product-line reports.
-        minimumOrderQuantityDefault:
-          minimum: 1
-          type: integer
-          description: Default minimum order quantity (case size) for products in this product line.
-          format: int32
-        targetProductDepth:
-          minimum: 0
-          type: integer
-          description: Target product depth for this product line.
-          format: int32
     ProductInventoryResponse:
       type: object
       properties:
@@ -915,34 +936,7 @@ components:
           description: Units available at a fulfillment/distribution location.
           format: int32
       description: Records for the current page.
-    LimitOffsetResponseProductLineDetailResponse:
-      type: object
-      properties:
-        limit:
-          type: integer
-          description: Maximum number of records requested for this page.
-          format: int32
-          example: 100
-        offset:
-          type: integer
-          description: Zero-based result offset used for this page.
-          format: int32
-          example: 0
-        totalCount:
-          type: integer
-          description: Total number of matching records before pagination is applied.
-          format: int32
-          example: 250
-        results:
-          type: array
-          description: Records for the current page.
-          items:
-            $ref: '#/components/schemas/ProductLineDetailResponse'
-        hasMore:
-          type: boolean
-          description: True when more records are available after this page.
-          example: true
-    ProductLineUpdateRequest:
+    ProductLineCreateRequest:
       required:
       - name
       - productQueryParams
@@ -950,7 +944,7 @@ components:
       properties:
         name:
           type: string
-          description: Product line/demand group display name.
+          description: Product line display name.
           example: Acme Gummies
         productQueryParams:
           $ref: '#/components/schemas/ProductQueryParams'
@@ -975,11 +969,21 @@ components:
           format: int32
         autoRunDays:
           type: array
-          description: Days of week to auto-run this product line, using ISO day-of-week values.
+          description: Days of week to auto-run this product line, using ISO day-of-week values. Defaults to Monday through Friday.
+          example:
+          - 1
+          - 3
+          - 5
           items:
             type: integer
-            description: Days of week to auto-run this product line, using ISO day-of-week values.
+            description: Days of week to auto-run this product line, using ISO day-of-week values. Defaults to Monday through Friday.
             format: int32
+          default:
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
         reportEmailTargetDefaults:
           type: array
           description: Default email recipients for product-line reports.
@@ -987,7 +991,7 @@ components:
             type: string
             description: Default email recipients for product-line reports.
         minimumOrderQuantityDefault:
-          minimum: 0
+          minimum: 1
           type: integer
           description: Default minimum order quantity (case size) for products in this product line.
           format: int32
@@ -995,10 +999,6 @@ components:
           minimum: 0
           type: integer
           description: Target product depth for this product line.
-          format: int32
-        autoDemandGroupCreateLogId:
-          type: integer
-          description: Auto-created demand group log ID, when this product line is auto-generated.
           format: int32
   securitySchemes:
     ApiKeyAuth:
