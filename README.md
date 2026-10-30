@@ -64,19 +64,129 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Happy Cabbage Analytics is a cannabis retail software company founded in 2019 and headquartered in San
-Francisco, California. Its Happy Buyers platform gives dispensary buyers AI-assisted inventory management,
-demand forecasting, replenishment and purchase-order workflows on top of live point-of-sale data from
-Dutchie, Flowhub, Blaze, Treez and Meadow, plus wholesale menus from Distru and Apex Trading. Happy Cabbage
-sold its Happy Marketers text-marketing suite to Alpine IQ in June 2025 and now focuses on Happy Buyers.
+Happy Cabbage Analytics is a cannabis retail software company founded in 2019 and headquartered in San Francisco, California, whose Happy Buyers platform gives dispensary buyers AI-assisted inventory management, demand forecasting, replenishment and purchase-order workflows on top of data pulled from their point-of-sale system. The platform reads live sell-through from POS integrations (Dutchie, Flowhub, Blaze, Treez, Meadow) and wholesale menus (Distru, Apex Trading), then scores inventory health by store, category and brand, predicts days-on-hand, groups SKUs into product lines, and drafts vendor orders with invoices attached. Happy Cabbage sold its Happy Marketers text-marketing suite to Alpine IQ in June 2025 and now focuses on Happy Buyers. A public Happy Buyers External API entered beta in June 2026 and is documented with a Swagger UI, exposing organization metadata, inventory health, product/product-line inventory, packages, daily sales metadata and full order management to API-key holders — the same API the company's own published AI-agent workflows are built on.
 
-The **Happy Buyers External API** entered beta on 2026-06-05 and is documented with a public Swagger UI.
-It is an OpenAPI 3.0.1 contract with 40 operations across 30 paths and 49 schemas, authenticated with an
-organization-scoped API key sent in the `hca-api-key` header.
+**Areas:** Cannabis · Retail · Inventory · Analytics · Purchasing · Point-of-Sale · Wholesale · Demand Forecasting · Supply Chain · Agent-Native
 
-- Website: https://www.happycabbage.io/
-- API reference: https://cabbage.pub/swagger-ui/index.html
-- OpenAPI: https://cabbage.pub/v3/api-docs/external
-- Base URL: https://api.happycabbage.ai (`/external/v1`)
-- Release notes: https://www.happycabbage.io/release-notes
-- AI Hub: https://www.happycabbage.io/ai-hub
+## Happy Cabbage Analytics on APIs.io
+
+Everything profiled for Happy Cabbage Analytics is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/happy-cabbage-analytics/](https://apis.io/providers/happy-cabbage-analytics/)** — or go straight to one of the APIs or properties below.
+
+### APIs (14)
+
+- [Happy Cabbage Analytics Blockout Dates API](https://apis.io/apis/happy-cabbage-analytics/happy-cabbage-analytics-blockout-dates-api/) — Blockout dates
+- [Happy Cabbage Analytics Daily Sales Metadata API](https://apis.io/apis/happy-cabbage-analytics/happy-cabbage-analytics-daily-sales-metadata-api/) — Daily product sales and stock metadata
+- [Happy Cabbage Analytics Identity API](https://apis.io/apis/happy-cabbage-analytics/happy-cabbage-analytics-identity-api/) — API key identity and organization context
+- [Happy Cabbage Analytics Inventory Health API](https://apis.io/apis/happy-cabbage-analytics/happy-cabbage-analytics-inventory-health-api/) — Inventory health data
+- [Happy Cabbage Analytics Orders API](https://apis.io/apis/happy-cabbage-analytics/happy-cabbage-analytics-orders-api/) — Orders
+- [Happy Cabbage Analytics Packages API](https://apis.io/apis/happy-cabbage-analytics/happy-cabbage-analytics-packages-api/) — Package-level product inventory
+- [Happy Cabbage Analytics POS Brands API](https://apis.io/apis/happy-cabbage-analytics/happy-cabbage-analytics-pos-brands-api/) — Organization POS brand metadata and mappings
+- [Happy Cabbage Analytics POS Categories API](https://apis.io/apis/happy-cabbage-analytics/happy-cabbage-analytics-pos-categories-api/) — Organization POS category metadata and mappings
+- [Happy Cabbage Analytics Product Inventory API](https://apis.io/apis/happy-cabbage-analytics/happy-cabbage-analytics-product-inventory-api/) — Product-level inventory, sales, and demand metrics
+- [Happy Cabbage Analytics Product Line Inventory API](https://apis.io/apis/happy-cabbage-analytics/happy-cabbage-analytics-product-line-inventory-api/) — Product-line inventory, demand, and replenishment metrics
+- [Happy Cabbage Analytics Product Lines API](https://apis.io/apis/happy-cabbage-analytics/happy-cabbage-analytics-product-lines-api/) — Product-lines
+- [Happy Cabbage Analytics Stores API](https://apis.io/apis/happy-cabbage-analytics/happy-cabbage-analytics-stores-api/) — Organization location metadata
+- [Happy Cabbage Analytics Universal Brands API](https://apis.io/apis/happy-cabbage-analytics/happy-cabbage-analytics-universal-brands-api/) — Canonical brand metadata across POS systems
+- [Happy Cabbage Analytics Universal Categories API](https://apis.io/apis/happy-cabbage-analytics/happy-cabbage-analytics-universal-categories-api/) — Canonical product category metadata across POS systems
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [happy-cabbage-analytics-mcp.yml](https://apis.io/servers/happy-cabbage-analytics/happy-cabbage-analytics-mcp-yml/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Happy Cabbage Analytics Happy Buyers External Overlay](https://apis.io/overlays/happy-cabbage-analytics/happy-cabbage-analytics-happy-buyers-external-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Happy Cabbage Analytics Authentication](https://apis.io/security/happy-cabbage-analytics/happy-cabbage-analytics-authentication/)
+- [Happy Cabbage Analytics Domain Security](https://apis.io/security/happy-cabbage-analytics/happy-cabbage-analytics-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Happy Cabbage Analytics Plans Pricing](https://apis.io/plans/happy-cabbage-analytics/happy-cabbage-analytics-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Happy Cabbage Analytics Rate Limits](https://apis.io/rate-limits/happy-cabbage-analytics/happy-cabbage-analytics-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.happycabbage.io/)
+- [Documentation](https://cabbage.pub/swagger-ui/index.html)
+- [API reference](https://cabbage.pub/swagger-ui/index.html)
+- [Sign up](https://www.happycabbage.io/buyers-free-trial)
+- [Support](https://www.happycabbage.io/contact)
+- [Changelog](https://www.happycabbage.io/release-notes)
+- [Blog](https://www.happycabbage.io/the-patch)
+- [Privacy policy](https://lrn.mobi/hca_privacy_policy)
+- [GitHub](https://github.com/happycabbage)
+
+## API Evangelist rating
+
+**Kin Score 35.2** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 66.1 |
+| Contract quality | 53.1 |
+| Contract governance | 4.5 |
+| Operational transparency | 18.4 |
+| Developer ergonomics | 37.5 |
+| Access clarity | 23.7 |
+
+**Agent readiness 27.5** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | yes |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 20.6** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/happy-cabbage-analytics/](https://apis.io/providers/happy-cabbage-analytics/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Happy Cabbage Analytics: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/happy-cabbage-analytics/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
